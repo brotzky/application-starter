@@ -1,0 +1,13 @@
+.FormButton {
+  margin: ($base-space) (auto) (0);
+  width: 100%;
+  height: 52.5px;
+  font-size: font(1);
+  @include ease(out);
+  @include button;
+  @include button--pri;
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,18 @@
+.RecommendationAnnouncement {
+  margin: ($base-space) ($base-space * 3) (0);
+  padding: ($base-space / 1.5) ($base-space);
+  background-color: rgba(color(green), 0.05);
+  border: 1px solid color(green);
+  border-radius: 4px;
+  color: color(green);
+  font-weight: 500;
+  font-size: font(3);
+  text-align: center;
+  
+  &-declined {
+    background-color: rgba(color(red), 0.05);
+    border: 1px solid color(red);
+    border-radius: 4px;
+    color: color(red);
+  }
+}

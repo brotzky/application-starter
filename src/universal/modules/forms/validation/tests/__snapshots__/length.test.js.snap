@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Validation] length length() should return a function that will validate the length 1`] = `[Function]`;
+
+exports[`[Form Validation] length length() should return an error object when an invalid length is passed in 1`] = `
+Object {
+  "defaultMessage": "should be {length} characters",
+  "id": "form.errors.length",
+  "values": Object {
+    "length": 3,
+  },
+}
+`;
+
+exports[`[Form Validation] length length() should return no errors if a valid length string is passed in 1`] = `undefined`;

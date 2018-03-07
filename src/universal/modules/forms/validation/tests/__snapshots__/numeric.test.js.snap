@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Validation] numeric numeric() should return an empty string if nothing is passed it 1`] = `""`;
+
+exports[`[Form Validation] numeric numeric() should return an error object when a non-number string is passed in 1`] = `
+Object {
+  "defaultMessage": "can only contain numbers",
+  "id": "form.errors.numeric",
+  "values": Object {},
+}
+`;
+
+exports[`[Form Validation] numeric numeric() should return no errors if a string of numbers is passed in 1`] = `undefined`;

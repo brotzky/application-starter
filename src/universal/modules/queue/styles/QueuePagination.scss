@@ -1,0 +1,40 @@
+.QueuePagination {
+
+  &__button {
+    $size: 24px;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    vertical-align: middle;
+    position: relative;
+    background: rgba(black, 0.3);
+    box-shadow: 0 2px 6px rgba(black, 0);
+    cursor: pointer;
+    @include ease(out);
+
+    &:hover {
+      background: rgba(black, 0.5);
+    }
+
+    &:active {
+      box-shadow: 0 2px 6px rgba(black, 0.2);
+    }
+
+    &:last-child {
+      margin-left: ($base-space / 3);
+    }
+
+    &[disabled] {
+      cursor: not-allowed;
+      opacity: 0.35;
+    }
+
+    &-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      fill: white;
+    }
+  }
+}

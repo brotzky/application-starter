@@ -1,0 +1,107 @@
+.MemberHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 135px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(black, 0.1);
+  background: grow(pri);
+  // margin-bottom: ($base-space);
+
+  &__wrapper {
+    width: 100%;
+    padding: (0) ($base-space);
+  }
+
+  &__person {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__heading {
+    margin-left: ($base-space / 1.5);
+  }
+
+  &__fullname,
+  &__email {
+    color: white;
+  }
+
+  &__fullname {
+    margin-bottom: ($base-space / 4);
+    font-size: font(3);
+  }
+
+  &__email {
+    display: inline-block;
+    margin-bottom: ($base-space / 5);
+    margin-right: ($base-space);
+    font-size: font(2);
+  }
+
+  &__initials {
+    $size: 78px;
+    width: $size;
+    height: $size;
+    display: inline-block;
+    line-height: $size;
+    background: white;
+    color: grow(sec);
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: font(5);
+    text-transform: uppercase;
+    box-shadow: 0 1px 4px rgba(black, 0.1);
+  }
+
+  &__icon {
+    $size: 24px;
+    display: inline-block;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    margin-right: ($base-space / 3);
+    text-align: center;
+    background: white;
+
+    svg {
+      $size: 16px;
+      width: $size;
+      height: $size;
+    }
+
+    &--verified {
+      background: color(green);
+      svg { fill: white; }
+    }
+
+    &--unverified {
+      svg { * { fill: color(grey-mid); } }
+    }
+  }
+
+  &Placeholder {
+
+    &__text {
+      height: 8px;
+      margin-bottom: ($base-space / 2);
+      background: linear-gradient(90deg, mix(grow(pri), white, 25), white 15%, mix(grow(pri), white, 25));
+      opacity: 0.5;
+      animation: text-loading 0.5s linear infinite;
+
+      &--name {
+        width: 200px;
+      }
+
+      &--details {
+        width: 300px;
+      }
+    }
+
+    @keyframes text-loading {
+      0% { background-position: 0; }
+      100% { background-position: 300px; }
+    }
+  }
+}

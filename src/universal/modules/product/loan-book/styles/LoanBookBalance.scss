@@ -1,0 +1,34 @@
+.LoanBookBalance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: ($base-space * 2) (auto) ($base-space * 1.5);
+  text-align: center;
+
+  &__label {
+    font-size: font(5);
+    font-weight: 600;
+    color: white;
+
+    span {
+      // font-weight: 600;
+    }
+  }
+
+  &__input {
+    border: none;
+    background: none;
+    width: 142px;
+    margin: (0) ($base-space / 2);
+    font-size: font(5);
+    border-bottom: 1px dotted white;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+  }
+
+  &__spinner {
+    display: inline-block;
+    width: 150px;
+  }
+}

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Validation] minDollarAmount minDollarAmount() should return a function 1`] = `[Function]`;
+
+exports[`[Form Validation] minDollarAmount minDollarAmount() should return an error object when an amount less than specified is passed in 1`] = `
+Object {
+  "defaultMessage": "cannot be less than {amount}",
+  "id": "form.errors.minDollarAmount",
+  "values": Object {
+    "amount": "$5",
+  },
+}
+`;
+
+exports[`[Form Validation] minDollarAmount minDollarAmount() should return no errors if the number passed is more than the originally specified amount 1`] = `undefined`;

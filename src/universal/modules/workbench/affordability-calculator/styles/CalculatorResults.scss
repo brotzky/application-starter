@@ -1,0 +1,14 @@
+.CalculatorResult {
+  display: block;
+  min-width: 178px;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  font-feature-settings: "tnum"; 
+}
+
+.CalculatorResults {
+  display: block;
+  margin: ($base-space * 1.5) (0) ($base-space * 1.65);
+  font-weight: 500;
+  font-size: font(3);
+}

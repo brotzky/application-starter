@@ -1,0 +1,41 @@
+.PrimaryNavNav {
+  margin-left: ($base-space * 1);
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -1px;
+    height: 55px;
+    width: 1px;
+    background: white;
+    opacity: 0.12;
+  }
+
+  &__list {
+    list-style-type: none;
+  }
+
+  &__item {
+    display: inline-block;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    height: 55px;
+    padding: (0) ($base-space);
+    font-weight: 500;
+    line-height: 1;
+
+    &:hover {
+      background: rgba(white, 0.1);
+    }
+  }
+
+  &__icon {
+    margin-right: ($base-space / 2);
+    * { fill: white; }
+  }
+}

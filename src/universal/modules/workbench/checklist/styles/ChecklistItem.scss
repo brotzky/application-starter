@@ -1,0 +1,378 @@
+.ChecklistItem {
+  $p: &;
+  border-bottom: 1px solid #efefef;
+  @include ease(out);
+
+  &:hover {
+    background: #fdfdfd;
+  }
+
+  &--success {
+    #{$p}__name {
+      position: relative;
+      text-decoration: line-through;
+
+      span {
+        display: inline-block;
+        color: #c5c5c5;
+
+        &::after {
+          content: '';
+          height: 2px;
+          width: 100%;
+          background: #c5c5c5;
+          left: -2px;
+          right: -2px;
+          top: -11px;
+          display: block;
+          position: relative;
+          width: 105%;
+        }
+      }
+    }
+  }
+
+  &--expanded {
+    &:hover {
+    }
+  }
+
+  &__overview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0($base-space * 1.25);
+    font-size: 1.5rem;
+
+    &:hover {
+      .ChecklistItem__status-unchecked {
+        border-color: grow(pri);
+      }
+
+      .ChecklistItem__name {
+        color: grow(pri);
+      }
+    }
+  }
+
+  &__details {
+    color: $text-color;
+    padding: ($base-space / 2.25) ($base-space) ($base-space / 1.5) (67px);
+
+    &-heading {
+      max-width: 540px;
+      margin-bottom: ($base-space / 1.75);
+      font-size: font(3);
+    }
+
+    &-subheading {
+      margin-bottom: ($base-space / 3);
+      font-size: font(2);
+    }
+
+    &-copy,
+    p {
+      overflow-wrap: break-word;
+      max-width: 540px;
+    }
+  }
+
+  &__status {
+    &--unclaimed {
+      position: relative;
+
+      &::before {
+        content: 'You must be the manager of this application to edit';
+        position: absolute;
+        width: 400px;
+        left: 38px;
+        right: 0;
+        margin: 0 auto;
+        padding: 0.6rem;
+        top: -4px;
+        border-radius: 3px;
+        background: white;
+        color: color(black);
+        cursor: not-allowed;
+        z-index: 1;
+        opacity: 0;
+        box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.15),
+          0 2px 3px rgba(27, 39, 51, 0.06);
+        transform-origin: bottom;
+        text-align: center;
+        pointer-events: none;
+        @include ease(in-out);
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
+
+      &::after {
+        opacity: 0;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        border-radius: 50%;
+        cursor: not-allowed;
+      }
+    }
+    &--inquirydisabled {
+      position: relative;
+
+      &::before {
+        content: 'Cannot edit checklist items when application has status Inquiry';
+        position: absolute;
+        width: 475px;
+        left: 38px;
+        right: 0;
+        margin: 0 auto;
+        padding: 0.6rem;
+        top: -4px;
+        border-radius: 3px;
+        background: white;
+        color: color(black);
+        cursor: not-allowed;
+        z-index: 1;
+        opacity: 0;
+        box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.15),
+          0 2px 3px rgba(27, 39, 51, 0.06);
+        transform-origin: bottom;
+        text-align: center;
+        pointer-events: none;
+        @include ease(in-out);
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
+
+      &::after {
+        opacity: 0;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        border-radius: 50%;
+        cursor: not-allowed;
+      }
+    }
+
+    &--unchecked {
+      position: relative;
+      height: 26px;
+      width: 26px;
+      border-radius: 50%;
+      border: 1px solid rgb(173, 173, 173);
+      cursor: pointer;
+      @include ease(out);
+
+      &::before {
+        opacity: 0;
+        transform: scale(0.8);
+        content: '';
+        display: block;
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        bottom: 4px;
+        left: 4px;
+        background: grow(pri);
+        box-shadow: 0px 1px 1px rgba(black, 0.1);
+        border-radius: 50%;
+        @include ease(out);
+      }
+
+      &:hover {
+        box-shadow: inset 0px -1px 3px rgba(black, 0.1);
+        &::before {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          background: white;
+        }
+      }
+
+      &--active {
+        background: white;
+        border-color: grow(pri);
+      }
+    }
+
+    &-icon {
+      position: relative;
+      cursor: pointer;
+      @include ease(out);
+
+      &::after {
+        opacity: 0;
+        transform: scale(0.8);
+        content: '';
+        display: block;
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        bottom: 3px;
+        left: 3px;
+        background: white;
+        box-shadow: 0px 1px 1p rgba(black, 0.2);
+        border-radius: 50%;
+        @include ease(out);
+      }
+
+      &:hover {
+        opacity: 0.85;
+
+        &::after {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      &--success {
+        width: 26px;
+        height: 26px;
+        * {
+          fill: grow(pri);
+        }
+      }
+
+      &--error {
+        * {
+          stroke: color(red);
+        }
+      }
+    }
+  }
+
+  &__name {
+    flex: 1;
+    display: inline-block;
+    margin-left: ($base-space / 1.5);
+    padding: ($base-space / 2.25) (0);
+    color: $text-color;
+    @include ease(out);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    margin-left: ($base-space / 1.5);
+  }
+
+  &__info {
+    margin-left: ($base-space / 1.5);
+    position: relative;
+    background: none;
+
+    &-content {
+      position: absolute;
+      z-index: 2;
+      opacity: 0;
+      visibility: hidden;
+      width: 380px;
+      border-radius: 2px;
+      padding: ($base-space / 2);
+      right: ($base-space / -1.5);
+      top: 33px;
+      background: grow(pri);
+      color: white;
+      box-shadow: 0 1px 4px rgba(black, 0.1);
+      @include ease(out);
+
+      &:after {
+        @include triangle(10px, up, grow(pri));
+        content: '';
+        position: absolute;
+        top: -5px;
+        right: 22px;
+      }
+    }
+
+    &-icon {
+      cursor: pointer;
+
+      * {
+        @include ease(out);
+        stroke: color(grey-mid);
+      }
+
+      &:hover {
+        * {
+          stroke: grow(pri);
+        }
+      }
+    }
+  }
+
+  &__button {
+    @include button;
+    min-width: 0;
+    min-height: 0;
+    line-height: 1.1;
+    width: auto;
+    height: ($base-space * 1.15);
+    margin: 0;
+
+    &--correct {
+      display: flex;
+      align-items: center;
+      color: $text-color;
+      background: none;
+      opacity: 0.5;
+      box-shadow: none;
+
+      &::before {
+        display: none;
+      }
+
+      &:hover {
+        background: none;
+      }
+    }
+
+    &--resolve {
+      margin-left: ($base-space / 2);
+      background: grow(pri);
+      color: white;
+    }
+
+    &--resolved {
+      background: none;
+      box-shadow: none;
+      color: lighten(color(grey-mid), 7);
+      cursor: default;
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+}

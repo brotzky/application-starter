@@ -1,0 +1,22 @@
+.LoginHeader {
+  text-align: center;
+  margin-bottom: $base-space;
+
+  &__logo {
+    height: 60px;
+    max-width: 200px;
+    margin: 0 auto 4.2rem;
+  }
+
+  &__heading {
+    font-weight: 600;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  &__text {
+    font-size: 1.8rem;
+    color: #616161;
+    margin-bottom: 5rem;
+  }
+}

@@ -1,0 +1,16 @@
+.Login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: white;
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__form-wrapper {
+    position: relative;
+    margin-bottom: ($base-space * 2);
+  }
+}

@@ -1,0 +1,75 @@
+.CalculatorRowHeader {
+  padding: ($base-space / 1.75) ($base-space / 1.5) ($base-space / 3);
+  background-color: #fafafa;
+  color: $text-color;
+  border-bottom: 1px solid #ebeef0;
+  border-top: 1px solid #ebeef0;
+
+  &Title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: ($base-space / 4.5);
+
+    &__heading {
+      font-size: 1.7rem;
+      text-transform: capitalize;
+      margin: 0;
+      font-weight: 500;
+
+      &:last-child {
+        min-width: 178px;
+      }
+    }
+  }
+
+  &Label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__heading {
+      font-size: font(1);
+
+      &:last-child {
+        min-width: 178px;
+      }
+    }
+  }
+}
+
+.SectionHeader {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: ($base-space / 1.75) ($base-space * 1.25);
+  border-bottom: 1px solid #ebeef0;
+  background: #fafafa;
+
+  &__heading {
+    margin: 0;
+    font-size: 1.6rem;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: font(2);
+    font-weight: 400;
+  }
+
+  &__icon {
+    $size: 24px;
+    width: $size;
+    height: $size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      * {
+        fill: color(grey-mid);
+      }
+    }
+  }
+}

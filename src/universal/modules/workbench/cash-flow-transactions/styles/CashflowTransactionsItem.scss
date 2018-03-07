@@ -1,0 +1,41 @@
+.CashflowTransactionsItem {
+  padding: (0) ($base-space * 1.25);
+  $p: &;
+
+  &__wrapper {
+    display: flex;
+  }
+
+  &__cell {
+    flex: 1;
+
+    &--pos,
+    &--neg {
+      #{$p}__text {
+        text-align: center;
+        font-weight: 500;
+      }
+    }
+
+    &--neg {
+
+      #{$p}__text {
+        // background: rgba(color(red), 0.75);
+      }
+    }
+
+    &--pos {
+
+      #{$p}__text {
+        color: color(green);
+      }
+    }
+  }
+
+  &__text {
+    display: inline-block;
+    border-radius: 999px;
+    padding: (0) ($base-space / 3);
+    min-width: ($base-space * 3);
+  }
+}

@@ -1,0 +1,37 @@
+.SidebarUserMenu {
+  width: ($base-space * 7);
+  position: absolute;
+  top: -5px;
+  left: 45px;
+  border-radius: 4px;
+  background: lighten(grow(sec), 10);
+  box-shadow: 0 2px 8px rgba(black, 0.2);
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  @include ease(out);
+
+  &:before {
+    @include triangle(5px, left, lighten(grow(sec), 10));
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  &__item {
+
+  }
+
+  &__link {
+    display: block;
+    padding: ($base-space / 2) ($base-space);
+    color: white;
+    cursor: pointer;
+  }
+}

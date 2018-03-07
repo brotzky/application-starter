@@ -1,0 +1,43 @@
+.UsersListItem {
+  transition: 200ms ease all;
+  font-size: 1.4rem;
+
+  &:hover {
+    cursor: pointer;
+    background: rgba(black, 0.045);
+  }
+
+  &:last-child {
+    td {
+      border: none;
+    }
+  }
+
+  td {
+    text-align: left;
+    color: #31373d;
+    padding: 10px 16px;
+    user-select: none;
+    border-bottom: 1px solid #ebeef0;
+    vertical-align: top;
+
+    &:nth-child(2) {
+      width: 400px;
+    }
+
+    &:nth-child(3) {
+      width: 200px;
+      text-align: right;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  th {
+    &:last-child {
+      text-align: right;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Validation] alphaNumeric alphaNumeric() should return an error object when special characeters are passed in 1`] = `
+Object {
+  "defaultMessage": "cannot contain special characters",
+  "id": "form.errors.alphaNumeric",
+  "values": Object {},
+}
+`;
+
+exports[`[Form Validation] alphaNumeric alphaNumeric() should return no errors if a string of numbers is passed in 1`] = `undefined`;
+
+exports[`[Form Validation] alphaNumeric alphaNumeric() should return no errors if a string of only alphabetical letters is passed in 1`] = `undefined`;

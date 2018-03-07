@@ -1,0 +1,199 @@
+.QueueItem {
+  $p: &;
+  padding: (0) ($base-space);
+  position: relative;
+  background: white;
+
+  &:nth-child(even) {
+    background: color(grey-white);
+  }
+
+  &-appear {
+    opacity: 0.01;
+  }
+
+  &-appear-active {
+    opacity: 1;
+    @include ease(out, 0.4);
+  }
+
+  &__wrapper {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+  }
+
+  &__cell {
+    display: block;
+    flex: 1;
+    padding: ($base-space / 1.75) ($base-space / 1.75) ($base-space / 1.75) (0);
+    text-overflow: ellipsis;
+    color: $text-color;
+    font-size: 1.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    &--lg {
+      flex: 1.1;
+    }
+    &--md {
+      flex: 0.5;
+    }
+    &--sm {
+      flex: 0.15;
+    }
+
+    &--sm-t {
+      font-size: font(1);
+    }
+
+    &--align-right {
+      padding-left: 0;
+      text-align: right;
+    }
+
+    &--rel {
+      position: relative;
+    }
+    &--no-text-overflow {
+      text-overflow: initial;
+    }
+  }
+
+  &__heading {
+    font-weight: 600;
+    color: $headings-color;
+    margin-top: 0.5rem;
+  }
+
+  &__title {
+    position: relative;
+    top: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 1.2rem;
+    opacity: 0.6;
+  }
+
+  &__link {
+    cursor: pointer;
+
+    &:hover {
+      color: grow(pri);
+    }
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: grow(pri);
+      color: white;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      height: 21px;
+      width: 21px;
+      font-size: 0.7rem;
+      font-weight: 600;
+
+      @for $i from 2 to 5 {
+        #{&}:nth-child(#{$i}) {
+          position: relative;
+          left: -2px * $i;
+          background: #cde2f9;
+          color: grow(pri);
+        }
+      }
+
+      &-container {
+        display: flex;
+        align-items: center;
+        margin-right: 2px;
+      }
+    }
+
+    &-product {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    &-main {
+      font-weight: 500;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: left;
+      margin-bottom: 1px;
+    }
+
+    &-sub {
+      font-size: 1.25rem;
+      opacity: 0.75;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  &__isRep {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: line-through;
+    }
+  }
+
+  &__button {
+    @include button;
+    @include button--pri;
+    @include button--sm;
+  }
+
+  &__button-small {
+    @include button;
+    @include button--pri;
+    @include button--sm;
+  }
+
+  &__button-small-claimed {
+    @include button;
+    @include button--sec;
+    @include button--sm;
+
+    &:hover {
+      background: grow(pri);
+
+      span {
+        color: white;
+      }
+    }
+  }
+
+  &__menu-dots {
+    cursor: pointer;
+
+    &-icon {
+      transform: rotate(90deg);
+      * {
+        fill: grow(sec);
+      }
+
+      &--active {
+        * {
+          fill: grow(pri);
+        }
+      }
+
+      &:hover {
+        * {
+          fill: grow(pri);
+        }
+      }
+    }
+  }
+}

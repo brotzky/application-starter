@@ -1,0 +1,151 @@
+.Modal {
+  $p: &;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ($base-space / 1.75);
+  backface-visibility: hidden;
+
+  @include bp(small) {
+    padding: ($base-space / 1.25);
+  }
+
+  @include bp(medium) {
+    padding: ($base-space * 4) ($base-space * 4);
+  }
+
+  &-enter {
+    #{$p}__background {
+      opacity: 0;
+    }
+
+    #{$p}__dialog {
+      opacity: 0;
+      transform: translateY(8%);
+    }
+  }
+
+  &-enter-active {
+    #{$p}__background,
+    #{$p}__dialog {
+      opacity: 1;
+      @include ease(out, 0.5);
+    }
+
+    #{$p}__dialog {
+      transform: none;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+  }
+
+  &-leave-active {
+    opacity: 0;
+    @include ease(out);
+  }
+
+  &--not-fullscreen {
+    #{$p}__dialog {
+      height: auto;
+      width: auto;
+    }
+  }
+
+  &--error {
+    #{$p}__dialog {
+      border-color: color(red);
+    }
+  }
+
+  &__loading {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-color;
+
+    &-text {
+      position: relative;
+      top: 6px;
+      font-size: font(4);
+    }
+  }
+
+  &__dialog {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 310px;
+    min-width: 330px;
+    border-radius: 2px;
+    padding: ($base-space);
+    background: white;
+    box-shadow: 0 2px 8px rgba(black, 0.2);
+    border: 1px solid #9c9c9c;
+
+    &--noPadding {
+      padding: 0;
+    }
+  }
+
+  &__body {
+    height: 100%;
+    margin-bottom: ($base-space * 1.5);
+    overflow: hidden;
+
+    &--no-margin {
+      margin-bottom: 0;
+    }
+  }
+
+  &__text {
+    margin-bottom: 0;
+  }
+
+  &__actions {
+    position: absolute;
+    opacity: 0.7;
+    height: 36px;
+    width: 36px;
+    top: -36px;
+    right: -20px;
+    line-height: 1;
+    color: #585858;
+    font-size: 3.2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-text-fill-color: white;
+  }
+
+  &__button {
+    margin-bottom: 0;
+  }
+
+  &__background {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -1;
+    background: rgba(black, 0.35);
+  }
+}

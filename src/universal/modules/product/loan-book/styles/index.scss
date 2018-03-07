@@ -1,0 +1,10 @@
+$react-dates-color-primary: grow(pri);
+$react-dates-color-primary-dark: grow(pri);
+@import '~react-dates/css/variables.scss';
+@import '~react-dates/css/styles.scss';
+
+@import "LoanBook";
+@import "LoanBookBalance";
+@import "LoanBookHeader";
+@import "LoanBookEditPaymentScheduleForm";
+@import "LoanBookCollectionsModal";

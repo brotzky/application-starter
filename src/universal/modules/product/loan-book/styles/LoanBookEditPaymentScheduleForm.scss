@@ -1,0 +1,73 @@
+.LoanBookEditPaymentScheduleForm {
+  color: $text-color;
+  min-width: 718px;
+
+  &__group {
+    margin-bottom: ($base-space / 1.5);
+
+    label {
+      margin: (0) ($base-space / 1.5) (0) ($base-space / 4);
+    }
+  }
+
+  &__preview {
+    margin-bottom: ($base-space);
+
+    &-frequency {
+      display: inline-block;
+      margin: (0) ($base-space / 6);
+      min-width: 93px;
+      text-align: center;
+      border-bottom: 1px dotted color(grey-mid);
+    }
+
+    .SingleDatePickerInput {
+      border-top-width: 0 !important;
+      border-left-width: 0 !important;
+      border-right-width: 0 !important;
+      border-bottom: 1px dotted color(grey-mid) !important;
+      margin: (0) (0) (0) ($base-space / 5) !important;
+    }
+
+    .DateInput {
+      padding: 0 !important;
+      font-weight: 600 !important;
+      font-size: font(2) !important;
+      background: none !important;
+      line-height: inherit;
+    }
+
+    .DateInput__display-text {
+      padding: 0 5px !important;
+    }
+  }
+
+  &__error {
+    margin-bottom: ($base-space / 2);
+    color: color(red);
+    font-weight: 600;
+  }
+
+  &Button {
+    width: auto;
+  }
+
+  &Field {
+    display: inline-block;
+  }
+
+  &Input {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    margin-bottom: ($base-space / 1.5);
+    padding: ($base-space / 6) ($base-space / 2);
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px dotted color(grey-mid);
+    color: color(grey-mid-dark);
+    font-weight: 600;
+  }
+}

@@ -1,0 +1,28 @@
+.AccountSettingsComplete {
+  color: color(black);
+  margin-left: 10px;
+
+  &Container {
+    display: flex;
+    align-items: center;
+
+    & > div,
+    svg {
+      margin: 13px;
+    }
+  }
+
+  &__top {
+    position: relative;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  &__sub {
+    position: relative;
+    bottom: 1px;
+    font-size: 1.4rem;
+    opacity: 0.75;
+    margin: 2px 0 0;
+  }
+}

@@ -1,0 +1,50 @@
+.MemberAboutTooltip {
+  $p: &;
+  position: absolute;
+  z-index: 1;
+  top: -36px;
+  right: ($base-space * 1.25);
+
+  &__icon {
+    display: inline-block;
+    border-radius: 50%;
+    background: white;
+    cursor: help;
+
+    &:hover {
+      + #{$p}__content {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    svg {
+      * {
+        fill: color(red);
+      }
+    }
+  }
+
+  &__content {
+    width: 420px;
+    background: color(grey-light);
+    color: color(grey-mid-dark);
+    padding: ($base-space / 1.5);
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(black, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 34px;
+    right: -12px;
+    @include ease(out);
+
+    &:before {
+      @include triangle(10px, up, color(grey-light));
+      content: "";
+      position: absolute;
+      top: -5px;
+      right: 18px;
+    }
+  }
+}

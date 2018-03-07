@@ -1,0 +1,14 @@
+.UsersDelete {
+  &Button {
+    color: $text-color;
+  }
+
+  &List {
+    color: $text-color;
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 15px;
+    }
+  }
+}

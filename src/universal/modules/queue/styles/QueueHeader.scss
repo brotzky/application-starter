@@ -1,0 +1,24 @@
+.QueueHeader {
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  &__label {
+    font-weight: 600;
+    color: $headings-color;
+  }
+
+  &__button {
+    color: color(black);
+    min-width: 163px;
+  }
+
+  &__chevron {
+    top: 52%;
+    left: - ($base-space / 4);
+    transform: translateY(-50%);
+    
+    * { fill: color(grey-mid); }
+  }
+}

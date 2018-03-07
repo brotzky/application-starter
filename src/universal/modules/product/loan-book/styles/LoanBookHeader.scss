@@ -1,0 +1,87 @@
+.LoanBookHeader {
+  min-height: 256px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(black, 0.1);
+  background: grow(pri);
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    padding: ($base-space / 2.25) ($base-space);
+    // background: rgba(black, 0.2);
+  }
+
+  &__heading {
+    margin: 0;
+    font-size: font(3);
+    font-weight: 600;
+    color: white;
+
+    &-icon {
+      margin-right: ($base-space / 2);
+      vertical-align: text-bottom;
+      * { stroke: white; }
+    }
+  }
+
+  &__middle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: (0) ($base-space) ($base-space * 1.5);
+  }
+
+  &__snippet {
+    margin: (0) ($base-space * 2);
+    text-align: center;
+
+    &-label,
+    &-value {
+      margin: 0;
+    }
+
+    &-label {
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 1.4rem;
+      color: rgba(white, 0.7);
+    }
+
+    &-value {
+      font-size: font(4);
+      font-weight: 600;
+      color: white;
+    }
+  }
+
+  &Placeholder {
+
+    &__heading {
+      width: 540px;
+      height: 8px;
+      margin: ($base-space * 2) (auto) ($base-space * 3.25);
+      background: rgba(white, 0.3);
+    }
+
+    &__snippet {
+      width: 160px;
+      height: 8px;
+      margin: (0) ($base-space * 2);
+      background: rgba(white, 0.3);
+    }
+  }
+
+  .SingleDatePickerInput {
+    border-width: 0 !important;
+    border-radius: 4px;
+    margin: (0) ($base-space / 2) !important;
+  }
+
+  .DateInput {
+    padding: 5px !important;
+    font-weight: 600 !important;
+    font-size: font(3) !important;
+    background: none !important;
+  }
+}

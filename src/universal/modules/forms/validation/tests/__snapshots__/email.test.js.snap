@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Validation] email email() should return an error object when an invalid email is passed in 1`] = `
+Object {
+  "defaultMessage": "must be a valid email address",
+  "id": "form.errors.email",
+  "values": Object {},
+}
+`;
+
+exports[`[Form Validation] email email() should return no errors if a valid email is passed in 1`] = `undefined`;

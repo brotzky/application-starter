@@ -1,0 +1,20 @@
+.CashflowTransactionsList {
+  list-style-type: none;
+
+  &__button {
+    display: block;
+    width: 100%;
+    background: white;
+    padding: ($base-space / 1.25);
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: color(grey-mid-dark);
+    font-size: 1.4rem;
+
+    &[disabled] {
+      cursor: default;
+      color: color(grey-mid);
+    }
+  }
+}

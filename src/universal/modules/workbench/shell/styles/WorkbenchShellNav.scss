@@ -1,0 +1,109 @@
+.WorkbenchShellNav {
+  $p: &;
+
+  &__list {
+    list-style: none;
+    margin: 0 auto 10px;
+  }
+
+  &__item {
+    position: relative;
+  }
+
+  &__link {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    left: -($base-space / 1.75);
+    min-width: 260px;
+    padding: ($base-space / 2.5) ($base-space / 1.75);
+    font-weight: 400;
+    border: 1px solid transparent;
+    color: color(grey-mid-dark);
+    position: relative;
+    border-radius: 2px;
+    margin-bottom: 2px;
+
+    @include ease(out);
+
+    &:hover {
+      background-color: rgba(white, 0.5);
+    }
+
+    &--subnav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &--active {
+      color: color(black);
+      background: #fff;
+      border: 1px solid #e8e8e8;
+
+      #{$p}__icon {
+        * {
+          fill: grow(pri);
+        }
+      }
+    }
+  }
+
+  &__icon {
+    margin-right: ($base-space / 2);
+    * {
+      fill: color(grey-mid);
+    }
+  }
+
+  &__chevron {
+    position: relative;
+    right: -7px;
+    width: 30px;
+    text-align: center;
+    background: none;
+    border-radius: 50%;
+
+    svg {
+      * {
+        fill: color(grey-mid);
+      }
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    position: relative;
+    top: -2px;
+    padding: 1px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    color: white;
+    background: grow(pri);
+    font-weight: 600;
+    font-size: font(1);
+    text-shadow: 1px 1px 1px rgba(black, 0.2);
+
+    &-container {
+      height: 20px;
+    }
+  }
+
+  &Header {
+    padding: ($base-space / 1.5) ($base-space);
+
+    &__heading {
+      font-size: 2.4rem;
+      margin: 0;
+    }
+
+    &__placeholder {
+      display: block;
+      height: 13px;
+      margin: 6px auto;
+    }
+  }
+}

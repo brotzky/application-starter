@@ -1,0 +1,83 @@
+.MemberProfiles {
+  &__image {
+    &-row {
+      margin-bottom: ($base-space);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &-wrapper {
+      margin-right: ($base-space / 3);
+    }
+
+    &-list {
+      display: flex;
+      flex-wrap: wrap;
+      list-style-type: none;
+    }
+
+    &-link {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: ($base-space / 2);
+
+      &:hover {
+        &:before {
+          opacity: 0.3;
+          transform: none;
+        }
+
+        &:after {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        @include ease(out, 0.35);
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        background: black;
+      }
+    }
+
+    &-content {
+    }
+
+    &-row-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 400;
+    }
+
+    &-row-heading {
+      margin-bottom: ($base-space / 3);
+      font-size: font(2);
+      color: color(grey-mid);
+    }
+
+    &-label {
+      margin-bottom: ($base-space / 5);
+
+      span {
+        font-weight: 500;
+      }
+    }
+
+    &-no-images {
+      margin-bottom: ($base-space / 1.5);
+      font-size: font(2);
+    }
+  }
+}

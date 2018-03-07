@@ -1,0 +1,23 @@
+.FormLabel {
+  display: block;
+  // position: absolute;
+  width: 100%;
+  top: 8px;
+  left: ($base-space / 1.5);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: font(1);
+  text-align: left;
+  color: color(grey-mid-dark);
+  cursor: text;
+  // transform: translateY(50%);
+  // opacity: 0;
+  @include ease(out);
+
+  &--static {
+    position: static;
+    transform: none;
+    opacity: 1;
+    margin-bottom: ($base-space / 1.5);
+  }
+}

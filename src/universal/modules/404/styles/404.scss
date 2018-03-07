@@ -1,0 +1,17 @@
+.NotFound {
+  text-align: center;
+  height: 100vh;
+  padding-top: 30vh;
+
+  &__title {
+    padding: 2.5rem;
+  }
+
+  &__text {
+    padding: 2rem;
+  }
+
+  &__redirect-button{
+    padding: 1rem;
+  }
+}

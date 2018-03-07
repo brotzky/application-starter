@@ -1,0 +1,39 @@
+.SearchResults {
+  min-height: 43.5px;
+  padding-bottom: 43.5px;
+  color: color(grey-mid-dark);
+
+  &__wrapper {
+    // height: 444px;
+    @include ease(out);
+
+    &--fetching {
+      height: 80px;
+    }
+
+    &--no-results {
+      height: 44px;
+    }
+  }
+
+  &__spinner {
+    height: 43.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .Spinner__spinner {
+      $size: 24px;
+      width: $size;
+      height: $size;
+    }
+
+    * {
+      stroke: grow(sec);
+    }
+  }
+
+  &List {
+    list-style: none;
+  }
+}

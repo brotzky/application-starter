@@ -1,0 +1,33 @@
+.CashflowTransactionsPlaceholder {
+
+  &Header {
+    height: 131.5px;
+    background: color(grey-white);
+    padding: $base-space * 1.25;
+
+    &__heading {
+      
+    }
+  }
+
+  &SubHeader {
+    height: 55px;
+    background: color(grey-white);
+
+    &__heading {
+      
+    }
+  }
+
+  &List {
+    list-style: none;
+    &__item {
+      height: 58px;
+      background: color(grey-white);
+
+      &:nth-child(odd) {
+        background: white;
+      }
+    }
+  }
+}

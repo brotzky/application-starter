@@ -1,0 +1,21 @@
+.MemberNotesPlaceholder {
+
+  .MemberNotesItem__header-name,
+  .MemberNotesItem__header-date {
+    display: inline-block;
+    height: 6px;
+    background: #f5f5f5;
+  }
+
+  .MemberNotesItem__header-name {
+    width: 280px;
+  }
+
+  .MemberNotesItem__header-date {
+    width: 100px;
+  }
+
+  .MemberNotesItem__body {
+    height: 117px;
+  }
+}

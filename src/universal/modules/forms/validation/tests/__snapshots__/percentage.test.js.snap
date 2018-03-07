@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Validation] percentage percentage() should return a function 1`] = `[Function]`;
+
+exports[`[Form Validation] percentage percentage() should return an empty string if nothing is passed it 1`] = `""`;
+
+exports[`[Form Validation] percentage percentage() should return an error when a percentage less than 100 is passed in 1`] = `
+Object {
+  "defaultMessage": "cannot be less than 100%",
+  "id": "form.errors.percentage1",
+  "values": Object {},
+}
+`;
+
+exports[`[Form Validation] percentage percentage() should return an error when a percentage less than 100 is passed in, with comparison string being a random string other than "max" 1`] = `
+Object {
+  "defaultMessage": "cannot be less than 100%",
+  "id": "form.errors.percentage1",
+  "values": Object {},
+}
+`;
+
+exports[`[Form Validation] percentage percentage() should return an error when a percentage over 100 is passed in 1`] = `
+Object {
+  "defaultMessage": "cannot be greater than 100%",
+  "id": "form.errors.percentage1",
+  "values": Object {},
+}
+`;
+
+exports[`[Form Validation] percentage percentage() should return no error when a percentage passed in equals to the percentage in comparison ("max" comparison) 1`] = `undefined`;
+
+exports[`[Form Validation] percentage percentage() should return no error when a percentage passed in equals to the percentage in comparison ("min" comparison) 1`] = `undefined`;
+
+exports[`[Form Validation] percentage percentage() should return no error when a percentage passed in equals to the percentage in comparison ("random" comparison) 1`] = `undefined`;
+
+exports[`[Form Validation] percentage percentage() should return no errors if a percentage greater than 100 is passed in 1`] = `undefined`;
+
+exports[`[Form Validation] percentage percentage() should return no errors if a percentage less than 100 is passed in 1`] = `undefined`;
+
+exports[`[Form Validation] percentage percentage() should return no errors if a percentage less than 100 is passed in 2`] = `undefined`;

@@ -1,0 +1,105 @@
+.MemberNotesItem {
+  $p: &;
+  overflow: auto;
+
+  &__header {
+    flex-wrap: nowrap;
+    display: flex;
+    padding: ($base-space / 1.5) ($base-space);
+    color: color(grey-mid-dark);
+
+    &-name {
+      max-width: 490px;
+      display: inline-block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      font-weight: 500;
+
+      span {
+        color: grow(pri);
+      }
+    }
+
+    &-date {
+      flex: 1;
+      min-width: 275px;
+      text-align: right;
+    }
+  }
+
+  &__icon {
+    margin-right: ($base-space / 2);
+    vertical-align: bottom;
+    * {
+      stroke: color(grey-mid);
+    }
+  }
+
+  &__body {
+    margin: (0) ($base-space) ($base-space / 1.25) (57px);
+    border-radius: 2px;
+    position: relative;
+    border: 1px solid #eee;
+    background: color(grey-white);
+
+    &:hover {
+      #{$p}__edit-button {
+        opacity: 1;
+      }
+    }
+
+    &--padded {
+      padding: ($base-space / 1.5);
+    }
+
+    p {
+      cursor: text;
+      white-space: pre-wrap;
+      padding: ($base-space / 1.5);
+      word-wrap: break-word;
+      word-break: break-all;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: ($base-space / 1.5);
+      border: 1px solid #eee;
+      margin-bottom: ($base-space / 1.5);
+      color: $text-color;
+      @include ease(out);
+
+      &:focus {
+        outline: none;
+        border-color: grow(pri);
+      }
+    }
+  }
+
+  &__edit-button {
+    position: absolute;
+    top: ($base-space / 1.5);
+    right: ($base-space / 1.5);
+    background: none;
+    color: grow(pri);
+    opacity: 0;
+    @include ease(out);
+  }
+
+  &__save-button {
+    @include button;
+    @include button--pri;
+    margin: (0) ($base-space / 2) (0) (0);
+  }
+
+  &__cancel-button {
+    @include button;
+    @include button--sec;
+    margin: (0) ($base-space / 2) (0) (0);
+  }
+}

@@ -1,0 +1,32 @@
+.UsersList {
+  tr {
+    cursor: pointer;
+
+    &:last-child > td {
+      border: none;
+    }
+  }
+
+  &Container {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  &Header {
+    width: 100%;
+    padding: 0 ($base-space * 1.5);
+
+    th {
+      font-weight: 500;
+      text-align: left;
+      color: color(black);
+      padding: 13px 15px;
+      user-select: none;
+      border-bottom: 1px solid #ebeef0;
+
+      &:nth-child(3) {
+        text-align: left;
+      }
+    }
+  }
+}

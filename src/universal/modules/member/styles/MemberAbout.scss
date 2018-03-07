@@ -1,0 +1,212 @@
+.MemberAbout {
+  $p: &;
+  display: flex;
+  min-height: 385px;
+
+  &Sidebar {
+    $pp: &;
+    width: 260px;
+    border-right: 1px solid color(grey-mid-light);
+
+    &__list {
+      list-style-type: none;
+    }
+
+    &__item {
+    }
+
+    &__link {
+      display: block;
+      padding: ($base-space / 1.75) ($base-space);
+      font-weight: 500;
+      color: color(grey-mid);
+
+      &:hover {
+        color: grow(sec);
+
+        #{$pp}__icon {
+          * {
+            fill: grow(sec);
+          }
+        }
+      }
+
+      &--active,
+      &--active:hover {
+        color: grow(pri);
+
+        #{$pp}__icon {
+          * {
+            fill: grow(pri);
+          }
+        }
+      }
+    }
+
+    &__icon {
+      margin-right: ($base-space / 2);
+      * {
+        fill: color(grey-mid);
+      }
+    }
+  }
+
+  &Content {
+    flex: 1;
+    position: relative;
+
+    // To cover up the border-bottom of the last row
+    &:before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      height: 1px;
+      width: 100%;
+      background: white;
+      border-radius: 4px;
+    }
+  }
+
+  &Section {
+    &__no-data-message {
+      margin: 0;
+      padding: ($base-space / 1.75) ($base-space * 1.25);
+      font-style: italic;
+      opacity: 0.4;
+      border-top: 1px solid color(grey-mid-light);
+      border-bottom: 1px solid color(grey-mid-light);
+    }
+
+    &__placeholder {
+      position: relative;
+      height: 47px;
+      border-bottom: 1px solid color(grey-mid-light);
+
+      @keyframes AboutSectionPlaceholder {
+        0% {
+          background-position: 0;
+        }
+        100% {
+          background-position: 500px;
+        }
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 7px;
+        background: linear-gradient(
+          90deg,
+          rgba(color(grey-mid), 0.1),
+          rgba(color(grey-mid), 0.02) 40%,
+          rgba(color(grey-mid), 0.1)
+        );
+      }
+
+      &:before {
+        left: ($base-space);
+        width: 300px;
+        animation: AboutSectionPlaceholder 1s linear infinite;
+      }
+    }
+
+    &__heading {
+      padding: ($base-space / 1.75) ($base-space * 1.25);
+      border-bottom: 1px solid #efefef;
+      background: color(grey-light);
+      font-size: font(2);
+      margin: 0;
+      font-weight: 500;
+    }
+
+    &__form-upload {
+      margin: (0) (0) ($base-space / 1.5) (auto);
+    }
+
+    &__cancel-changes {
+      display: block;
+      margin: 0 0 0 auto;
+      padding: ($base-space / 1.75) ($base-space) (0);
+      font-size: 1.4rem;
+      background: none;
+      color: grow(pri);
+      @include ease(out);
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  &__row {
+    $p: &;
+    display: flex;
+    border-bottom: 1px solid #efefef;
+    position: relative;
+
+    &-button {
+      display: flex;
+      opacity: 0;
+    }
+
+    &:hover &-button {
+      opacity: 1;
+    }
+
+    &-label,
+    &-value {
+      color: $text-color;
+      padding: ($base-space / 2.25) ($base-space * 1.25);
+    }
+
+    &-label {
+      width: ($base-space * 10);
+      text-transform: capitalize;
+      color: color(grey-mid);
+    }
+
+    &-edit {
+      position: absolute;
+      top: 50%;
+      right: ($base-space);
+      transform: translateY(-50%);
+      background: none;
+      color: grow(pri);
+      border: 1px solid grow(pri);
+      opacity: 0;
+      min-width: 5rem;
+      min-height: 1.75rem;
+      padding: 0 1.75rem;
+      line-height: 2.7rem;
+      font-size: 1.4rem;
+      font-weight: 500;
+      border-radius: 2px;
+      @include ease(out);
+
+      &:hover,
+      &:focus {
+        color: white;
+        background: grow(pri);
+      }
+
+      &:active {
+        box-shadow: 0 3px 6px rgba(black, 0.14) inset;
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+        color: #bbc0ca;
+      }
+    }
+
+    &-value {
+      flex: 1;
+      // max-width: 368px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.QueueList {
+  list-style-type: none;
+}
+
+.QueueAssignApplication {
+  max-height: 250px;
+  overflow-y: scroll;
+  border: 1px solid color(grey-mid-light);
+  border-radius: 2px;
+}

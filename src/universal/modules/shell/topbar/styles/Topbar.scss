@@ -1,0 +1,67 @@
+.Topbar {
+  $P: &;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 60px;
+  right: 0;
+  height: 60px;
+  padding-right: ($base-space);
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(black, 0.09);
+  @include ease(out);
+
+  &--search-active {
+    background: grow(pri);
+    color: white;
+  }
+
+  &__search-trigger {
+    position: relative;
+    top: -1px;
+    margin-right: ($base-space / 2);
+
+    &-icon {
+      position: relative;
+      top: -2px;
+      fill: #717070;
+    }
+  }
+
+  &__search-results {
+    position: absolute;
+    z-index: 10;
+    width: 575px;
+    top: 40px;
+    left: 0;
+    border-radius: 4px;
+    background: white;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.1),
+      0 8px 30px rgba(27, 39, 51, 0.08);
+    transform-origin: center top;
+    animation: scaleYUp 0.25s ease(out) forwards;
+  }
+
+  .Topbar__search {
+    width: 640px;
+    @include ease(out);
+
+    &--active {
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &Search {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 575px;
+    margin-left: 72px;
+  }
+}

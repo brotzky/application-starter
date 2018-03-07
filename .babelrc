@@ -1,0 +1,36 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"]
+        }
+      }
+    ],
+    "react",
+    "stage-0"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "react-loadable/babel",
+    "transform-class-properties",
+    "transform-regenerator",
+    "transform-runtime",
+    "transform-decorators-legacy",
+    [
+      "babel-plugin-styled-components",
+      {
+        "ssr": true
+      }
+    ],
+    [
+      "module-alias",
+      [
+        { "expose": "grow-actions", "src": "./grow-app-actions/" },
+        { "expose": "grow-utils", "src": "./grow-app-utils/" },
+        { "expose": "gac-utils", "src": "./src/universal/utils/" }
+      ]
+    ]
+  ]
+}

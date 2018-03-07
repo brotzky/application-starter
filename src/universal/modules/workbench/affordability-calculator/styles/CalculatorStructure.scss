@@ -1,0 +1,85 @@
+.Calculator {
+  display: flex;
+  justify-content: center;
+
+  &Column {
+    flex: 1;
+
+    &:last-child {
+      flex: 2;
+    }
+  }
+
+  &Calculated {
+    font-weight: 500;
+    color: grow(pri);
+  }
+}
+
+.CalculatorRow {
+  display: flex;
+  border-bottom: 1px solid #ebeef0;
+
+  & div:nth-child(2) {
+    width: 52%;
+
+    @include bp(largest) {
+      width: 42%;
+    }
+  }
+
+  &--no-permission {
+    background: #f8f8fa;
+  }
+}
+
+.CalculatorBottomRow {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ($base-space / 1.25) ($base-space / 1.5) ($base-space * 1.5);
+  background-color: white;
+}
+
+.CalculatorColumn__one {
+  width: 237px;
+  
+
+  @include bp(xlarge) {
+    width: 228px;
+  }
+
+  @include bp(largest) {
+    width: 296px;
+  }
+}
+
+.CalculatorColumn__two {
+  width: 122px;
+  
+  @include bp(xlarge) {
+    width: 117px;
+  }
+  
+  @include bp(largest) {
+    width: 129px;
+  }
+}
+
+.CalculatorColumn__three {
+  display: flex;
+  align-items: flex-end;
+}
+
+.CalculatorFormField {
+  &:nth-child(1) {
+    display: flex;
+    align-items: center;
+    min-width: 60%;
+
+    @include bp(largest) {
+      min-width: 385px;
+    }
+  }
+}

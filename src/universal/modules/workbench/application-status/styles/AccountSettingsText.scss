@@ -1,0 +1,13 @@
+.AccountSettingsText {
+  margin: 1rem 3rem;
+
+  &__header {
+    font-size: font(2);
+  }
+
+  &__subheader {
+    opacity: 0.75;
+    margin: 4px 0 0;
+    font-size: 1.4rem;
+  }
+}

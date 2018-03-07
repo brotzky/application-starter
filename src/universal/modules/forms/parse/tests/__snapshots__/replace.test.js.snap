@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Form Field Parsing] replace replace() should replace a value in a string that is specific 1`] = `"12"`;
+
+exports[`[Form Field Parsing] replace replace() should replace only a single value that is specific 1`] = `"12 3"`;
+
+exports[`[Form Field Parsing] replace replace() should return a function 1`] = `[Function]`;

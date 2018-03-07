@@ -1,0 +1,74 @@
+.CreditBureau {
+  &Overview {
+    width: 100%;
+    background-color: white;
+    margin-bottom: $base-space;
+  }
+
+  &Report {
+    padding: (0) ($base-space * 1.5) ($base-space * 1.5);
+    min-width: 755px;
+    min-height: 700px;
+    background-color: white;
+    @include ease(out);
+
+    @include bp(xlarge) {
+      padding: (0) ($base-space * 1.5) ($base-space * 1.5);
+    }
+
+    &Paper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: calc(700px - 9rem);
+      font-size: 1.7rem;
+      color: $text-color;
+
+      .EmptyState__text {
+        width: 100%;
+      }
+    }
+  }
+
+  &Body {
+    display: flex;
+    justify-content: center;
+    padding: ($base-space);
+
+    &__pull {
+      margin-left: $base-space * 2;
+    }
+
+    &__header {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      min-height: 43px;
+    }
+
+    select,
+    button {
+      min-width: 238px;
+    }
+  }
+
+  &List {
+    list-style: none;
+    margin: $base-space / 2.25 0;
+    color: $headings-color;
+  }
+
+  &Header {
+    &__empty {
+      font-size: font(4);
+      text-align: center;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+}

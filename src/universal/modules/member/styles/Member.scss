@@ -1,0 +1,14 @@
+.Member {
+  &__box {
+    @include clearfix;
+    background: white;
+    box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 3px 0 rgba(63,63,68,0.15);
+
+    &--ofh { overflow: hidden; }
+  }
+
+  &__heading {
+    margin: ($base-space * 1.25) 0 ($base-space / 3);
+    font-size: font(3);
+  }
+}

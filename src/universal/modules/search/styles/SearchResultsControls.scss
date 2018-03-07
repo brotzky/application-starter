@@ -1,0 +1,44 @@
+.SearchResultsControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 43.5px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: (0) ($base-space / 1.5);
+  background: color(grey-light);
+
+  > * {
+    flex: 1;
+  }
+
+  &__close {
+    color: grow(pri);
+    cursor: pointer;
+    font-weight: 600;
+    @include ease(out);
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    &-icon {
+      margin-right: ($base-space / 2);
+      height: 16px;
+
+      * {
+        fill: grow(pri);
+      }
+    }
+  }
+
+  &__page {
+    text-align: center;
+  }
+
+  &__pagination {
+    text-align: right;
+  }
+}

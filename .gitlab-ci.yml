@@ -1,0 +1,34 @@
+image: node:6.11.0
+
+stages:
+  - test
+  - build
+
+cache:
+  untracked: true
+  paths:
+    - node_modules/
+    - .yarn
+
+
+before_script:
+  - node --version
+  - npm --version
+  - yarn --version
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+  - yarn install
+
+test:
+  stage: test
+  script:
+    - yarn test
+  tags:
+    - node
+
+build:
+  stage: build
+  script:
+    - yarn run build:generate
+  tags:
+    - node

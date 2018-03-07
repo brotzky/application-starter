@@ -1,0 +1,137 @@
+.WorkbenchShell {
+  display: flex;
+  align-items: flex-start;
+
+  // Override box-shadow to show none within workbench placeholders
+  .ChecklistPlaceholder {
+    box-shadow: none;
+  }
+
+  &Sidebar {
+    top: 1px;
+    width: 280px;
+
+    @include bp(xlarge) {
+      width: 290px;
+    }
+  }
+
+  &Section {
+    margin-bottom: $base-space * 1.5;
+  }
+
+  &Header {
+    &__heading {
+      margin: 0;
+      padding-bottom: $base-space / 4.5;
+      color: grow(sec);
+      font-size: 2rem;
+    }
+  }
+
+  &Dynamic {
+    flex: 1;
+    margin-left: 0;
+    @include ease(out, 0.5);
+
+    @include bp(large) {
+      margin-left: $base-space / 1.25;
+    }
+
+    @include bp(largest) {
+      margin-left: $base-space;
+    }
+
+    &--joint {
+      transform: translateY(58px);
+      transition: all 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    &__content {
+      &::before {
+        content: 'You must be the manager of this application to proceed';
+        position: absolute;
+        width: 250px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        padding: 1.75rem 2rem;
+        top: 100px;
+        border-radius: 2px;
+        background: white;
+        color: color(black);
+        cursor: not-allowed;
+        z-index: 1;
+        opacity: 0;
+        box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.1),
+          0 8px 30px rgba(27, 39, 51, 0.08);
+        transform: scale(0.85) translate3d(0, 5px, -2px);
+        transform-origin: bottom;
+        text-align: center;
+        @include ease(out);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        background: white;
+        top: 65px;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        cursor: not-allowed;
+        opacity: 0;
+        @include ease(out);
+      }
+
+      &:hover::before {
+        opacity: 1;
+        transform: scale(1) translate3d(0, 0px, 0px);
+      }
+
+      &:hover::after {
+        opacity: 0.4;
+      }
+    }
+  }
+
+  &List {
+    list-style: none;
+
+    &__item {
+      display: flex;
+      align-items: center;
+      padding: (0.75rem) (0);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      color: color(grey-mid-dark);
+
+      &-single {
+        padding: (0.75rem) (0);
+        display: block;
+        color: color(grey-mid-dark);
+      }
+
+      a:hover {
+        color: grow(pri);
+      }
+    }
+
+    &__title {
+      display: inline-block;
+      min-width: 95px;
+      color: color(black);
+    }
+
+    &__detail {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+
+      &--pending {
+        opacity: 0.5;
+      }
+    }
+  }
+}
