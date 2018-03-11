@@ -67,10 +67,8 @@ class SearchTerms extends Component {
 
   render() {
     return (
-      <div className={`SearchTerms ${this.props.className || ''}`}>
-        <div className="SearchTerms__wrapper">
-          <SearchForm onSubmit={this.handleSubmit} />
-        </div>
+      <div style={{ width: '100%' }}>
+        <SearchForm onSubmit={this.handleSubmit} />
       </div>
     );
   }

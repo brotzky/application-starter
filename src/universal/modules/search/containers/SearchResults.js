@@ -1,12 +1,41 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
+import styled, { withTheme } from 'styled-components';
+import { push } from 'react-router-redux';
 import SearchResultsItem from '../components/SearchResultsItem';
 import SearchResultsControls from '../components/SearchResultsControls';
-import Spinner from '../../ui/spinner/spinner';
-import { addClassNameIf } from 'grow-utils/addClassNameIf';
+import { Spinner } from 'gac-ui/components/';
 
+const SearchResultsContainer = styled.div`
+  min-height: 43.5px;
+  padding-bottom: 43.5px;
+  color: #585858;
+`;
+const SearchResultsSpinnerWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const SearchResultsNoResults = styled.div`
+  padding: 1rem 3rem;
+
+  &:nth-child(even) {
+    background: #fafafa;
+  }
+
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+  color: ${props => props.theme.colors.black};
+`;
+
+const SearchResultsWrapper = styled.div`
+  ${props => props.isFetching && 'height: 80px'};
+  ${props => props.noResults && 'height: 45px'};
+  transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+`;
 class SearchResults extends Component {
   static propTypes = {
     className: PropTypes.string,
@@ -16,24 +45,30 @@ class SearchResults extends Component {
     handlePagination: PropTypes.func.isRequired,
   };
 
-  handleResultClick = id => {
-    const { clearSearchResults, dispatch } = this.props;
-
-    dispatch(push(`/members/${id}`));
-    return clearSearchResults();
+  setResultsWrapperHeight = (members, isFetching) => {
+    const height = members.length * 45;
+    if (!members.length || isFetching) return '45px';
+    return height > 435 ? '450px' : `${height}px`;
   };
 
-  renderLoading = () => <Spinner className="SearchResults__spinner" />;
+  handleResultClick = id => {
+    this.props.dispatch(push(`/members/${id}`));
+    return this.props.clearSearchResults();
+  };
+
+  renderLoading = () => (
+    <SearchResultsSpinnerWrapper>
+      <Spinner color={this.props.theme.colors.blue} />
+    </SearchResultsSpinnerWrapper>
+  );
 
   renderNoResults = () => (
-    <div className="SearchResultsItem SearchResultsItem--no-results">
-      Sorry, no results found
-    </div>
+    <SearchResultsNoResults>Sorry, no results found</SearchResultsNoResults>
   );
 
   renderResults(members) {
     return (
-      <ul className="SearchResultsList">
+      <ul style={{ listStyle: 'none' }}>
         {members.map(member => (
           <SearchResultsItem
             key={member.email}
@@ -45,12 +80,6 @@ class SearchResults extends Component {
     );
   }
 
-  setResultsWrapperHeight(members, isFetching) {
-    const height = members.length * 43.5;
-    if (!members.length || isFetching) return '43.5px';
-    return height > 435 ? '435px' : `${height}px`;
-  }
-
   render() {
     const {
       className,
@@ -59,6 +88,7 @@ class SearchResults extends Component {
       hasMoreResults,
       handlePagination,
     } = this.props;
+
     const { queryParams } = data;
     const someQueryExists = Object.keys(queryParams).some(
       k => queryParams[k] && queryParams[k].length > 0,
@@ -71,19 +101,13 @@ class SearchResults extends Component {
     }
 
     return (
-      <div className={`SearchResults ${className}`}>
-        <div
+      <SearchResultsContainer className={className}>
+        <SearchResultsWrapper
           style={{
             height: this.setResultsWrapperHeight(data.members, data.isFetching),
           }}
-          className={`
-          SearchResults__wrapper
-          ${addClassNameIf(data.isFetching, 'SearchResults__wrapper--fetching')}
-          ${addClassNameIf(
-            noResultsExists,
-            'SearchResults__wrapper--no-results',
-          )}
-        `}
+          isFetching={data.isFetching}
+          noResults={noResultsExists}
         >
           {(() => {
             if (data.isFetching) {
@@ -101,10 +125,10 @@ class SearchResults extends Component {
             hasMoreResults={hasMoreResults}
             page={data.page}
           />
-        </div>
-      </div>
+        </SearchResultsWrapper>
+      </SearchResultsContainer>
     );
   }
 }
 
-export default connect()(SearchResults);
+export default withTheme(SearchResults);

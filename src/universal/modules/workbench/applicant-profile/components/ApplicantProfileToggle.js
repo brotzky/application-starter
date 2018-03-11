@@ -1,10 +1,10 @@
-// @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFormValues, focus, initialize } from 'redux-form';
 import ApplicantProfileFile from './ApplicantProfileFile';
 import ApplicantProfileText from './ApplicantProfileText';
 import ApplicantProfileEdit from './ApplicantProfileEdit';
+import stringifyRange from 'gac-utils/stringifyRange';
 
 class ApplicantProfileToggle extends Component {
   state = {
@@ -31,14 +31,26 @@ class ApplicantProfileToggle extends Component {
   getFieldValue(fieldName: string): string {
     const query: string[] = fieldName.split('.');
     const hasNoFormValues = !Object.keys(this.props.formValues).length;
-
     if (hasNoFormValues) return null;
 
     let fieldValue: {} = this.props.formValues;
 
     for (let i = 0; i < query.length; i++) {
-      if (fieldValue !== undefined) {
-        fieldValue = fieldValue[query[i]];
+      if (fieldValue) {
+        /**
+         * This is to check whether it is a true object. We cannot just use typeof
+         * because other types such as null or array will be considered as an object in JS.
+         * This check is mainly to check if the "range" object exists, which is returned from backend.
+         * Ref: https://toddmotto.com/understanding-javascript-types-and-reliable-type-checking/#true-object-types
+         */
+        if (
+          Object.prototype.toString.call(fieldValue[query[i]]) ===
+          '[object Object]'
+        ) {
+          fieldValue = stringifyRange(fieldValue[query[i]]);
+        } else {
+          fieldValue = fieldValue[query[i]];
+        }
       }
     }
     return fieldValue;
@@ -70,7 +82,7 @@ class ApplicantProfileToggle extends Component {
   };
 
   render() {
-    const { group } = this.props;
+    const { group, sameAdmin } = this.props;
     return (
       <div>
         {this.state.showEditForm ? (
@@ -85,8 +97,8 @@ class ApplicantProfileToggle extends Component {
                 field,
                 fieldValue: this.getFieldValue(field.name),
                 handleToggleClick: this.handleToggleClick,
+                sameAdmin,
               };
-
               switch (field.type) {
                 case 'file':
                   return (
@@ -107,6 +119,7 @@ class ApplicantProfileToggle extends Component {
 
 const mapStateToProps = state => ({
   formValues: getFormValues('workbench')(state),
+  sameAdmin: state.workbench.primaryRep.email === state.user.email,
 });
 
 export default connect(mapStateToProps)(ApplicantProfileToggle);

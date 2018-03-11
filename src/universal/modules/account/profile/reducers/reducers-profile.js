@@ -21,8 +21,6 @@ import {
   UPDATE_PASSWORD_REQUEST,
 } from 'grow-actions/user/constants';
 
-import { UPLOAD_PROFILE_PICTURE_SUCCESS } from 'grow-actions/upload-file/constants';
-
 const initialState = {
   firstName: '',
   lastName: '',
@@ -108,13 +106,6 @@ export default function profileReducer(state = initialState, action) {
     case UNLOCK_USER_PROFILE_SUCCESS:
       return Object.assign({}, state, {
         ...action.payload.data.user,
-      });
-    case UPLOAD_PROFILE_PICTURE_SUCCESS:
-      return Object.assign({}, state, {
-        profilePicture:
-          action.payload.user.id === state.id
-            ? action.payload.preview
-            : state.profilePicture,
       });
     case DELETE_USER_SUCCESS:
     case 'RESET_PROFILE':

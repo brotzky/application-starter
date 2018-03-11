@@ -1,38 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'gac-ui/components';
+import styled from 'styled-components';
 import { FadeIn } from '../../../ui/transitions';
 
-const ChecklistResolutionIncomplete = props => {
-  return (
-    <FadeIn className="ChecklistResolution__not-completed" component="div">
-      <p className="ChecklistResolution__not-completed-text">
-        {props.member.firstName}
-        {' '}
-        has not completed the required steps to be able to resolve the
-        {' '}
-        {props.checklistItem.prettyName}
-        {' '}
-        checklist item.
-      </p>
-      <p className="ChecklistResolution__not-completed-text">
-        Please wait for
-        {' '}
-        {props.member.firstName}
-        {' '}
-        to complete the required steps before resolving this item.
-      </p>
-      <button
-        onClick={event => props.handleCloseActionMenu(event)}
-        className="c-button c-button--sec c-button--flush c-button--sm"
-      >
-        <span>Close</span>
-      </button>
-    </FadeIn>
-  );
-};
+const Text = styled.p`
+  margin: 1.37rem 0 2.4rem;
+
+  &:first-child {
+    margin-bottom: 1.2rem;
+  }
+`;
+
+const ChecklistResolutionIncomplete = props => (
+  <FadeIn component="div">
+    <Text>
+      {props.member.firstName} has not completed the required steps to be able
+      to resolve the {props.checklistItem.prettyName} checklist item.
+    </Text>
+    <Text>
+      Please wait for {props.member.firstName} to complete the required steps
+      before resolving this item.
+    </Text>
+    <Button
+      onClick={event => props.handleCloseActionMenu(event)}
+      size="large"
+      text="Close"
+    />
+  </FadeIn>
+);
 
 const mapStateToProps = state => ({
-  member: state.member.member
+  member: state.member.member,
 });
 
 export default connect(mapStateToProps)(ChecklistResolutionIncomplete);

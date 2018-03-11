@@ -1,14 +1,112 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import ReactHtmlParser from 'react-html-parser';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { ease } from 'gac-utils/sc';
 import { FadeIn } from '../../ui/transitions/';
-import { User } from '../../ui/icons/';
 import { productApplication } from 'grow-utils/productApplicationUtils';
 import { htmlEnDeCode } from 'grow-utils/htmlEnDecoder';
-import { EmptyNote } from '../../ui/icons/';
-import { EmptyState } from '../../ui/components';
+import { EmptyNote, User } from '../../ui/icons/';
+import { EmptyState, Button } from '../../ui/components';
+
+const NotesList = styled.ul`
+  list-style-type: none;
+  margin-bottom: 1.6rem;
+`;
+
+const NotesItem = styled.li`
+  border-bottom: 1px solid rgba(${props => props.theme.banks.grow.pri}, 0.1);
+  &:last-of-type {
+    border-bottom: none;
+  }
+`;
+
+const NotesItemHeader = styled.header`
+  flex-wrap: nowrap;
+  display: flex;
+  padding: 1.6rem 2.4rem;
+  color: ${props => props.theme.colors.greyMidDark};
+`;
+
+const NotesItemBody = styled.header`
+  margin: 0 2.4rem 1.92rem 5.7rem;
+  border-radius: 2px;
+  position: relative;
+  border: 1px solid #eee;
+  background: #fafafa;
+
+  p {
+    cursor: text;
+    white-space: pre-wrap;
+    padding: 1.6rem;
+    word-wrap: break-word;
+    word-break: break-all;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1.6rem;
+    border: 1px solid #eee;
+    margin-bottom: 1.6rem;
+    color: ${props => props.theme.colors.black};
+    transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+
+    &:focus {
+      outline: none;
+      border-color: ${props => props.theme.colors.blue};
+    }
+  }
+  ${props => (props.padding ? 'padding: 1.6rem;' : '')};
+`;
+
+const NotesItemHeaderName = styled.header`
+  max-width: 490px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 500;
+
+  span {
+    color: ${props => props.theme.colors.blue};
+  }
+`;
+const NotesItemHeaderDate = styled.header`
+  flex: 1;
+  min-width: 275px;
+  text-align: right;
+`;
+const NotesItemIcon = styled(User)`
+  margin-right: 1.2rem;
+  vertical-align: bottom;
+  * {
+    stroke: ${props => props.theme.colors.greyMid};
+  }
+`;
+
+const EditButton = styled(Button)`
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  background: none;
+  color: ${props => props.theme.colors.blue};
+  opacity: 0;
+  ${ease('out')};
+`;
+
+const SaveButton = styled(Button)`
+  margin: 0 1.2rem 0 0;
+`;
+
+const CancelButton = styled(Button)`
+  margin: 0 4.8rem 0 0;
+`;
 
 // Props to Henry for this
 const replaceAngleBracketsIfStringContainsAtSymbolNoSemicolon = /<(?!.*;.*)(?:(.*@.*\..*))>/g;
@@ -97,7 +195,7 @@ class MemberNotesList extends Component {
     const { errors = [] } = notes;
 
     return (
-      <ul className="MemberNotesList">
+      <NotesList>
         <FadeIn>
           {errors.length > 0 &&
             !notes.isFetching &&
@@ -160,26 +258,20 @@ class MemberNotesList extends Component {
 
           return (
             <FadeIn key={id}>
-              <li className="MemberNotesItem">
-                <header className="MemberNotesItem__header">
-                  <User className="MemberNotesItem__icon" />
-                  <div className="MemberNotesItem__header-name">
+              <NotesItem>
+                <NotesItemHeader>
+                  <NotesItemIcon />
+                  <NotesItemHeaderName>
                     {creator.firstName} {creator.lastName} in
                     <span>{categoryDisplayName}</span>
-                  </div>
-                  <span className="MemberNotesItem__header-date">
+                  </NotesItemHeaderName>
+                  <NotesItemHeaderDate>
                     {dateCreatedMoment.format('MMM D YYYY, h:mm a')} (
                     {dateCreatedMoment.fromNow()}
                     )
-                  </span>
-                </header>
-                <div
-                  className={`MemberNotesItem__body ${
-                    notes.editNoteId === note.id
-                      ? 'MemberNotesItem__body--padded'
-                      : ''
-                  }`}
-                >
+                  </NotesItemHeaderDate>
+                </NotesItemHeader>
+                <NotesItemBody padding={notes.editNoteId === note.id}>
                   {notes.editNoteId === note.id ? (
                     <textarea
                       value={formattedNoteText}
@@ -196,35 +288,32 @@ class MemberNotesList extends Component {
                   )}
                   {canEditNote &&
                     notes.editNoteId !== note.id && (
-                      <button
+                      <EditButton
+                        appearance="secondary"
+                        text="Edit"
                         onClick={() => this.handleEditClick(note)}
-                        className="MemberNotesItem__edit-button"
-                      >
-                        Edit
-                      </button>
+                      />
                     )}
                   {notes.editNoteId === note.id && (
-                    <button
+                    <SaveButton
+                      appearance="primary"
+                      text="Save"
                       onClick={() => this.handleSaveClick(note)}
-                      className="MemberNotesItem__save-button"
-                    >
-                      <span>Save</span>
-                    </button>
+                    />
                   )}
                   {notes.editNoteId === note.id && (
-                    <button
+                    <CancelButton
+                      appearance="secondary"
+                      text="Cancel"
                       onClick={() => this.handleCancelClick()}
-                      className="MemberNotesItem__cancel-button"
-                    >
-                      <span>Cancel</span>
-                    </button>
+                    />
                   )}
-                </div>
-              </li>
+                </NotesItemBody>
+              </NotesItem>
             </FadeIn>
           );
         })}
-      </ul>
+      </NotesList>
     );
   }
 }

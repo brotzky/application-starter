@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { formValueSelector } from 'redux-form';
 import queryString from 'query-string';
-import { FadeDownSlow, Transition } from '../../ui/transitions/';
+import styled from 'styled-components';
+import { push } from 'react-router-redux';
+import { Transition } from '../../ui/transitions/';
 import { CheckCircleFilled } from '../../ui/icons/';
 import {
   resetPasswordRequest,
@@ -11,13 +12,61 @@ import {
 } from 'grow-actions/auth/auth0-reset-password';
 import RequestResetPasswordForm from './RequestResetPasswordForm';
 import ResetPasswordForm from './ResetPasswordForm';
-
+import { LoginWrapper } from 'gac-utils/sc';
 import AuthFromWrapper from '../../auth/components/AuthFormWrapper';
+
+const LoginMessage = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: -1rem;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #585858;
+  font-weight: 400;
+  font-size: ${props => props.theme.font.size3};
+  width: 80%;
+  word-break: break-word;
+
+  &-enter {
+    opacity: 0;
+    transform: translateX(-50%) translateY(35px);
+  }
+
+  &-enter-active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    transition: all 400ms ease-out;
+  }
+`;
+
+const LoginMessageIcon = styled.span`
+    margin-right: 1rem;
+    position: relative;
+    
+    * {
+      fill: ${props => props.theme.colors.blue};
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 19px;
+      height: 19px;
+      background: white;
+      border-radius: 50%;
+    }
+  }
+`;
 
 class ResetPassword extends Component {
   handleResetSubmit = data => {
-    const { dispatch } = this.props;
+    const { dispatch, pathname } = this.props;
     const { email } = data;
+    const isResetPasswordForm = pathname.includes('/reset');
 
     if (email) {
       return dispatch(
@@ -35,7 +84,6 @@ class ResetPassword extends Component {
       isFormFilled &&
       passwordsMath
     );
-
     if (isResetPasswordFormValid) {
       return dispatch(
         resetPassword({
@@ -50,15 +98,16 @@ class ResetPassword extends Component {
   render() {
     const {
       auth: { organization },
+      pathname,
       workEmail,
       hasSentResetPasswordInstructions,
     } = this.props;
-    // const isResetPasswordForm = window.location.href.includes('/reset');
-    const isResetPasswordForm = false;
+
+    const isResetPasswordForm = pathname.includes('/reset');
 
     return (
       <AuthFromWrapper>
-        <div className="Login__wrapper">
+        <LoginWrapper>
           {isResetPasswordForm ? (
             <ResetPasswordForm onSubmit={this.handleResetSubmit} />
           ) : (
@@ -66,16 +115,16 @@ class ResetPassword extends Component {
           )}
           <Transition transitionName="LoginMessage">
             {hasSentResetPasswordInstructions && (
-              <div className="LoginMessage">
-                <span className="LoginMessage__icon">
+              <LoginMessage>
+                <LoginMessageIcon>
                   <CheckCircleFilled />
-                </span>{' '}
-                A link with password reset instructions has been sent to{' '}
-                {workEmail}
-              </div>
+                </LoginMessageIcon>{' '}
+                If you have an account, a link with password reset instructions
+                will be sent to <strong>{workEmail}</strong>
+              </LoginMessage>
             )}
           </Transition>
-        </div>
+        </LoginWrapper>
       </AuthFromWrapper>
     );
   }
@@ -85,6 +134,7 @@ const selector = formValueSelector('resetRequestPass');
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  pathname: state.router.location.pathname,
   workEmail: selector(state, 'email'),
   hasSentResetPasswordInstructions: state.auth.hasSentResetPasswordInstructions,
 });

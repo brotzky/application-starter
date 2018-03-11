@@ -6,15 +6,17 @@ import config from '../../../webpack/webpack.development.config';
 const isDev = process.env.NODE_ENV === 'development';
 const webpackConfig = config();
 const compiler = webpack(webpackConfig);
+const devServerConfig = {
+  noInfo: true,
+  publicPath: webpackConfig.output.publicPath,
+  stats: 'errors-only',
+};
 
 const byPass = (req, res, next) => next();
 
 // Only running webpack middlware in dev
 export const webpackDev = isDev
-  ? webpackDevMiddleware(compiler, {
-      noInfo: true,
-      publicPath: webpackConfig.output.publicPath,
-    })
+  ? webpackDevMiddleware(compiler, devServerConfig)
   : byPass;
 
 export const webpackHot = isDev ? webpackHotMiddleware(compiler) : byPass;

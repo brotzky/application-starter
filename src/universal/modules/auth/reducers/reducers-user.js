@@ -22,7 +22,7 @@ import {
   UPDATE_PASSWORD_FAILURE,
 } from 'grow-actions/user/constants';
 
-import { UPLOAD_PROFILE_PICTURE_SUCCESS } from 'grow-actions/upload-file/constants';
+import { UPLOAD_PROFILE_PICTURE_FILE_SUCCESS } from 'grow-actions/upload-file/constants';
 
 const initialState = {
   firstName: '',
@@ -59,7 +59,7 @@ export default function userReducer(state = initialState, action) {
         isUpdating: false,
         resources,
       });
-    case UPLOAD_PROFILE_PICTURE_SUCCESS:
+    case UPLOAD_PROFILE_PICTURE_FILE_SUCCESS:
       return Object.assign({}, state, {
         profilePicture: action.payload.preview,
       });

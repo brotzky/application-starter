@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import Fuse from 'fuse.js';
 import _set from 'lodash/set';
 import _unset from 'lodash/unset';
-import { push } from 'react-router-redux';
+import { push } from 'react-router-redux'
 
 import {
   FirebaseAPI,
@@ -22,9 +23,16 @@ import EditorSidebar from '../components/EditorSidebar';
 import OrgLanguageList from '../components/OrgLanguageList';
 import ViewPermission from '../../../ui/components/Permissions/ViewPermission';
 
-const ContentCard = Card.extend`
-  width: 100%;
+const Container = styled.div`
   display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  width: 1050px;
+`;
+
+const ContentCard = Card.extend`
+  display: flex;
+  width: 100%;
   flex-wrap: wrap;
 `;
 
@@ -153,7 +161,7 @@ class Translator extends Component {
         activeCategory: null,
         selectedLanguageKey: null,
       },
-      () => dispatch(push(`/tools/translator/${env}`)),
+      () => this.props.dispatch(push(`/tools/translator/${env}`),
     );
 
   pushToEnv = async env => {
@@ -195,9 +203,9 @@ class Translator extends Component {
     await this.setState(
       { selectedLanguageDefs, selectedLanguageKey: lang },
       () =>
-        this.props.dispatch(
-          push(`/tools/translator/${this.props.params.env}/${lang}`),
-        ),
+        this.props.dispatch(push(
+          `/tools/translator/${this.props.params.env}/${lang}`,
+        )),
     );
   };
 
@@ -232,9 +240,7 @@ class Translator extends Component {
         onSidebarCategoryClick={this.onSidebarCategoryClick}
         onBackClick={() =>
           this.setState({ selectedLanguageKey: null }, () =>
-            this.props.dispatch(
-              push(`/tools/translator/${this.props.params.env}`),
-            ),
+            this.props.dispatch(push(`/tools/translator/${this.props.params.env}`),
           )
         }
         onCategoryAdd={this.onCategoryAdd}
@@ -265,14 +271,13 @@ class Translator extends Component {
         ].map(
           tab =>
             tab.id === 'dev' ? (
-              <ViewPermission key={tab.id} permission="GROW_DEV">
-                <Tab
-                  active={activeTab === tab.id}
-                  onClick={() => this.changeEnv(tab.id)}
-                >
-                  {tab.title}
-                </Tab>
-              </ViewPermission>
+              <Tab
+                key={tab.id}
+                active={activeTab === tab.id}
+                onClick={() => this.changeEnv(tab.id)}
+              >
+                {tab.title}
+              </Tab>
             ) : (
               <Tab
                 key={tab.id}
@@ -300,13 +305,15 @@ class Translator extends Component {
   render() {
     const { languages } = this.state;
     return languages.length > 0 ? (
-      <FadeInFast className="WorkbenchShell Container" component="div">
-        <ContentCard>
-          {this.renderTabBar()}
-          {this.renderSidebar()}
-          {this.renderChild()}
-        </ContentCard>
-      </FadeInFast>
+      <Container>
+        <ViewPermission permission="EDIT_TRANSLATIONS">
+          <ContentCard>
+            {this.renderTabBar()}
+            {this.renderSidebar()}
+            {this.renderChild()}
+          </ContentCard>
+        </ViewPermission>
+      </Container>
     ) : (
       <div>loading..</div>
     );
@@ -315,6 +322,7 @@ class Translator extends Component {
 
 const mapStateToProps = state => ({
   org: state.auth.organization.toLowerCase(),
+  permissions: state.users.permissions,
 });
 
 export default AuthWrapper(connect(mapStateToProps)(Translator));

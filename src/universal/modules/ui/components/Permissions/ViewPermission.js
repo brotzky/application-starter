@@ -8,11 +8,11 @@ import { EmptyState } from '../../components/';
 /**
  * <ViewPermission />
  * A compenent used to wrap components that require
- * permissions to view 
+ * permissions to view
  */
 
 // Used for the view permissions Icon
-const EyeBall = () => (
+const EyeBall = ({ className }) => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@ const EyeBall = () => (
     width="48"
     height="48"
   >
-    <g className="nc-icon-wrapper" fill="#585858">
+    <g className={`${className}`} fill="#585858">
       <path
         fill="none"
         stroke="#585858"
@@ -60,38 +60,45 @@ const EyeBall = () => (
     </g>
   </svg>
 );
-const ViewPermission = (props: {
-  children: React.Node,
-  hasPermission: boolean,
-  text?: string,
-}) => {
-  const {
-    children,
-    emptyStateText,
-    hasPermission,
-    text,
-    gacPermissions,
-    permission,
-    hide,
-  } = props;
-  const requiredPermission = gacPermissions.find(
-    gacPerm => gacPerm.name === permission,
-  );
 
-  if (!requiredPermission && hide) return null;
-  if (!requiredPermission) return children;
+class ViewPermission extends React.PureComponent {
+  render() {
+    const {
+      children,
+      hasPermission,
+      text,
+      gacPermissions,
+      permission,
+      hide,
+    } = this.props;
+    const requiredPermission = gacPermissions.find(
+      gacPerm => gacPerm.name === permission,
+    );
 
-  return (
-    <div>
-      {hasPermission ? (
-        children
-      ) : (
-        <EmptyState Icon={EyeBall} text={emptyStateText} />
-      )}
-    </div>
-  );
-};
+    if (!requiredPermission && hide) return null;
+    if (!requiredPermission) return children;
 
+    const emptyStateText = text || (
+      <span>
+        View{' '}
+        <span style={{ fontWeight: '500' }}>
+          {requiredPermission.prettyName}
+        </span>{' '}
+        permission is required
+      </span>
+    );
+
+    return (
+      <div>
+        {hasPermission ? (
+          children
+        ) : (
+          <EmptyState Icon={EyeBall} text={emptyStateText} />
+        )}
+      </div>
+    );
+  }
+}
 ViewPermission.defaultProps = {
   text: '',
 };

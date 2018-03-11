@@ -1,21 +1,45 @@
 import React from 'react';
+import styled from 'styled-components';
 import TopbarSearch from '../../topbar/containers/TopbarSearch';
 import PrimaryNavNav from '../components/PrimaryNavNav';
 import PrimaryNavDropdown from '../components/PrimaryNavDropdown';
 import { GrowWhite } from '../../../ui/logo/logos';
 
+const PrimaryNavContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #242b3c;
+  color: white;
+  position: relative;
+  height: 56px;
+  padding: 0 2.4rem;
+`;
+
+const PrimaryNavLeft = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const PrimaryNavLogo = styled(GrowWhite)`
+  width: 32px;
+  height: 30px;
+  position: relative;
+  top: -1.5px;
+`;
+
 const PrimaryNav = () => (
-  <div className="PrimaryNav">
-    <div className="PrimaryNav__left">
-      <GrowWhite className="PrimaryNav__logo" />
+  <PrimaryNavContainer>
+    <PrimaryNavLeft>
+      <PrimaryNavLogo />
       <PrimaryNavNav />
-      <TopbarSearch />
-    </div>
-    <div className="PrimaryNav__middle" />
-    <div className="PrimaryNav__right">
+    </PrimaryNavLeft>
+    <TopbarSearch />
+    <div />
+    <div>
       <PrimaryNavDropdown />
     </div>
-  </div>
+  </PrimaryNavContainer>
 );
 
 export default PrimaryNav;

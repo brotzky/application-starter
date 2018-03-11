@@ -11,12 +11,13 @@ class CalculateHelocRender extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    const { calculator, dispatch } = this.props;
+    const { calculator, dispatch, val } = this.props;
     if (
       !isEqual(
         getObjectValues(calculator, 'heloc'),
         getObjectValues(nextProps.calculator, 'heloc'),
-      )
+      ) ||
+      nextProps.val.final !== val.final
     ) {
       dispatch(updateHeloc(nextProps.val.final));
     }
@@ -26,7 +27,7 @@ class CalculateHelocRender extends Component {
     const { val } = this.props;
 
     return (
-      <span className="CalculatorResult">
+      <span>
         {(() => {
           if (val.final.toString().length === 5 && val.total <= 100) {
             return numeral(val.final).format('$0,0.000');

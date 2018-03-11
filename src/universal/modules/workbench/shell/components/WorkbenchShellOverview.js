@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral';
 import { capitalizeString } from 'grow-utils/stringFormatting';
 import { getMaskedFreq, getMaskedTerms } from 'grow-utils/accountOpening';
 import { getQuote } from 'grow-actions/quote/quote';
+import { showModal } from '../../../ui/modal/actions/actions-modal';
 import {
   dispatchPropType,
   workbenchPropType,
@@ -16,7 +17,7 @@ import {
 } from 'gac-utils/proptypes';
 import { UPDATE_QUOTE } from 'grow-actions/quote/constants';
 import Loading from '../../../ui/loading';
-
+import { InlineTooltip } from '../../../ui/components';
 const OverviewContainer = styled.div`
   padding: 0.7rem 2.8125rem 2.7rem;
   border-bottom: 1px solid #eee;
@@ -65,10 +66,14 @@ const OverviewItemDetails = styled.div`
   color: ${props => props.theme.colors.greyMidDark};
 `;
 
-const OverrideLink = styled.div`
+const OverrideLink = styled(InlineTooltip.Container)`
   display: inline-block;
   width: 180px;
   margin-left: auto;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  &:active {
+    pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+  }
 `;
 
 const PrimaryColumn = styled.div`
@@ -78,23 +83,21 @@ const InviteeColumn = styled.div`
   width: 100%;
 `;
 
-const Override = styled(Link)`
+const Override = styled.button`
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
   border-radius: 2px;
   border: 1px solid;
   font-size: 1.3rem;
   padding: 0.4rem 1.2rem;
-  border-color: ${props => props.theme.colors.blue};
-  background: ${props => props.theme.colors.blue};
+  border-color: ${props =>
+    !props.disabled ? props.theme.colors.blue : props.theme.colors.greyBg};
+  background: ${props =>
+    !props.disabled ? props.theme.colors.blue : props.theme.colors.greyBg};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-  color: white;
+  color: ${props => (!props.disabled ? 'white' : props.theme.colors.black)};
   transition: all 0.2s ease-out;
   transition-property: background, border, box-shadow, color;
-  &:hover {
-    background: #5293ff;
-    border-color: #5293ff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  }
+  cursor: inherit;
 `;
 
 // deep check if any changes between two objects in redux store
@@ -113,7 +116,7 @@ const loanQuoteStepsList = [
 ];
 // to build all the items in Overview section
 const OverviewBuilder = props => (
-  <OverviewItemRow key={props.label}>
+  <OverviewItemRow>
     <OverviewLabel>{props.label}</OverviewLabel>
     <OverviewItem>
       <OverviewItemDetails>{props.item || <Loader />}</OverviewItemDetails>
@@ -209,6 +212,8 @@ class WorkbenchShellOverview extends Component {
         QUOTE,
       },
       org,
+      sameAdmin,
+      dispatch,
     } = this.props;
 
     const hasInvitee = invites.length > 0;
@@ -239,7 +244,13 @@ class WorkbenchShellOverview extends Component {
       params.workbenchId
     }/${params.workbenchProduct}`;
     const buildStatusNav = url => (
-      <Override id="override" to={`${url}/status`}>
+      <Override
+        id="override"
+        disabled={!sameAdmin}
+        onClick={() =>
+          dispatch(showModal('STATUS_MANAGEMENT_MODAL', { params }))
+        }
+      >
         Override App Status
       </Override>
     );
@@ -352,14 +363,19 @@ class WorkbenchShellOverview extends Component {
       { label: 'Tax: ', item: getMaskedTaxResidency() },
       { label: 'Marketing: ', item: getMaskedMarketing() },
     ];
-
     return (
       <OverviewContainer>
         <div>
           <OverviewTitle>
             <OverviewLabel>Application</OverviewLabel>
             <OverviewItemDetails>
-              <OverrideLink>{buildStatusNav(baseUrl)}</OverrideLink>
+              <OverrideLink active={!sameAdmin} disabled={!sameAdmin}>
+                {buildStatusNav(baseUrl)}
+
+                <InlineTooltip>
+                  Please claim this application to override status
+                </InlineTooltip>
+              </OverrideLink>
             </OverviewItemDetails>
           </OverviewTitle>
           <OverviewItemRow>
@@ -375,7 +391,11 @@ class WorkbenchShellOverview extends Component {
           </OverviewItemRow>
 
           {baseItems.map(item => (
-            <OverviewBuilder label={item.label} item={item.item} />
+            <OverviewBuilder
+              key={item.label}
+              label={item.label}
+              item={item.item}
+            />
           ))}
 
           {/* Loan Quote */}
@@ -383,7 +403,11 @@ class WorkbenchShellOverview extends Component {
             Object.keys(quote).length > 0 &&
             loanQuoteStepsList.includes(currentStep) &&
             loanQuoteItems.map(item => (
-              <OverviewBuilder label={item.label} item={item.item} />
+              <OverviewBuilder
+                key={item.label}
+                label={item.label}
+                item={item.item}
+              />
             ))}
 
           {/* Account Opening */}
@@ -392,7 +416,11 @@ class WorkbenchShellOverview extends Component {
             productName.includes('gic') &&
             metadataIsLoaded &&
             acctOpeningItems.map(item => (
-              <OverviewBuilder label={item.label} item={item.item} />
+              <OverviewBuilder
+                key={item.label}
+                label={item.label}
+                item={item.item}
+              />
             ))}
         </div>
 
@@ -451,6 +479,7 @@ const mapStateToProps = state => ({
   workbench: state.workbench,
   org: state.auth.organization,
   metadata: state.workbench.metadata,
+  sameAdmin: state.workbench.primaryRep.email === state.user.email,
 });
 
 export default connect(mapStateToProps)(WorkbenchShellOverview);

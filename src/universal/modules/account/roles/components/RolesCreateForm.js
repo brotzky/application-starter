@@ -7,14 +7,12 @@ import { reduxForm, Field, change } from 'redux-form';
 
 const FormRow = styled.div`
   display: flex;
-  justifyContent: space-between;
+  justifycontent: space-between;
   margin-bottom: 1.5rem;
   color: #585858;
   font-size: 1.4rem;
   padding: 0 2.4rem;
 `;
-
-const Form = styled.form``;
 
 const FormRowHeader = FormRow.extend`
   font-weight: 500;
@@ -137,7 +135,7 @@ class RolesCreateForm extends Component {
     });
 
     return (
-      <Form>
+      <form>
         <FormRowHeader>
           <FormDescription>Description</FormDescription>
           <FormViewEdit>
@@ -172,7 +170,7 @@ class RolesCreateForm extends Component {
             </FormViewEdit>
           </FormRow>
         ))}
-      </Form>
+      </form>
     );
   }
 }

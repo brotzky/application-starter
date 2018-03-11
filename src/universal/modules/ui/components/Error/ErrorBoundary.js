@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 
-const ErrorContainer = styled.div`
-  background: #fafafa;
-`;
+const ErrorContainer = styled.div`background: #fafafa;`;
 
 const ErrorPrimaryNav = styled.div`
   height: 55px;
@@ -82,8 +80,7 @@ class ErrorBoundary extends Component {
   }
 
   render() {
-    const debugDetails =
-      process.env && process.env.GIT && Object.values(process.env.GIT);
+    const debugDetails = process.env && Object.values(process.env.GIT);
 
     if (this.state.hasError) {
       return (
@@ -101,8 +98,7 @@ class ErrorBoundary extends Component {
                 Our team has been notified, but you can still{' '}
                 <u
                   onClick={() =>
-                    Raven.lastEventId() && Raven.showReportDialog()
-                  }
+                    Raven.lastEventId() && Raven.showReportDialog()}
                   style={{ cursor: 'pointer' }}
                 >
                   submit a formal report
@@ -115,6 +111,11 @@ class ErrorBoundary extends Component {
                   <ErrorDetailsListItem>
                     {moment().format('MMMM Do, YYYY, h:mm:ss a')}
                   </ErrorDetailsListItem>
+                  {debugDetails.map(details => (
+                    <ErrorDetailsListItem key={details}>
+                      {details}
+                    </ErrorDetailsListItem>
+                  ))}
                 </ErrorDetailsList>
               </ErrorDetails>
               <ErrorText />

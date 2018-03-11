@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Spinner from '../../../ui/spinner/spinner';
+import { Spinner } from 'gac-ui/components/';
 
 const StatusTextLoading = ({ isFetching }) =>
   isFetching ? (

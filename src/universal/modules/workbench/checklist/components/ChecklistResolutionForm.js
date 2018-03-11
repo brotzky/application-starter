@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import ChecklistCorrectForm from '../containers/ChecklistCorrectForm';
+
+const Text = styled.p`
+  margin: 1rem 0 1.75rem;
+`;
 
 const ChecklistResolutionForm = props => {
   const {
@@ -15,16 +20,14 @@ const ChecklistResolutionForm = props => {
     : true;
 
   return (
-    <div className="ChecklistResolution__conent">
+    <div>
       {hasPermission ? (
         <div>
-          <p className="ChecklistResolution__text">
-            {isVerified ? (
-              `You are unresolving ${prettyName}`
-            ) : (
-              `Please enter your reasons for resolving ${prettyName}`
-            )}
-          </p>
+          <Text>
+            {isVerified
+              ? `You are unresolving ${prettyName}`
+              : `Please enter your reasons for resolving ${prettyName}`}
+          </Text>
           <ChecklistCorrectForm
             checklistItemDetails={checklistDetails[name]}
             {...props}

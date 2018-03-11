@@ -7,7 +7,9 @@ import FormWrapper from '../../../forms/components/FormWrapper';
 import { Button } from '../../../ui/components/';
 import { updateMemberProductApplicationMetadata } from 'grow-actions/member/member-category-metadata-gac';
 
-const FieldGroupContainer = styled.div`padding: 1rem 2.8125rem;`;
+const FieldGroupContainer = styled.div`
+  padding: 1rem 2.8125rem;
+`;
 
 const FieldGroupButtonContainer = styled.div`
   display: flex;
@@ -16,7 +18,9 @@ const FieldGroupButtonContainer = styled.div`
   border-bottom: 1px solid #ebeef0;
 `;
 
-const FieldGroupButtonWrapper = styled.div`padding-left: 2rem;`;
+const FieldGroupButtonWrapper = styled.div`
+  padding-left: 2rem;
+`;
 
 class ApplicantProfileEdit extends Component {
   handleSubmit = async data => {
@@ -34,7 +38,7 @@ class ApplicantProfileEdit extends Component {
      * that the GAC user has clicked "edit" for and only submitting those to backend.
      * This makes it easier to debug instead of sending all the
      * metadata to backend at once.
-     * 
+     *
      * This is turning the registeredFields into a single object
      */
     const activeFields = registeredFields.reduce(
@@ -69,6 +73,7 @@ class ApplicantProfileEdit extends Component {
   };
 
   buildFormField = field => {
+    const { sameAdmin } = this.props;
     const isLocked = this.checkIfFieldIsLocked(field);
     const disabled = field.disabled || isLocked;
     const formName = 'workbench';
@@ -85,7 +90,13 @@ class ApplicantProfileEdit extends Component {
   };
 
   render() {
-    const { group, handleToggleClick, workbench } = this.props;
+    const {
+      group,
+      handleToggleClick,
+      workbench,
+      files,
+      sameAdmin,
+    } = this.props;
     return (
       <div>
         <FormWrapper form="workbench" onSubmit={this.handleSubmit}>
@@ -97,6 +108,7 @@ class ApplicantProfileEdit extends Component {
                 text="Cancel"
                 type="button"
                 onClick={handleToggleClick}
+                disabled={workbench.isUpdatingMetadata || files.isUploading}
               />
             </FieldGroupButtonWrapper>
 
@@ -105,6 +117,7 @@ class ApplicantProfileEdit extends Component {
                 <Button
                   type="submit"
                   text="Update"
+                  disabled={!sameAdmin}
                   isSubmitting={workbench.isUpdatingMetadata}
                 />
               </FieldGroupButtonWrapper>
@@ -121,8 +134,8 @@ class ApplicantProfileEdit extends Component {
  * which in redux form language means the form is registered and editable
  * within the UI. We only want to keep fields that are currently being
  * edited.
- * 
- * @param {Object} registeredFields 
+ *
+ * @param {Object} registeredFields
  */
 const getActiveFields = registeredFields => {
   if (!registeredFields) return {};
@@ -138,7 +151,9 @@ const mapStateToProps = state => ({
   workbench: state.workbench,
   member: state.member.member,
   org: state.auth.organization,
+  sameAdmin: state.workbench.primaryRep.email === state.user.email,
   registeredFields: getActiveFields(state.form.workbench.registeredFields),
+  files: state.files,
 });
 
 export default connect(mapStateToProps)(ApplicantProfileEdit);

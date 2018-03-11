@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import moment from 'moment';
+import styled from 'styled-components';
 import ModalContent from '../modal/components/ModalContent';
 import { hideModal } from '../modal/actions/actions-modal';
+import { Button } from 'gac-ui/components/';
 import { CheckCircle, ExclamationCircle } from '../icons/';
-import { Button } from '../components';
+import { clearfix } from 'gac-utils/sc';
 
 const imageTypeMap = new Map();
 imageTypeMap.set('dl_pid_front', 'Primary ID - Front');
@@ -11,6 +13,55 @@ imageTypeMap.set('dl_pid_back', 'Primary ID - Back');
 imageTypeMap.set('portrait', 'Portrait');
 imageTypeMap.set('ps_noa', 'Paystub or N.O.A');
 imageTypeMap.set('vc_ddf', 'Void Cheque or Direct Deposit Form');
+
+const ImageViewerWrapper = styled.div`
+  max-height: 600px;
+  width: 100%;
+  background: white;
+  position: relative;
+  ${clearfix};
+`;
+
+const ImageViewerImageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const ImageViewerImage = styled.img`
+  display: flex;
+  align-items: center;
+`;
+const ImageViewerContent = styled.div`
+  float: left;
+  width: 50%;
+`;
+const ImageViewerHeading = styled.h2`
+  margin-bottom: 1.2rem;
+  font-size: 2.4rem;
+`;
+const ImageViewerSubHeading = styled.h3`
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+`;
+const ImageViewerStatus = styled.p`
+  margin-bottom: 3.6rem;
+  font-weight: 600;
+`;
+const ImageViewerViewBtn = styled.div`
+  margin-top: 3.6rem;
+`;
+
+const VerificationIconSuccess = styled(CheckCircle)`
+  margin-right: 1.2rem;
+  * {
+    stroke: ${props => props.theme.colors.green};
+  }
+`;
+const VerificationIconFailure = styled(ExclamationCircle)`
+  margin-right: 1.2rem;
+  * {
+    stroke: ${props => props.theme.colors.red};
+  }
+`;
 
 const ImageViewer = props => {
   const { dispatch } = props;
@@ -21,29 +72,25 @@ const ImageViewer = props => {
       modalAction={() => dispatch(hideModal())}
       modalFullscreen={false}
     >
-      <div className="ImageViewer__wrapper">
-        <div className="ImageViewer__image">
-          <img
-            className="ImageViewer__image-image"
-            height="350"
-            src={preview}
-          />
-        </div>
-        <div className="ImageViewer__content">
-          <h2 className="ImageViewer__heading">{imageTypeMap.get(type)}</h2>
-          <p className="ImageViewer__status">
+      <ImageViewerWrapper>
+        <ImageViewerImageWrapper>
+          <ImageViewerImage height="350" src={preview} />
+        </ImageViewerImageWrapper>
+        <ImageViewerContent>
+          <ImageViewerHeading>{imageTypeMap.get(type)}</ImageViewerHeading>
+          <ImageViewerStatus>
             {verificationMsg === 'ACCEPTED' ? (
               <span>
-                <CheckCircle className="ImageViewer__verification-icon ImageViewer__verification-icon--success" />Accepted
+                <VerificationIconSuccess />Accepted
               </span>
             ) : (
               <span>
-                <ExclamationCircle className="ImageViewer__verification-icon ImageViewer__verification-icon--failure" />
+                <VerificationIconFailure />
                 {verificationMsg}
               </span>
             )}
-          </p>
-          <h3 className="ImageViewer__subheading">Details</h3>
+          </ImageViewerStatus>
+          <ImageViewerSubHeading>Details</ImageViewerSubHeading>
           <div>
             <strong>Filename:</strong> {name}
           </div>
@@ -51,17 +98,13 @@ const ImageViewer = props => {
             <strong>Date Verified:</strong>{' '}
             {moment(dateVerified).format('MMM Do, YYYY')}
           </div>
-          <div className="ImageViewer__view-btn">
-            <a
-              href={preview}
-              target="_blank"
-              className="c-button c-button--pri"
-            >
-              <span>View full size</span>
-            </a>
-          </div>
-        </div>
-      </div>
+          <ImageViewerViewBtn>
+            <Link href={preview} target="_blank">
+              <Button text="View full size" />
+            </Link>
+          </ImageViewerViewBtn>
+        </ImageViewerContent>
+      </ImageViewerWrapper>
     </ModalContent>
   );
 };

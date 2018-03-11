@@ -6,7 +6,7 @@ import fieldBuilder from '../utils/fieldBuilder';
 import { FadeIn } from '../../ui/transitions';
 
 const ListList = styled.ul`
-  padding: 2.2rem 2.8125rem;
+  padding: 1.4rem 1.8125rem 0rem;
   background: #fafafa;
   border-radius: 4px;
   list-style: none;
@@ -22,13 +22,15 @@ const ListItem = styled.li`
   text-align: right;
 `;
 
-const ListFieldContainer = styled.div`padding-bottom: 2rem;`;
+const ListFieldContainer = styled.div`
+  padding-bottom: 2rem;
+`;
 
 const ListHeader = styled.h3`
   font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  padding-left: 2.8125rem;
+  padding-left: 0.4rem;
 `;
 
 const ListAddButton = styled.button`
@@ -46,7 +48,7 @@ const ListRemoveButton = styled.button`
 `;
 
 const ListItemEmptyButton = styled.div`
-  border: 1px solid #ebeef0;
+  border: 2px dashed #ebeef0;
   padding: 2rem;
   border-radius: 4px;
   margin-bottom: 2rem;
@@ -63,7 +65,25 @@ const ListItemEmptyButton = styled.div`
     background: #fbfcff;
     color: ${props => props.theme.colors.blue};
   }
+
+  svg {
+    margin-right: 1rem;
+  }
 `;
+
+const AddIcon = () => (
+  <svg
+    fill="262626"
+    height="24"
+    viewBox="0 0 24 24"
+    width="24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+    <path d="M0 0h24v24H0z" fill="none" />
+  </svg>
+);
+
 const List = ({ fields, label, subFields, disabled }) => {
   const noMetadata = fields.length === 0;
 
@@ -72,7 +92,7 @@ const List = ({ fields, label, subFields, disabled }) => {
       <ListHeader>{label}</ListHeader>
       {noMetadata ? (
         <ListItemEmptyButton type="button" onClick={() => fields.push({})}>
-          Add {label.toLowerCase()}
+          <AddIcon /> Add {label.toLowerCase()}
         </ListItemEmptyButton>
       ) : (
         <FadeIn>

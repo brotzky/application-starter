@@ -45,7 +45,7 @@ class Editor extends Component {
     if (!definitions) return null;
     return (
       <Wrapper>
-        <ViewPermission permission="GROW_DEV">
+        <ViewPermission permission="EDIT_TRANSLATIONS">
           <AddDefinition
             category={category}
             onAddDefinition={onAddDefinition}

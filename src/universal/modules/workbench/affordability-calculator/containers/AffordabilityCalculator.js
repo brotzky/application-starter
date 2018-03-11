@@ -53,16 +53,21 @@ class AffordabilityCalculator extends Component {
       return <AffordabilityPlaceholder />;
     }
 
+    // initial value will set the toggle to "on"
     return (
       <ViewPermission permission="VIEW_DSR_CALCULATOR">
         <AffordabilityForm
           onSubmit={this.handleSubmit}
           initialValues={
-            affordabilityCalculator.calculator ? (
-              affordabilityCalculator.calculator
-            ) : (
-              initialValues
-            )
+            affordabilityCalculator.calculator
+              ? {
+                  ...affordabilityCalculator.calculator,
+                  manualToggle: true,
+                  transactionsToggle: true,
+                  bothToggle: true,
+                  creditBureauToggle: true,
+                }
+              : initialValues
           }
         />
       </ViewPermission>

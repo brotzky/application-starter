@@ -23,11 +23,12 @@ class ApplicantProfile extends Component {
     ) {
       this.initializeMetadataForm();
     }
-
-    /**
-     * Required to re-initialize the form data when the application
-     * is joint with 2 or more users on it.
-     */
+    if (
+      !this.props.workbench.isFetchingMetadata &&
+      prevProps.workbench.isFetchingMetadata
+    ) {
+      this.initializeMetadataForm();
+    }
     if (this.props.member.id !== prevProps.member.id) {
       this.initializeMetadataForm();
     }

@@ -1,31 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import styled from 'styled-components';
 import { Select, Text } from '../../../forms/fields/';
 
-let UsersCreateContactForm = () => {
-  const fieldProps = { className: 'UsersCreateForm' };
+const UsersCreateFormRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+// Form for User Creation
+let UsersCreateCttForm = () => (
+  <form>
+    <Field name="phone" component={Text} />
+    <Field name="street" component={Text} />
+    <Field name="unit" component={Text} />
+    <UsersCreateFormRow>
+      <Field name="city" component={Text} />
+      <Field name="province" component={Select} />
+    </UsersCreateFormRow>
+    <Field name="postal" component={Text} />
+  </form>
+);
 
-  return (
-    <form>
-      <Field name="phone" component={Text} {...fieldProps} />
-      <Field name="street" component={Text} {...fieldProps} />
-      <Field name="unit" component={Text} {...fieldProps} />
-      <div className="UsersCreateFormRow">
-        <Field name="city" component={Text} {...fieldProps} />
-        <Field name="province" component={Select} {...fieldProps} />
-      </div>
-      <Field name="postal" component={Text} {...fieldProps} />
-    </form>
-  );
-};
-
-UsersCreateContactForm = reduxForm({
+UsersCreateCttForm = reduxForm({
   form: 'create-user',
-})(UsersCreateContactForm);
+})(UsersCreateCttForm);
 
-UsersCreateContactForm = connect(state => ({
+const UsersCreateContactForm = connect(state => ({
   creatingUser: state.users.creatingUser,
-}))(UsersCreateContactForm);
+}))(UsersCreateCttForm);
 
 export default UsersCreateContactForm;

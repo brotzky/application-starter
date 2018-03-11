@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { unlockUser } from 'grow-actions/user/user';
 import {
-  unlockUser,
   notificationPush,
   notificationEdit,
 } from '../../../ui/notifications/actions';
@@ -17,6 +17,7 @@ const ProfileHeader = styled.h3`
 const ProfileText = styled.p`
   font-size: 1.4rem;
   color: ${props => props.theme.colors.greyDark};
+  margin-bottom: 1.5em;
 `;
 
 class ProfileManageAccountSection extends Component {
@@ -24,8 +25,8 @@ class ProfileManageAccountSection extends Component {
     const {
       notificationPush,
       notificationEdit,
-      unlockUser,
       profile: { firstName },
+      dispatch,
     } = this.props;
 
     notificationPush({
@@ -33,7 +34,7 @@ class ProfileManageAccountSection extends Component {
       kind: 'loading',
       message: `Unlocking ${firstName}'s account...`,
     });
-    unlockUser(userId).then(({ errors, errorMessage }) => {
+    dispatch(unlockUser(userId)).then(({ errors, errorMessage }) => {
       const error = errors && errors.length > 0;
 
       notificationEdit({

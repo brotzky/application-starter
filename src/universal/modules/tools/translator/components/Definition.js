@@ -95,7 +95,7 @@ class Definition extends Component {
           />
         )}
         {showActions && (
-          <ViewPermission permission="GROW_DEV">
+          <ViewPermission permission="EDIT_TRANSLATIONS">
             <ActionButtonToolbar>
               <ActionButton
                 onClick={() =>
@@ -103,7 +103,8 @@ class Definition extends Component {
                     parent
                       ? `${category}.${parent}.${title}`
                       : `${category}.${title}`,
-                  )}
+                  )
+                }
               >
                 Delete
               </ActionButton>

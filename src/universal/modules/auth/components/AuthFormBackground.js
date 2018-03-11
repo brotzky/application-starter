@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import styled, { keyframes } from 'styled-components';
+import { media } from 'gac-utils/sc';
 
 const levitate = keyframes`
   0% {
@@ -54,14 +54,19 @@ const AuthFormBackgroundImageWrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: ${generateRandomBackground};
+
+  ${media.xlarge`
+    width: 58%;
+  `};
 `;
 
 const ImageContainer = styled.div`
   position: relative;
+  top: 0;
+  left: 8%;
   display: flex;
-  width: 100%;
-  height: 1002;
-  display: flex;
+  width: 108%;
+  height: 1002px;
   align-items: center;
   justify-content: center;
   opacity: ${props => (props.imageLoaded ? 1 : 0)};
@@ -70,20 +75,37 @@ const ImageContainer = styled.div`
 
 const TabletImage = styled.img`
   position: absolute;
+  top: 13%;
+  left: -96px;
   z-index: 2;
-  width: 119%;
-  max-width: 1440px;
-  animation: ${levitate} 50s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+  width: 110%;
+  max-width: 1448px;
+  animation: ${levitate} 55s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+
+  ${media.xlarge`
+    top: 15%;
+    left: -100px;
+    z-index: 2;
+    width: 110%;
+    max-width: 1448px;
+  `};
+
+  ${media.largest`
+    top: 11%;
+  `};
 `;
 
 const TabletShadowImage = styled.img`
   position: absolute;
+  top: -8%;
+  left: -96px;
   z-index: 1;
-  width: 119%;
+  height: 100%;
+  width: 110%;
   transform: translateY(166px);
   opacity: 0.8;
   filter: blur(26px);
-  animation: ${levitateShadow} 30s cubic-bezier(0.445, 0.05, 0.55, 0.95)
+  animation: ${levitateShadow} 55s cubic-bezier(0.445, 0.05, 0.55, 0.95)
     infinite;
 `;
 
@@ -92,14 +114,6 @@ class AuthFormBackground extends Component {
     tablet: false,
     shadow: false,
   };
-
-  componentDidMount() {
-    const tabletImage = ReactDOM.findDOMNode(this.tabletImage);
-
-    if (tabletImage.complete) {
-      this.setState({ tablet: true, shadow: true });
-    }
-  }
 
   handleImageLoaded = piece => {
     this.setState({ [piece]: true });
@@ -115,9 +129,6 @@ class AuthFormBackground extends Component {
             src="/static/img/devices/tablet/tablet-applications-page.png"
             alt="Applications page tablet"
             onLoad={() => this.handleImageLoaded('tablet')}
-            ref={img => {
-              this.tabletImage = img;
-            }}
           />
           <TabletShadowImage
             src="/static/img/devices/tablet/tablet-applications-page-shadow.png"

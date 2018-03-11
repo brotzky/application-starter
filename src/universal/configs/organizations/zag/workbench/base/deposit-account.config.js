@@ -1,7 +1,7 @@
 import fields from '../../../../../modules/forms/utils/fieldDefinitions';
 import adminSteps from '../../../../../modules/workbench/application-status/admin-steps/adminStepDefinitions';
 import zagOccupationsList from '../options/zagOccupations';
-import { industryList } from '../../../../../modules/forms/options/industries';
+import { industryList } from '../../../../../modules/forms/options/industry';
 import sidebarLinks from '../../../../navigation/workbench-sidebar.js';
 
 export default {

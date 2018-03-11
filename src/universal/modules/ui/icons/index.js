@@ -126,7 +126,7 @@ export const ArrowRight = ({ width = 24, height = 24, className = '' }) => (
     height={height}
     className={className}
   >
-    <g fill="#fff">
+    <g className="nc-icon-wrapper" fill="#fff">
       <line
         data-cap="butt"
         data-color="color-2"
@@ -603,7 +603,7 @@ export const User = ({ width = 24, height = 24, className = '' }) => (
       overflow: 'hidden',
       borderRadius: '50%',
       height: `${height}px`,
-      minWidth: `${width}px`,
+      width: `${width}px`,
     }}
   >
     <svg

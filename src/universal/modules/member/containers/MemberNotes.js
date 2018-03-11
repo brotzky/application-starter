@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getMember, getNotes, updateNote } from 'grow-actions/member/member';
+import styled from 'styled-components';
+import { clearfix, bButton } from 'gac-utils/sc';
+import { getNotes, updateNote } from 'grow-actions/member/member';
 import Pagination from '../../ui/pagination/containers/Pagination';
 import {
   TOGGLE_NOTE_COMPOSER,
@@ -15,6 +17,23 @@ import {
 } from '../../ui/notifications/actions/';
 import { FadeIn } from '../../ui/transitions/';
 
+const Wrapper = styled.div`
+  ${clearfix};
+  background: white;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05),
+    0 1px 3px 0 rgba(63, 63, 68, 0.15);
+`;
+
+const MemberNotesMore = styled.div`
+  margin-bottom: 2.4rem;
+  padding: 0 3rem;
+  text-align: center;
+`;
+
+const MemberNotesMoreBtn = styled.button`
+  ${bButton};
+  background: ${props => props.theme.colors.blue};
+`;
 class MemberNotes extends Component {
   constructor(props) {
     super(props);
@@ -98,63 +117,45 @@ class MemberNotes extends Component {
   }
 
   render() {
-    const {
-      data: notes,
-      dispatch,
-      hasMoreResults,
-      member,
-      updateData,
-      user,
-    } = this.props;
+    const { data: notes, dispatch, member, updateData, user } = this.props;
     return (
-      <div className="Member__box MemberNotes">
+      <Wrapper>
         <MemberNotesHeader
           handleAddNoteClick={this.handleAddNoteClick}
           member={member}
           notes={notes}
           updateData={updateData}
         />
-        <FadeIn>
-          {notes.isFetching ? (
-            <MemberNotesPlaceholder />
-          ) : (
-            (member.member.id && (
-              <MemberNotesList
-                dispatch={dispatch}
-                handleEditSubmit={this.handleEditSubmit}
-                member={member.member}
-                notes={notes}
-                user={user}
-              />
-            )) ||
-            null
-          )}
-        </FadeIn>
-        {/* {hasMoreResults("next") || notes.list.length > 3
-          ? <div className="MemberNotes__more">
-              <button
-                disabled={!hasMoreResults("next") || notes.isFetching}
+        <div>
+          <FadeIn>
+            {notes.isFetching ? (
+              <MemberNotesPlaceholder />
+            ) : (
+              (member.member.id && (
+                <MemberNotesList
+                  dispatch={dispatch}
+                  handleEditSubmit={this.handleEditSubmit}
+                  member={member.member}
+                  notes={notes}
+                  user={user}
+                />
+              )) ||
+              null
+            )}
+          </FadeIn>
+          {notes.list.length > 3 ? (
+            <MemberNotesMore>
+              <MemberNotesMoreBtn
+                disabled={notes.isFetching}
                 type="button"
-                onClick={this.handleMoreClick}
-                className="MemberNotes__more-button"
+                onClick={this.handleLessClick}
               >
-                <span>More</span>
-              </button>
-            </div>
-          : null} */}
-        {notes.list.length > 3 ? (
-          <div className="MemberNotes__more">
-            <button
-              disabled={notes.isFetching}
-              type="button"
-              onClick={this.handleLessClick}
-              className="MemberNotes__more-button"
-            >
-              <span>Less</span>
-            </button>
-          </div>
-        ) : null}
-      </div>
+                <span>Less</span>
+              </MemberNotesMoreBtn>
+            </MemberNotesMore>
+          ) : null}
+        </div>
+      </Wrapper>
     );
   }
 }

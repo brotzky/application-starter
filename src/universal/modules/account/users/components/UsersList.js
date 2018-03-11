@@ -1,76 +1,119 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { usersPropType, isFetchingPropType } from 'gac-utils/proptypes';
-import UsersListHeader from './UsersListHeader';
+import { reduxForm, formValueSelector, change } from 'redux-form';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 import UsersItem from './UsersItem';
 import UsersListPlaceholder from './UsersListPlaceholder';
+import UsersPagination from './UsersPagination';
 import EmptyUserRoleList from '../../../ui/UserRolesList/EmptyList';
 
-const buildUserList = (users, activeSort, sortByAsc) => {
-  // If there are no users show empty state
+// A hack to hide the last border bottom;
+const UserItemContainer = styled.div`
+  position: relative;
 
-  if (users.length < 1) {
-    return (
-      <EmptyUserRoleList text="No users found. Try a different search term." />
-    );
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 1px;
+    background: #fff;
   }
+`;
 
-  users.sort((a, b) => {
-    const userA = a[activeSort];
-    const userB = b[activeSort];
-    if (sortByAsc) {
-      if (userA < userB) return -1;
-      if (userA > userB) return 1;
-    } else {
-      if (userA < userB) return 1;
-      if (userA > userB) return -1;
-    }
-    return 0;
-  });
+const EmptyUserRoleListContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
-  return (
-    <tbody>{users.map(user => <UsersItem user={user} key={user.id} />)}</tbody>
-  );
-};
+const UsersListContainer = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 30px;
+`;
 
-class UsersList extends PureComponent {
+class UsersList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeSort: 'firstName', // same field name as the users array in redux
-      sortByAsc: true, // ascending === true | descending === false
+      sortedList: this.props.users, // ascending order
     };
   }
 
-  handleSortClick = event => {
-    const { activeSort, sortByAsc } = this.state;
-    // Need this to make entire header area clickable including SVG. Checks for the heading data-sortname
-    const clickedHeader = event.target
-      .closest('th')
-      .firstChild.getAttribute('data-sortname');
+  componentDidMount() {
+    this.sortUserList();
+  }
 
-    this.setState({
-      activeSort: clickedHeader,
-      sortByAsc: activeSort === clickedHeader ? !sortByAsc : true,
+  componentDidUpdate(prevProps) {
+    if (prevProps.users !== this.props.users) this.sortUserList();
+  }
+
+  sortUserList = () => {
+    const { activeSort } = this.state;
+    const { users } = this.props;
+
+    const usersClone = users.slice();
+
+    usersClone.sort((a, b) => {
+      const userA = a[activeSort];
+      const userB = b[activeSort];
+      return userA < userB ? -1 : 1;
     });
+    this.setState({ sortedList: usersClone });
+  };
+
+  generateRenderedUsers = currentPage => {
+    const { sortedList } = this.state;
+    const start = currentPage === 1 ? 0 : currentPage * 10 - 10;
+    const end = currentPage * 10;
+
+    // If there are no users show empty state
+    if (sortedList.length < 1) {
+      return (
+        <EmptyUserRoleListContainer>
+          <EmptyUserRoleList text="No users found. Try a different search term." />
+        </EmptyUserRoleListContainer>
+      );
+    }
+    return (
+      <UserItemContainer>
+        {sortedList
+          .slice(start, end)
+          .map(user => <UsersItem user={user} key={user.id} />)}
+      </UserItemContainer>
+    );
   };
 
   render() {
-    const { users, isFetching } = this.props;
-    const { activeSort, sortByAsc } = this.state;
+    const { users, isFetching, dispatch, currentPage } = this.props;
+    const pagesSumm = Math.ceil(users.length / 10);
 
     return (
-      <table className="UsersListContainer">
-        <UsersListHeader
-          activeSort={activeSort}
-          handleClick={this.handleSortClick}
-          sortByAsc={sortByAsc}
-        />
+      <UsersListContainer>
         {isFetching ? (
           <UsersListPlaceholder />
         ) : (
-          buildUserList(users, activeSort, sortByAsc)
+          <div>
+            <UsersPagination
+              currentPage={currentPage}
+              change={change}
+              dispatch={dispatch}
+              pagesSumm={pagesSumm}
+            />
+            {this.generateRenderedUsers(currentPage)}
+            <UsersPagination
+              currentPage={currentPage}
+              change={change}
+              dispatch={dispatch}
+              pagesSumm={pagesSumm}
+            />
+          </div>
         )}
-      </table>
+      </UsersListContainer>
     );
   }
 }
@@ -80,4 +123,17 @@ UsersList.propTypes = {
   isFetching: isFetchingPropType.isRequired,
 };
 
-export default UsersList;
+UsersList = reduxForm({
+  form: 'users-pagination',
+  initialValues: {
+    page: 1,
+  },
+})(UsersList);
+
+const selector = formValueSelector('users-pagination');
+
+const mapStateToProps = state => ({
+  currentPage: selector(state, 'page'),
+});
+
+export default connect(mapStateToProps)(UsersList);

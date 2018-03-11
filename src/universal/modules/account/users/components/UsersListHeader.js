@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { TriangleUp } from '../../../ui/icons/';
 
-const TableRow = styled.tr`cursor: pointer;`;
+const TableRow = styled.tr`
+  cursor: pointer;
+`;
 
 const TableHeader = styled.th`
   font-weight: 500;
   text-align: left;
-  color: color(black);
+  color: ${props => props.theme.colors.black};
   padding: 13px 15px;
   user-select: none;
   border-bottom: 1px solid #ebeef0;
@@ -30,7 +32,9 @@ const StyledTriangleUp = styled(TriangleUp)`
   transform: ${props => (props.sortByAsc ? 'rotate(0deg)' : 'rotate(180deg)')};
 `;
 
-const Head = styled.thead`width: 100%;`;
+const Head = styled.thead`
+  width: 100%;
+`;
 
 const UsersListHeader = ({ activeSort, sortByAsc, handleClick }) => (
   <Head>
@@ -57,7 +61,9 @@ const UsersListHeader = ({ activeSort, sortByAsc, handleClick }) => (
       </TableHeader>
       <TableHeader onClick={handleClick}>
         <span data-sortname="auth0MfaEnabled">2FA</span>
-        {activeSort === 'auth0MfaEnabled' && <StyledTriangleUp sortByAsc={sortByAsc} />}
+        {activeSort === 'auth0MfaEnabled' && (
+          <StyledTriangleUp sortByAsc={sortByAsc} />
+        )}
       </TableHeader>
     </TableRow>
   </Head>

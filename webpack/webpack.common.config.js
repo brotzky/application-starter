@@ -15,6 +15,10 @@ module.exports = () => ({
   cache: true,
   target: 'web',
 
+  stats: {
+    chunks: false,
+  },
+
   entry: {
     client: ['isomorphic-fetch', path.join(src, 'client/index.js')],
     vendor: [

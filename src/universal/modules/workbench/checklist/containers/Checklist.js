@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { capitalizeString } from 'grow-utils/stringFormatting';
 import { EmptyState } from '../../../ui/components';
 import { ErrorCircle } from '../../../ui/icons/';
 import ChecklistView from './ChecklistView';
 import ChecklistPlaceholder from '../components/ChecklistPlaceholder';
 
+const Container = styled.div`
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+`;
+
 class Checklist extends Component {
   renderErrorEmptyState = () => (
-    <div className="ChecklistPlaceholder">
+    <Container>
       <EmptyState
         Icon={ErrorCircle}
         text={`Failed to retrieve checklist items for this ${capitalizeString(
@@ -17,7 +28,7 @@ class Checklist extends Component {
           ' ',
         )}`}
       />
-    </div>
+    </Container>
   );
 
   render() {

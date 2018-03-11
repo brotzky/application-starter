@@ -1,18 +1,8 @@
+import stringifyRange from 'gac-utils/stringifyRange';
+
 const normalizeYesNo = value => {
   return value === true ? 'y' : 'n';
 };
-
-const stringifyRange = (obj = {}) =>
-  JSON.stringify({
-    min:
-      obj && typeof obj.min === 'string'
-        ? parseFloat(obj.min).toFixed(1)
-        : null,
-    max:
-      obj && typeof obj.max === 'string'
-        ? parseFloat(obj.max).toFixed(1)
-        : null,
-  });
 
 /**
  * buildFileArray will take in an Array of files and format
@@ -36,7 +26,6 @@ const buildFileArray = files => {
 
 const flattenMetadata = (metadata = {}, activeMemberId) => {
   const values = Object.values(metadata);
-
   return values.reduce((acc, curr) => {
     /**
      * Exception for files because `uploadedFiles` will overwrite eachother,
@@ -53,7 +42,10 @@ const flattenMetadata = (metadata = {}, activeMemberId) => {
      * multiple members attached to a single product application
      */
     if (Object.keys(curr).includes(activeMemberId)) {
-      if (curr[activeMemberId].uploadedFiles) {
+      if (
+        curr[activeMemberId].uploadedFiles &&
+        curr[activeMemberId].uploadedFiles.length
+      ) {
         return Object.assign({}, acc, {
           [curr[activeMemberId].uploadedFiles[0].type]:
             curr[activeMemberId].uploadedFiles,
@@ -69,8 +61,8 @@ const flattenMetadata = (metadata = {}, activeMemberId) => {
 
 export default function metadataDeconstructor(metadata = {}, activeMemberId) {
   const data = flattenMetadata(metadata, activeMemberId);
-
   const root = {};
+
   if (data.acceptedLoanAmount) {
     root.acceptedLoanAmount = data.acceptedLoanAmount;
   }
@@ -139,7 +131,7 @@ export default function metadataDeconstructor(metadata = {}, activeMemberId) {
   }
 
   if (data.agreedToTermsOfService !== undefined) {
-    root.agreeToTermsOfUse = normalizeYesNo(data.agreedToTermsOfService);
+    root.agreeToTermsOfService = normalizeYesNo(data.agreedToTermsOfService);
   }
 
   if (data.amount) root.loanAmount = data.amount;
@@ -187,24 +179,24 @@ export default function metadataDeconstructor(metadata = {}, activeMemberId) {
   if (data.firstName) root.firstName = data.firstName;
 
   if (data.gender) root.gender = data.gender;
+
   // First Deposit metadata currently specific for Deposit Account workflow
   if (data.performDeposit) {
-    root.firstDeposit = {};
-    root.firstDeposit.amount = data.depositAmount;
+    root.firstDepositAmount = data.depositAmount;
 
     // if transfer from tfsa/rrsp, this object is not generated
     if (data.userFirstDepositAccountDetails) {
-      root.firstDeposit.accountId =
+      root.firstDepositAccountId =
         data.userFirstDepositAccountDetails.accountId;
-      root.firstDeposit.accountName =
+      root.firstDepositAccountName =
         data.userFirstDepositAccountDetails.accountName;
-      root.firstDeposit.accountNumber =
+      root.firstDepositAccountNumber =
         data.userFirstDepositAccountDetails.accountNumber;
-      root.firstDeposit.institutionName =
+      root.firstDepositInstitutionName =
         data.userFirstDepositAccountDetails.institutionName;
-      root.firstDeposit.institutionNumber =
+      root.firstDepositInstitutionNumber =
         data.userFirstDepositAccountDetails.institutionNumber;
-      root.firstDeposit.institutionTransit =
+      root.firstDepositInstitutionTransit =
         data.userFirstDepositAccountDetails.transitNumber;
     }
   }
@@ -393,6 +385,21 @@ export default function metadataDeconstructor(metadata = {}, activeMemberId) {
     root.hasThirdParty = normalizeYesNo(data.hasThirdParty);
   }
 
+  if (data.thirdParty) {
+    root.thirdPartyFirstName = data.thirdParty.firstName;
+    root.thirdPartyLastName = data.thirdParty.lastName;
+    root.thirdPartyDOB = data.thirdParty.dateOfBirthYYYYMMDD;
+    root.thirdPartyEmploymentStatus = data.thirdParty.employmentStatus;
+    root.thirdPartyIndustry = data.thirdParty.industry;
+    root.thirdPartyOccupation = data.thirdParty.occupation;
+    root.thirdPartyUnit = data.thirdParty.unit;
+    root.thirdPartyStreet = data.thirdParty.street;
+    root.thirdPartyCity = data.thirdParty.city;
+    root.thirdPartyProvince = data.thirdParty.province;
+    root.thirdPartyPostal = data.thirdParty.postal;
+    root.thirdPartyRelationship = data.thirdParty.relationship;
+  }
+
   if (data.wantsLoanInsurance !== undefined) {
     root.wantsLoanInsurance = normalizeYesNo(data.wantsLoanInsurance);
   }
@@ -437,5 +444,6 @@ export default function metadataDeconstructor(metadata = {}, activeMemberId) {
   if (data.username) {
     root.username = data.username;
   }
+
   return root;
 }

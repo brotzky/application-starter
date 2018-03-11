@@ -1,10 +1,10 @@
-// in src/server/index.js
 import express from 'express';
 import Loadable from 'react-loadable';
 
 import render from './middleware/render';
 import proxy from './middleware/proxy';
 import { webpackDev, webpackHot } from './middleware/webpack';
+import startup from './utils/startup';
 
 const app = express();
 
@@ -21,7 +21,5 @@ app.use('/static', express.static('./src/client/static'));
 app.use(render);
 
 Loadable.preloadAll().then(() => {
-  app.listen(3000, () => {
-    console.log('Running on http://localhost:3000/');
-  });
+  app.listen(3000, startup);
 });

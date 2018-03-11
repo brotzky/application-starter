@@ -47,7 +47,7 @@ class CreateCategory extends Component {
     const { onCategoryAdd } = this.props;
     const { category } = this.state;
     return (
-      <ViewPermission permission="GROW_DEV">
+      <ViewPermission permission="EDIT_TRANSLATIONS">
         <EditingCategory>
           <CategoryName
             placeholder="Category Name"

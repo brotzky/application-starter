@@ -2,6 +2,7 @@ import React from 'react';
 import { FieldArray } from 'redux-form';
 import styled, { ThemeProvider } from 'styled-components';
 import { fieldData, optionsData } from '../data/calculator-form-data';
+import { media } from 'gac-utils/sc';
 import { theme } from '../../../../themes';
 import AffordabilityInputRow from './AffordabilityInputRow';
 
@@ -61,50 +62,90 @@ const RowHeader = styled.div`
 `;
 
 const RowHeading = styled.h4`
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
 `;
 
-const RowSubheading = styled.div`font-size: 1.2rem;`;
+const RowSubheading = styled.div`
+  font-size: 1.2rem;
+`;
+
+const ColumnOne = styled.div`
+  width: 237px;
+
+  ${media.xlarge`
+    width: 228px;
+  `};
+`;
+
+const ColumnTwo = styled.div`
+  width: 122px;
+
+  ${media.xlarge`
+    width: 117px;
+  `};
+
+  ${media.largest`
+    width: 129px;
+  `};
+`;
+
+const ColumnThree = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+const CalculatedResultContainer = styled.div`
+  display: block;
+  min-width: 178px;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  font-feature-settings: 'tnum';
+`;
 
 const filterOptions = (optionsArray, name) => {
   const options = optionsArray.filter(item => item[name]);
   return options[0][name];
 };
 
-const AffordabilityInputTable = () => (
-  <ThemeProvider theme={CalculatorTheme}>
-    <div className="CalculatorInputTable">
-      {fieldData.map((data, index) => {
-        const CalculateResult = data.calculate;
-        return (
-          <div key={index}>
-            <RowHeader>
-              <div className="CalculatorColumn__one">
-                <RowHeading>{data.label}</RowHeading>
-                <RowSubheading>Description</RowSubheading>
-              </div>
-              <div className="CalculatorColumn__two">
-                <CalculateResult />
-                <RowSubheading>{data.headerLabel}</RowSubheading>
-              </div>
-              <div className="CalculatorColumn__three">
-                <RowSubheading>Source</RowSubheading>
-              </div>
-            </RowHeader>
-            <FieldArray
-              name={data.name}
-              label={data.label}
-              calculate={data.calculate}
-              options={filterOptions(optionsData, data.name)}
-              permission={data.permission}
-              component={AffordabilityInputRow}
-            />
-          </div>
-        );
-      })}
-    </div>
-  </ThemeProvider>
-);
+const AffordabilityInputTable = () => {
+  return (
+    <ThemeProvider theme={CalculatorTheme}>
+      <div>
+        {fieldData.map(data => {
+          const CalculateResult = data.calculate;
+
+          return (
+            <div key={data.label}>
+              <RowHeader>
+                <ColumnOne>
+                  <RowHeading>{data.label}</RowHeading>
+                  <RowSubheading>Description</RowSubheading>
+                </ColumnOne>
+                <ColumnTwo>
+                  <CalculatedResultContainer>
+                    <CalculateResult />
+                  </CalculatedResultContainer>
+                  <RowSubheading>{data.headerLabel}</RowSubheading>
+                </ColumnTwo>
+                <ColumnThree>
+                  <RowSubheading>Source</RowSubheading>
+                </ColumnThree>
+              </RowHeader>
+              <FieldArray
+                name={data.name}
+                label={data.label}
+                calculate={data.calculate}
+                options={filterOptions(optionsData, data.name)}
+                permission={data.permission}
+                component={AffordabilityInputRow}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </ThemeProvider>
+  );
+};
 
 export default AffordabilityInputTable;

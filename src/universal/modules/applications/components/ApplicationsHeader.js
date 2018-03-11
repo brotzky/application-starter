@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Table from '../../ui/components/Table/Table';
 import { ChevronDown } from '../../ui/icons/';
-import { capitalizeString } from 'grow-utils/stringFormatting';
 import getMaskedSteps from 'grow-utils/steps';
 
 const Header = styled.div`
@@ -25,6 +24,7 @@ const SelectWrap = styled.span`
   margin-left: 5px;
   position: relative;
 `;
+
 const StyledChevron = styled(ChevronDown)`
   width: 10px;
   height: 10px;
@@ -37,12 +37,19 @@ const StyledChevron = styled(ChevronDown)`
     fill: grey;
   }
 `;
-const StyledHeaderRow = styled(Table.Row)`height: 64px;`;
+
+const Select = styled.select`
+  opacity: 0;
+`;
+
+const StyledHeaderRow = styled(Table.Row)`
+  height: 64px;
+`;
+
 const ApplicationsHeader = ({
   itemsPerPage,
   queryParams,
   updateData,
-  products,
   adminSteps,
   org,
   steps,
@@ -59,9 +66,8 @@ const ApplicationsHeader = ({
         <Header>
           Status
           <SelectWrap>
-            <select
+            <Select
               name="queue-status"
-              style={{ opacity: '0' }}
               value={queryParams.currentStep}
               onChange={event =>
                 updateData({
@@ -71,7 +77,8 @@ const ApplicationsHeader = ({
                     start: 0,
                     end: itemsPerPage,
                   },
-                })}
+                })
+              }
             >
               <option value="">All</option>
               {steps &&
@@ -80,7 +87,7 @@ const ApplicationsHeader = ({
                     {getMaskedSteps(org, step)}
                   </option>
                 ))}
-            </select>
+            </Select>
             <StyledChevron />
           </SelectWrap>
         </Header>
@@ -89,10 +96,9 @@ const ApplicationsHeader = ({
         <Header>
           Review{' '}
           <SelectWrap>
-            <select
+            <Select
               name="queue-status"
               value={queryParams.adminStep}
-              style={{ opacity: '0' }}
               onChange={event =>
                 updateData({
                   page: 1,
@@ -101,7 +107,8 @@ const ApplicationsHeader = ({
                     start: 0,
                     end: itemsPerPage,
                   },
-                })}
+                })
+              }
             >
               <option value="">All</option>
               {adminSteps.map(step => (
@@ -109,7 +116,7 @@ const ApplicationsHeader = ({
                   {step.prettyName}
                 </option>
               ))}
-            </select>
+            </Select>
             <StyledChevron />
           </SelectWrap>
         </Header>

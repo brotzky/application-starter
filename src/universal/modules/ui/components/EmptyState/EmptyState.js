@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CircleCross } from '../../icons';
-import { FadeIn } from '../../transitions/';
 
 const EmptyStateContainer = styled.div`
   display: flex;
@@ -24,8 +23,6 @@ const EmptyStateHeader = styled.h4`
   max-width: 450px;
 `;
 
-const EmptyStateIcon = styled.div``;
-
 const EmptyStateShadow = styled.div`
   height: 7px;
   width: 50px;
@@ -34,25 +31,22 @@ const EmptyStateShadow = styled.div`
   border-radius: 50%;
 `;
 
-const EmptyState = ({ Icon, text, errors = [] }) => {
-  const requiresPermission = errors.includes('NO_PERMISSION');
+class EmptyState extends React.PureComponent {
+  render() {
+    const { Icon, text, errors = [] } = this.props;
+    const requiresPermission = errors.includes('NO_PERMISSION');
 
-  return (
-    <FadeIn>
+    return (
       <EmptyStateContainer>
-        <EmptyStateIcon>
-          {requiresPermission ? (
-            <CircleCross className="EmptyStateIcon__icon" />
-          ) : (
-            <Icon className="EmptyStateIcon__icon" />
-          )}
+        <div>
+          {requiresPermission ? <CircleCross /> : <Icon />}
           <EmptyStateShadow />
-        </EmptyStateIcon>
+        </div>
         <EmptyStateHeader>{text || 'Permission Required'}</EmptyStateHeader>
       </EmptyStateContainer>
-    </FadeIn>
-  );
-};
+    );
+  }
+}
 
 EmptyState.defaultProps = {
   Icon: CircleCross,
@@ -61,7 +55,7 @@ EmptyState.defaultProps = {
 };
 
 EmptyState.propTypes = {
-  Icon: PropTypes.element,
+  Icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   text: PropTypes.string,
   errors: PropTypes.arrayOf(PropTypes.string),
 };

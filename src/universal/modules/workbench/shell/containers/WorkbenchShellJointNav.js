@@ -1,7 +1,66 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { productApplication } from 'grow-utils/productApplicationUtils';
+
+const WorkbenchShellJointNavContainer = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05),
+    0 1px 3px 0 rgba(63, 63, 68, 0.15);
+  z-index: -1;
+
+  ${props =>
+    props.isJoint &&
+    `
+    transform: translateY(-57px);
+    transition: all 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  `};
+`;
+const WorkbenchShellJointNavTab = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+  padding: 1.6rem 3rem;
+  border-left: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  color: ${props => props.theme.colors.greyMid};
+  font-weight: 500;
+  font-size: 1.4rem;
+  min-width: 200px;
+  text-align: center;
+  position: relative;
+  top: 1px;
+  width: 50%;
+  cursor: ${props => (props.accepted ? ' pointer' : 'not-allowed')};
+
+  ${props =>
+    props.active &&
+    `
+    background: white;
+      border-bottom: 1px solid transparent;
+      box-shadow: none;
+      color: ${props => props.theme.colors.blue};
+  `};
+`;
+
+const WorkbenchShellJointNavTabIcon = styled.span`
+  ${props =>
+    props.secondary
+      ? `
+      background: #cde2f9;
+      color: inherit;
+      `
+      : `
+      background: ${props => props.theme.colors.blue};
+      color: white;
+  `};
+`;
 
 const WorkbenchShellJointNav = props => {
   const { params, workbench, org } = props;
@@ -9,13 +68,9 @@ const WorkbenchShellJointNav = props => {
   const joint = Application.getJointDetails();
 
   return (
-    <div
-      className={`WorkbenchShellJointNav ${
-        joint.isJoint ? 'WorkbenchShellJointNav--joint' : ''
-      }`}
-    >
+    <WorkbenchShellJointNavContainer isJoint={joint.isJoint}>
       {joint.isJoint ? (
-        <div className="WorkbenchShellJointNavContainer">
+        <div style={{ display: 'flex' }}>
           {joint.applicants.map((applicant, index) => {
             const link = `/members/${applicant.id}/workbench/${
               params.workbenchId
@@ -29,52 +84,37 @@ const WorkbenchShellJointNav = props => {
             if (index > 1) return null;
 
             return applicant.id ? (
-              <Link
+              <WorkbenchShellJointNavTab
                 key={link}
-                className={`WorkbenchShellJointNavTab ${
-                  currentUser ? 'WorkbenchShellJointNavTab--active' : ''
-                }`}
+                active={currentUser}
                 to={link}
               >
-                <span
-                  className={`WorkbenchShellJointNavTab__icon${
-                    index ? '--secondary' : ''
-                  }`}
-                >
+                <WorkbenchShellJointNavTabIcon secondary={index}>
                   {initials}
-                </span>
+                </WorkbenchShellJointNavTabIcon>
                 {fullName}
-              </Link>
+              </WorkbenchShellJointNavTab>
             ) : (
-              <div
+              <WorkbenchShellJointNavTab
                 key={link}
-                className={`
-                        WorkbenchShellJointNavTab
-                        ${
-                          applicant.accepted
-                            ? ''
-                            : 'WorkbenchShellJointNavTab--pending'
-                        }
-                        ${
-                          currentUser ? 'WorkbenchShellJointNavTab--active' : ''
-                        }
-                      `}
+                accepted={applicant.accepted}
+                active={currentUser}
               >
-                <span className="WorkbenchShellJointNavTab__icon">
+                <WorkbenchShellJointNavTabIcon>
                   {initials}
-                </span>
+                </WorkbenchShellJointNavTabIcon>
                 {fullName}
                 {!applicant.accepted && (
                   <span style={{ marginLeft: '8px', opacity: '0.5' }}>
                     (pending)
                   </span>
                 )}
-              </div>
+              </WorkbenchShellJointNavTab>
             );
           })}
         </div>
       ) : null}
-    </div>
+    </WorkbenchShellJointNavContainer>
   );
 };
 

@@ -23,7 +23,7 @@ export default ({
     <SidebarHeader>
       <SidebarButton onClick={onBackClick}>Back</SidebarButton>
     </SidebarHeader>
-    <ViewPermission permission="GROW_DEV">
+    <ViewPermission permission="EDIT_TRANSLATIONS">
       <CreateCategory onCategoryAdd={onCategoryAdd} />
       {categories(Object.keys(defs), onSidebarCategoryClick)}
     </ViewPermission>

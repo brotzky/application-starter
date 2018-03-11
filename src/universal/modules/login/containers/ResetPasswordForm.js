@@ -1,10 +1,53 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { AUTH_RESET_LOGIN_MESSAGE } from 'grow-actions/auth/constants';
+import {
+  LoginHeaderHeading,
+  LoginHeaderText,
+  LoginForm as FormContainer,
+} from 'gac-ui/components';
 import { FormButton, Text, TextLink } from '../../forms/fields/';
-import { ArrowRight } from '../../ui/icons/';
 import { theme } from '../../../themes/';
+
+const LoginFormSeparator = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem 0;
+`;
+
+const LoginFormSeparatorText = styled.span`
+  position: relative;
+  width: 50px;
+  background-color: #fff;
+  text-align: center;
+  z-index: 1;
+`;
+
+const LoginFormSeparatorLine = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #eaeaea;
+  left: 0;
+  top: 50%;
+`;
+
+const ReturnToLoginButton = styled.button`
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid #eaeaea;
+  border-radius: 2px;
+  background-color: #f8f8f8;
+  padding: 0.28125rem 0;
+  height: 5rem;
+  line-height: 4.375rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+`;
 
 export const LoginFormTheme = {
   ...theme,
@@ -54,34 +97,19 @@ class ResetPasswordForm extends Component {
             defaultMessage: 'is required',
           };
 
-    const fieldProps = {
-      className: 'LoginForm',
-    };
-
     return (
-      <form
+      <FormContainer
         onSubmit={handleSubmit}
         onChange={this.handleChange}
-        className="c-form LoginForm"
         id="login-form"
       >
-        <h1 className="LoginHeader__heading">Update your password</h1>
-        <p className="LoginHeader__text">
+        <LoginHeaderHeading>Update your password</LoginHeaderHeading>
+        <LoginHeaderText>
           Please enter your email and we'll send you instructions on how to
           reset your password.
-        </p>
+        </LoginHeaderText>
         <ThemeProvider theme={LoginFormTheme}>
           <div>
-            <fieldset>
-              <Field
-                name="oldPassword"
-                component={Text}
-                type="password"
-                validate={required}
-                label="Old password"
-                {...fieldProps}
-              />
-            </fieldset>
             <fieldset>
               <Field
                 name="newPassword"
@@ -89,7 +117,6 @@ class ResetPasswordForm extends Component {
                 type="password"
                 validate={required}
                 label="New password"
-                {...fieldProps}
               />
             </fieldset>
             <fieldset>
@@ -99,7 +126,6 @@ class ResetPasswordForm extends Component {
                 type="password"
                 validate={required}
                 label="Confirm password"
-                {...fieldProps}
               />
             </fieldset>
             <fieldset>
@@ -108,13 +134,18 @@ class ResetPasswordForm extends Component {
                 component={FormButton}
                 buttonText="Reset password"
                 isSubmitting={submitting}
-                {...fieldProps}
               />
             </fieldset>
-            <TextLink text="Return to login" path="/login" />
+            <LoginFormSeparator>
+              <LoginFormSeparatorText>or</LoginFormSeparatorText>
+              <LoginFormSeparatorLine />
+            </LoginFormSeparator>
+            <ReturnToLoginButton>
+              <TextLink text="Return to login" path="/login" />
+            </ReturnToLoginButton>
           </div>
         </ThemeProvider>
-      </form>
+      </FormContainer>
     );
   }
 }

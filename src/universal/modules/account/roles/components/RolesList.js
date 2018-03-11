@@ -1,9 +1,16 @@
 import React, { PureComponent } from 'react';
+import styled from 'styled-components';
 import { rolesPropType, isFetchingRolePropType } from 'gac-utils/proptypes';
 import RolesListHeader from './RolesListHeader';
 import RolesItem from './RolesItem';
 import UsersListPlaceholder from '../../users/components/UsersListPlaceholder';
 import EmptyUserRoleList from '../../../ui/UserRolesList/EmptyList';
+
+const UsersListContainer = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 30px;
+`;
 
 const buildUserList = (roles, activeSort, sortByAsc) => {
   // If there are no users show empty state
@@ -27,7 +34,7 @@ const buildUserList = (roles, activeSort, sortByAsc) => {
   });
 
   return (
-    <tbody>{roles.map(role => <RolesItem role={role} key={role.id} />)}</tbody>
+    <div>{roles.map(role => <RolesItem role={role} key={role.id} />)}</div>
   );
 };
 
@@ -58,7 +65,7 @@ class RolesList extends PureComponent {
     const { activeSort, sortByAsc } = this.state;
 
     return (
-      <table className="UsersListContainer">
+      <UsersListContainer>
         <RolesListHeader
           activeSort={activeSort}
           handleClick={this.handleSortClick}
@@ -69,7 +76,7 @@ class RolesList extends PureComponent {
         ) : (
           buildUserList(roles, activeSort, sortByAsc)
         )}
-      </table>
+      </UsersListContainer>
     );
   }
 }

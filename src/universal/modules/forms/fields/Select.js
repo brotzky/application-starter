@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import FormField from '../components/FormField';
 import FieldLabel from '../components/FieldLabel';
 import { ChevronDown } from '../../ui/icons';
+import sortObj from '../../../utils/sortObjectsByNameProperty';
+import { capitalizeString } from 'grow-utils/stringFormatting';
 
 const buildSelectOptionValue = option => {
   const value = option.id || option.value;
@@ -72,13 +74,11 @@ const SelectValue = styled.div`
         ? props.theme.colors.red
         : props.theme.inputs.border.color.default};
   color: ${props =>
-    props.isPlaceholder
+    props.disabled || props.isPlaceholder
       ? '#828282'
-      : props.hasPlaceholder ? props.theme.colors.black : '#828282'};
+      : props.theme.colors.black};
   background: ${props =>
-    props.disabled
-      ? '#f8f8f8'
-      : props.isPlaceholder ? props.theme.select.background : '#F8F8F8'};
+    props.disabled ? '#f8f8f8' : props.theme.select.background};
   padding: 0 ${props => props.theme.inputs.padding};
   padding-right: ${props => props.theme.inputs.paddingRight};
   text-overflow: ellipsis;
@@ -94,34 +94,38 @@ const SelectWrapper = styled.div`
 `;
 
 const Select = props => {
-  const {
-    disabled,
-    flex,
-    input = {},
-    label = '',
-    meta = {},
-    sort = false,
-  } = props;
+  const { disabled, flex, input = {}, label = '', meta = {}, options } = props;
   const { name, value } = input;
-  const options = sort
-    ? props.options.sort(
-        (a, b) => (a.value > b.value ? 1 : b.value > a.value ? -1 : 0),
-      )
-    : props.options;
 
-  const selectedObj = props.options.find(
-    option => option.value && option.value.indexOf(value) !== -1,
-  );
-  const selectValue = (selectedObj && selectedObj.name) || '';
+  /**
+   * Prepare options:
+   * 1. Make a copy of the props.options because we will sort the options. If we don't,
+   *    every time we render the select element will insert a placeholder since props.options
+   *    has been modified in sort
+   * 2. Use utility function "sortObj" to sort options in alphabetical order
+   * 3. Insert a placeholder option "Select an option" to first element of options array
+   */
+  const optionsCopy = options.slice();
 
-  const isPlaceholder =
-    selectedObj &&
-    (selectedObj.value === '' || selectedObj.value.includes('Select'));
-  const hasPlaceholder =
-    props.options.length &&
-    props.options[0].value &&
-    (props.options[0].value.includes('Select') ||
-      props.options[0].value === '');
+  sortObj(optionsCopy).unshift({
+    name: 'Select an option',
+    value: '',
+    disabled: true,
+  });
+
+  const selectedObj = optionsCopy.find(option => {
+    // In case 'value' are in array format such as "Roles" -> ["MANAGER"].
+    // Also normalize values for comparison
+
+    if (Array.isArray(value)) {
+      return option.value === value[0];
+    }
+
+    return option.value === value;
+  });
+
+  const selectValue = (selectedObj && selectedObj.value) || '';
+
   return (
     <FormField flex={flex}>
       <SelectStyled disabled={disabled} meta={meta} value={value}>
@@ -129,8 +133,8 @@ const Select = props => {
           <FieldLabel label={label} meta={meta} name={name} value={value} />
         )}
         <SelectWrapper>
-          <select {...input} id={name} value={value || ''} disabled={disabled}>
-            {options.map(option => {
+          <select {...input} id={name}>
+            {optionsCopy.map(option => {
               const val = buildSelectOptionValue(option);
               return (
                 <option
@@ -144,14 +148,12 @@ const Select = props => {
             })}
           </select>
           <SelectValue
-            isDefault={selectValue}
-            isPlaceholder={isPlaceholder}
-            hasPlaceholder={hasPlaceholder}
+            isPlaceholder={value === ''}
             disabled={disabled}
             meta={meta}
             value={value}
           >
-            {selectValue}
+            {capitalizeString(selectValue, ' ', ' ')}
           </SelectValue>
         </SelectWrapper>
         <ChevronDown />

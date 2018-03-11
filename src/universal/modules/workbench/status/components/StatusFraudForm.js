@@ -16,6 +16,7 @@ import {
   UPDATE_APPLICATION_STATE,
   UPDATE_LAST_FRAUD_TRANSITIONS,
 } from 'grow-actions/workbench/constants';
+import { QUEUE_IS_STALE } from '../../shell/actions/actions-update-queue-state';
 import {
   FRAUD_WARNING_ON_CREDIT_BUREAU,
   EMAILAGE_EMAIL_CHECK,
@@ -54,6 +55,21 @@ const Checkboxes = styled.div`
     width: 365px;
   }
 `;
+
+const StatusTextarea = styled.textarea`
+  overflow: auto;
+  outline: none;
+  width: 100%;
+  min-height: 145px;
+  padding: 1.5rem;
+  border: 1px solid #dee4e7;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  resize: none;
+  line-height: 1.5;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+`;
+
 class StatusFraudForm extends PureComponent {
   constructor(props) {
     super(props);
@@ -113,6 +129,9 @@ class StatusFraudForm extends PureComponent {
           dispatch({
             type: UPDATE_LAST_FRAUD_TRANSITIONS,
             payload: response.payload.data,
+          });
+          dispatch({
+            type: QUEUE_IS_STALE,
           });
         }
       });
@@ -254,7 +273,7 @@ class StatusFraudForm extends PureComponent {
               component="textarea"
               autoFocus
               name="fraudOtherComment"
-              className="RecommendationFormTextarea"
+              className={StatusTextarea}
               placeholder="Please provide your fraud reason"
             />
           </FadeIn>

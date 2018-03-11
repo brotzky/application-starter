@@ -38,10 +38,10 @@ const fillInTheBlanks = data => {
         const arr = filter[key].map(obj =>
           // eslint-disable-line no-loop-func
           /**
-         * Add in amount, category, description for API
-         * since it is require to have all the keys for the
-         * call to work
-         */
+           * Add in amount, category, description for API
+           * since it is require to have all the keys for the
+           * call to work
+           */
           ({
             amount: normalizeNumber(obj.amount) || 0,
             category: obj.category || '',
@@ -76,6 +76,9 @@ export const configCalcDataForAPI = (data, dsrData) => {
       monthlyIncome: normalizeNumber(data.monthlyIncome) || '0',
       monthlyNet: normalizeNumber(data.monthlyIncome) || '0',
       name:
+        `${moment().format('MMM Do YYYY')} - ${data.calculatorName}` ||
+        `${moment().format('MMM Do YYYY')}`,
+      value:
         `${moment().format('MMM Do YYYY')} - ${data.calculatorName}` ||
         `${moment().format('MMM Do YYYY')}`,
       tdsr: parseFloat(dsrData.TDSR.toFixed(8)).toString() || '0',

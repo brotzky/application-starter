@@ -3,33 +3,29 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { User } from '../../icons';
-import { FadeInFast } from '../../transitions';
 import { showModal, hideModal } from '../../modal/actions/actions-modal';
 import { userPropType, dispatchPropType } from 'gac-utils/proptypes';
 
 const ProfileImage = styled.img`
   height: ${props => props.size}px;
   width: ${props => props.size}px;
-  border-radius: 50%;
+  border-radius: ${props => props.borderRadius}%;
   opacity: ${props => (props.alreadyHasImage ? 1 : props.imageLoaded ? 1 : 0)};
   transition: opacity 180ms ease;
 `;
 
 const ProfileImageWrapper = styled.div`
   background: #fafafa;
-  border-radius: 50%;
 `;
 
 const ClickHandler = styled.div`
   position: relative;
   cursor: ${props => (props.allowUpdate ? 'pointer' : 'inherit')};
-  border-radius: 50%;
+  border-radius: ${props => props.borderRadius}%;
   overflow: hidden;
   height: ${props => props.size}px;
   background: #fafafa;
-  border-radius: 50%;
 
-  // Need max and min widths to fix a CSS issue
   max-width: ${props => props.size}px;
   min-width: ${props => props.size}px;
 
@@ -80,8 +76,9 @@ class ProfilePicture extends Component {
 
   render() {
     const {
+      borderRadius,
       size,
-      user: { firstName, email, id, profilePicture },
+      user: { firstName, email, profilePicture },
       isActive,
       allowUpdate,
     } = this.props;
@@ -101,6 +98,7 @@ class ProfilePicture extends Component {
         allowUpdate={allowUpdate}
         onClick={allowUpdate ? this.handleProfilePictureClick : () => {}}
         isActive={isActive}
+        borderRadius={borderRadius}
         size={size}
       >
         {email && (
@@ -108,6 +106,7 @@ class ProfilePicture extends Component {
             {profilePicture ? (
               <ProfileImage
                 size={size}
+                borderRadius={borderRadius}
                 src={profilePictureSrc}
                 onLoad={this.handleImageLoaded}
                 imageLoaded={imageLoaded}
@@ -127,9 +126,11 @@ class ProfilePicture extends Component {
 ProfilePicture.defaultProps = {
   isActive: false,
   size: 32,
+  borderRadius: 50,
 };
 
 ProfilePicture.propTypes = {
+  borderRadius: PropTypes.number,
   user: userPropType.isRequired,
   dispatch: dispatchPropType.isRequired,
   size: PropTypes.number.isRequired,

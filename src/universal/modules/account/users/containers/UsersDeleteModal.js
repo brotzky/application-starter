@@ -12,6 +12,22 @@ const ButtonWrapper = styled.div`
   margin-top: 2rem;
 `;
 
+const Heading = styled.h3`
+  display: block;
+  margin-bottom: 3.4rem;
+  font-size: 5rem;
+  font-weight: 600;
+  line-height: 1.5;
+`;
+
+const UsersDeleteList = styled.ul`
+  color: $text-color;
+  padding-left: 20px;
+
+  li {
+    margin-bottom: 15px;
+  }
+`;
 class UserDeleteModal extends Component {
   handleDeleteClick = () => {
     const { dispatch, profile, user } = this.props;
@@ -34,8 +50,12 @@ class UserDeleteModal extends Component {
   };
 
   render() {
-    const { dispatch, profile, submitting } = this.props;
-    const fullName = (
+    const { dispatch, profile, currentUser } = this.props;
+    const fullName = currentUser ? (
+      <strong>
+        {currentUser.firstName} {currentUser.lastName}
+      </strong>
+    ) : (
       <strong>
         {profile.firstName} {profile.lastName}
       </strong>
@@ -46,16 +66,16 @@ class UserDeleteModal extends Component {
         modalAction={() => dispatch(hideModal())}
         modalFullscreen={false}
       >
-        <h3 className="u-heading-5">Deactivate user</h3>
+        <Heading>Deactivate user</Heading>
         <div style={{ width: '400px' }}>
           <p>Please confirm the deactivation of {fullName}</p>
-          <ul className="UsersDeleteList">
+          <UsersDeleteList>
             <li>{fullName} will lose login access to Grow Admin Console.</li>
             <li>
               {fullName} will still be visible on applications they particated
               in, notes they have left, and all other interactions they created.
             </li>
-          </ul>
+          </UsersDeleteList>
           <ButtonWrapper>
             <Button
               permission="EDIT_PROFILE"

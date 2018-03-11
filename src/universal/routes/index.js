@@ -3,94 +3,113 @@ import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Core from '../modules/core/containers/Core';
 
+function Loading(props) {
+  if (props.error) {
+    return <div>Error!</div>;
+  } else if (props.timedOut) {
+    return <div>Taking a long time...</div>;
+  } else if (props.pastDelay) {
+    return <div>Loading...</div>;
+  } else {
+    return null;
+  }
+}
+
 const AsyncLogin = Loadable({
   loader: () => import('../modules/login/containers/Login'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncResetPassword = Loadable({
   loader: () => import('../modules/login/containers/ResetPassword'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncAuthloader = Loadable({
   loader: () => import('../modules/auth/components/AuthLoader'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncAcceptInvite = Loadable({
   loader: () => import('../modules/login/containers/NewPassword'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncMemberProfile = Loadable({
   loader: () => import('../modules/member/containers/Member'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncWorkbench = Loadable({
   loader: () => import('../modules/workbench/shell/containers/WorkbenchShell'),
-  loading: () => <div>Loading</div>,
-});
-
-const AsyncProduct = Loadable({
-  loader: () => import('../modules/product/shell/containers/ProductShell'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncAccount = Loadable({
   loader: () => import('../modules/account/shell/components/AccountShell'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncApplications = Loadable({
   loader: () => import('../modules/queue/containers/Queue'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 const AsyncNotFound = Loadable({
   loader: () => import('../modules/404/components/404'),
-  loading: () => <div>Loading</div>,
+  loading: () => Loading,
+  delay: 400,
+  timeout: 500,
 });
 
 export const routes = [
   {
     component: Core,
     routes: [
-      { path: '/', exact: true, component: Core },
-      { path: '/login', exact: true, component: AsyncLogin },
+      { exact: true, path: '/login', component: AsyncLogin },
       {
-        path: '/login/password-reset',
         exact: true,
+        path: '/login/password-reset',
         component: AsyncResetPassword,
       },
-      { path: '/login/reset', exact: true, component: AsyncResetPassword },
-      { path: '/redirect', exact: true, component: AsyncAuthloader },
-      { path: '/accept-invite', exact: true, component: AsyncAcceptInvite },
+      { exact: true, path: '/login/reset', component: AsyncResetPassword },
+      { exact: true, path: '/redirect', component: AsyncAuthloader },
+      { exact: true, path: '/accept-invite', component: AsyncAcceptInvite },
       {
-        path: '//members/:memberId/:profileSection?',
         exact: true,
-        component: AsyncMemberProfile,
-      },
-      {
         path:
           '/members/:memberId/workbench/:workbenchId/:workbenchProduct/:workbenchTab?/:profileSection?',
-        exact: true,
         component: AsyncWorkbench,
       },
       {
-        path: '/members/:memberId/product/:productCategory/:productId',
         exact: true,
-        component: AsyncProduct,
+        path: '/members/:memberId/:profileSection?',
+        component: AsyncMemberProfile,
       },
       {
-        path: '/applications/:page?',
         exact: true,
+        path: '/applications/:page?',
         component: AsyncApplications,
       },
       {
-        path: '/account/:accountTab/:accountSecondaryTab?',
         exact: true,
+        path: '/account/:accountTab/:accountSecondaryTab?',
         component: AsyncAccount,
       },
       { component: AsyncNotFound },
@@ -98,37 +117,4 @@ export const routes = [
   },
 ];
 
-const Routes = () => (
-  <Switch>
-    <Route exact path="/" component={Core} />
-    <Route exact path="/login" component={AsyncLogin} />
-    <Route exact path="/login/password-reset" component={AsyncResetPassword} />
-    <Route exact path="/login/reset" component={AsyncResetPassword} />
-    <Route exact path="/redirect" component={AsyncAuthloader} />
-    <Route exact path="/accept-invite" component={AsyncAcceptInvite} />
-    <Route
-      exact
-      path="/members/:memberId/:profileSection?"
-      component={AsyncMemberProfile}
-    />
-    <Route
-      exact
-      path="/members/:memberId/workbench/:workbenchId/:workbenchProduct/:workbenchTab?/:profileSection?"
-      component={AsyncWorkbench}
-    />
-    <Route
-      exact
-      path="/members/:memberId/product/:productCategory/:productId"
-      component={AsyncProduct}
-    />
-    <Route exact path="/applications/:page?" component={AsyncApplications} />
-    <Route
-      exact
-      path="/account/:accountTab/:accountSecondaryTab?"
-      component={AsyncAccount}
-    />
-    <Route path="*" component={AsyncNotFound} />
-  </Switch>
-);
-
-export default Routes;
+export default routes;

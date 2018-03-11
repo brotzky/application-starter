@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Panel } from '../../ui/components';
 import Select from 'react-select';
 import DateRange from '../../forms/forms/DateRange';
-import 'react-select/dist/react-select.css';
+
 const ListBox = styled.div`
   padding: 3px 8px 3px;
   background-color: #d9edf7;
@@ -15,6 +15,7 @@ const ListBox = styled.div`
   cursor: pointer;
   font-size: 12px;
 `;
+
 const ListHeader = styled(ListBox)`
   span.header {
     font-weight: 600;
@@ -30,12 +31,14 @@ const ListBody = styled(ListBox)`
   padding: 5px 8px 5px;
   margin-bottom: 5px;
 `;
+
 const CloseButton = styled.span`
   position: absolute;
   right: 10px;
   top: 3px;
   display: block;
 `;
+
 const InputWrapper = styled.input`
   display: block;
   width: 100%;
@@ -61,7 +64,7 @@ class SelectedFilter extends Component {
   };
 
   /**
-   * Expand to enter input values. 
+   * Expand to enter input values.
    */
   handleClick = event => {
     const { collapsed } = this.state;
@@ -75,7 +78,7 @@ class SelectedFilter extends Component {
   };
 
   /**
-   * 
+   *
    */
   renderFilterInput = () => {
     const {
@@ -189,11 +192,9 @@ class SelectedFilter extends Component {
           >
             <Remove height="10" width="10" />
           </CloseButton>
-          <span className="header">{item.label}</span>
+          <span>{item.label}</span>
           {collapsed && (
-            <span className="filter-value">
-              {display ? display : 'Click to apply a filter value.'}
-            </span>
+            <span>{display ? display : 'Click to apply a filter value.'}</span>
           )}
         </ListHeader>
         {!collapsed && <ListBody>{this.renderFilterInput()}</ListBody>}

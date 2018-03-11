@@ -5,27 +5,23 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
 import { productApplication } from 'grow-utils/productApplicationUtils';
-import { Action } from '../../ui/components';
+import { capitalizeString } from 'grow-utils/stringFormatting';
 import {
   Button,
-  ViewPermission,
-  ImageGroup,
   Tooltip,
   TextBox,
   Table,
   ProfilePicture,
 } from '../../ui/components';
-import { capitalizeString } from 'grow-utils/stringFormatting';
-import { addClassNameIf } from 'grow-utils/addClassNameIf';
 import { showModal } from '../../ui/modal/actions/actions-modal';
-import { MenuDots } from '../../ui/icons/';
-import { FadeIn, Transition } from '../../ui/transitions';
+import { FadeIn } from '../../ui/transitions';
 import JointIcons from '../../ui/joint-icons/';
 import {
   handleClaimClick,
   handleUnclaimClick,
 } from '../../../utils/claim-unclaim';
 import ProfileCard from '../components/ProfileCard';
+
 const StatePill = styled(Link)`
   padding: 2px 14px 3px;
 
@@ -48,22 +44,6 @@ const StatePill = styled(Link)`
   border-radius: 30px;
 `;
 
-const ExistingUserNotification = styled.span`
-  background: ${props =>
-    props.isExistingUser ? props.theme.colors.blue : 'rgb(201, 209, 214)'};
-  padding: 2px;
-  color: white;
-  font-weight: 700;
-  border-radius: 50%;
-  margin: 6px 6px 0 0;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 8px;
-  min-width: 8px;
-`;
-
 const QueueLink = styled(Link)`
   cursor: pointer;
 
@@ -82,12 +62,6 @@ const QueueLinkContent = styled.div`
   display: flex;
 `;
 
-const ActionButton = styled.button`
-  height: 100%;
-  width: 100%;
-  text-align: left;
-`;
-
 const CeatorName = styled.div`
   margin: 1px 0 0 12px;
 `;
@@ -95,6 +69,16 @@ const CeatorName = styled.div`
 class ApplicationsItem extends Component {
   state = {
     isActionMenuOpen: false,
+  };
+
+  /**
+   * Strip a url to get the last visited page.
+   * '/<partner>/apply/<page>'
+   */
+  getLastVisitedUrl = url => {
+    return url && url.split('/')[3]
+      ? capitalizeString(url.split('/')[3], '-', ' ')
+      : 'N/A';
   };
 
   handleActionMenuClick = (event, id) => {
@@ -117,27 +101,16 @@ class ApplicationsItem extends Component {
       }),
     );
   };
-  /**
-   * Strip a url to get the last visited page.
-   * '/<partner>/apply/<page>'
-   */
-  getLastVisitedUrl = url => {
-    return url && url.split('/')[3]
-      ? capitalizeString(url.split('/')[3], '-', ' ')
-      : 'N/A';
-  };
+
   render() {
-    const { item, showQueueMenu, user, org, dispatch } = this.props;
+    const { item, user, org, dispatch } = this.props;
     const Application = productApplication(org, item);
     const workbenchLink = Application.getWorkbenchLink();
     const memberLink = Application.getMemberLink();
-    const productLink = Application.getProductLink();
-    const productName = Application.getPrettyName();
     const currentStep = Application.getMaskedStatus();
     const isExistingUser = item.creator.isExisting;
     const repIsCurrentUser =
       item.primaryRep.email && item.primaryRep.email === user.email;
-    const { isActionMenuOpen } = this.state;
 
     return (
       <FadeIn component={Table.Row}>

@@ -1,15 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
 import { FadeInFast } from '../../../ui/transitions/';
 import OverviewFinancialDashboard from './OverviewFinancialDashboard';
 import OverviewPersonalLoan from './OverviewPersonalLoan';
 import OverviewDepositAccount from './OverviewDepositAccount';
 
-const OverviewProductsContainer = styled.div``;
-
 /**
  * <OverviewProducts />
- * 
+ *
  * Note, it was a consious decision to create three separate, but seemingly very
  * similar components for each product. This is because of the potentially differences
  * each GAC product can have in the future.
@@ -28,7 +25,7 @@ const OverviewProducts = ({ products }) => {
 
   return (
     <FadeInFast component="div">
-      <OverviewProductsContainer>
+      <div>
         {financialHealthProducts.length > 0 && (
           <OverviewFinancialDashboard products={financialHealthProducts} />
         )}
@@ -38,7 +35,7 @@ const OverviewProducts = ({ products }) => {
         {personalLoanProducts.length > 0 && (
           <OverviewPersonalLoan products={personalLoanProducts} />
         )}
-      </OverviewProductsContainer>
+      </div>
     </FadeInFast>
   );
 };

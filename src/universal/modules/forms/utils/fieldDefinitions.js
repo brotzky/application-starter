@@ -4,106 +4,29 @@ import * as parse from '../parse/';
 import * as validation from '../validation/';
 import * as format from '../format/'; // used for static text view
 import masks from '../masks/'; // used for dynamic input editing
-import { industryList } from '../options/industries';
-import { occupationList } from '../options/occupations';
-import { countryList } from '../options/countries';
-
-const relationship = [
-  { name: 'Aunt', value: 'AUNT' },
-  { name: 'Brother', value: 'BROTHER' },
-  {
-    name: 'Common Law Spouse',
-    value: 'COMMON_LAW_SPOUSE',
-  },
-  { name: 'Cousin', value: 'COUSIN' },
-  {
-    name: 'Daughter',
-    value: 'DAUGHTER',
-  },
-  {
-    name: 'Daughter in Law',
-    value: 'DAUGHTER_IN_LAW',
-  },
-  { name: 'Father', value: 'FATHER' },
-  {
-    name: 'Father in Law',
-    value: 'FATHER_IN_LAW',
-  },
-  {
-    name: 'Granddaughter',
-    value: 'GRANDDAUGHTER',
-  },
-  {
-    name: 'Grandfather',
-    value: 'GRANDFATHER',
-  },
-  {
-    name: 'Grandmother',
-    value: 'GRANDMOTHER',
-  },
-  {
-    name: 'Grandson',
-    value: 'GRANDSON',
-  },
-  {
-    name: 'Guardian',
-    value: 'GUARDIAN',
-  },
-  {
-    name: 'Mother',
-    value: 'MOTHER',
-  },
-  {
-    name: 'Mother in Law',
-    value: 'MOTHER_IN_LAW',
-  },
-  {
-    name: 'Nephew',
-    value: 'NEPHEW',
-  },
-  {
-    name: 'Niece',
-    value: 'NIECE',
-  },
-  {
-    name: 'Other',
-    value: 'OTHER',
-  },
-  {
-    name: 'Sister',
-    value: 'SISTER',
-  },
-  {
-    name: 'Son',
-    value: 'SON',
-  },
-  {
-    name: 'Son in Law',
-    value: 'SON_IN_LAW',
-  },
-  {
-    name: 'Spouse',
-    value: 'SPOUSE',
-  },
-  {
-    name: 'Step Daughter',
-    value: 'STEP_DAUGHTER',
-  },
-  {
-    name: 'Step Son',
-    value: 'STEP_SON',
-  },
-  {
-    name: 'Uncle',
-    value: 'UNCLE',
-  },
-];
-
-const stringifyRange = obj =>
-  JSON.stringify({
-    min: typeof obj.min === 'number' ? obj.min.toFixed(1) : null,
-    max: typeof obj.max === 'number' ? obj.max.toFixed(1) : null,
-  });
+import {
+  accountPurposeOptions,
+  countryOptions,
+  defaultOccupationOptions,
+  educationLevelOptions,
+  employmentStatusOptions,
+  genderOptions,
+  housingLengthOptions,
+  housingStatusOptions,
+  incomeOtherSourceOptions,
+  industryOptions,
+  interestTransferOptions,
+  loanPurposeOptions,
+  maritalStatusOptions,
+  payoutFrequencyOptions,
+  pepPositionOptions,
+  pepSelfRelativeOptions,
+  provinceOptions,
+  relationshipOptions,
+  termLengthOptions,
+  titleOptions,
+  zagEmploymentLengthOptions,
+} from '../options/';
 
 const radioYesNo = [
   {
@@ -113,41 +36,6 @@ const radioYesNo = [
   {
     name: 'No',
     value: 'n',
-  },
-];
-
-const loanPurposeOptions = [
-  {
-    value: 'DEBT_CONSOLIDATION',
-    name: 'Debt Consolidation',
-  },
-  {
-    value: 'VEHICLE_PURCHASE',
-    name: 'Vehicle Purchase',
-  },
-  {
-    value: 'BOAT_PURCHASE',
-    name: 'Boat Purchase',
-  },
-  {
-    value: 'RECREATIONAL_VEHICLE_PURCHASE',
-    name: 'Recreational Vehicle Purchase',
-  },
-  {
-    value: 'HOME_REPAIRS_RENOVATIONS',
-    name: 'Home Repairs / Renovations',
-  },
-  {
-    value: 'INVESTMENT',
-    name: 'Investment',
-  },
-  {
-    value: 'VACATION',
-    name: 'Vacation',
-  },
-  {
-    value: 'OTHER',
-    name: 'Other',
   },
 ];
 
@@ -184,7 +72,8 @@ const account_institution_transit_number = {
 const account_purpose = {
   label: 'Account Purpose',
   name: 'accountPurpose',
-  type: 'text',
+  type: 'select',
+  option: accountPurposeOptions,
 };
 
 const agree_info_correct = {
@@ -204,6 +93,13 @@ const agree_to_credit_check = {
 const agree_to_terms_use = {
   label: 'Agreed to Terms of Use',
   name: 'agreeToTermsOfUse',
+  options: radioYesNo,
+  type: 'radio',
+};
+
+const agree_to_terms_service = {
+  label: 'Agreed to Terms of Service',
+  name: 'agreeToTermsOfService',
   options: radioYesNo,
   type: 'radio',
 };
@@ -233,7 +129,7 @@ const beneficiary_relationship = {
   label: 'Beneficiary Relatioship',
   name: 'beneRelationship',
   type: 'select',
-  options: relationship,
+  options: relationshipOptions,
   validate: [validation.required],
 };
 
@@ -279,39 +175,13 @@ const date_of_birth = {
 const educational_institution = {
   label: 'Education Level',
   name: 'educationLevel',
-  options: [
-    {
-      disabled: true,
-      name: 'Select education level',
-      value: 'Select Education Level',
-    },
-    {
-      name: 'Some high school, no diploma',
-      value: 'SOME_HIGHSCHOOL_NO_DIPLOMA',
-    },
-    {
-      name: 'High school graduate or equivalent',
-      value: 'HIGH_SCHOOL_GRADUATE_OR_EQUIVALENT',
-    },
-    {
-      name: 'Some college, no degree',
-      value: 'SOME_COLLEGE_NO_DEGREE',
-    },
-    {
-      name: 'Trade/technical/vocational degree',
-      value: 'TRADE_TECHNICAL_VOCATIONAL_DEGREE',
-    },
-    { name: 'Associate degree', value: 'ASSOCIATE_DEGREE' },
-    { name: "Bachelor's degree", value: 'BACHELORS_DEGREE' },
-    { name: "Master's Degree", value: 'MASTERS_DEGREE' },
-    { name: "Doctor's Degree", value: 'DOCTORS_DEGREE' },
-  ],
+  options: educationLevelOptions,
   type: 'select',
   validate: [validation.required],
 };
 
 const email = {
-  label: 'Email',
+  label: 'Email Address',
   name: 'email',
   type: 'email',
   validate: [validation.required, validation.email],
@@ -340,75 +210,21 @@ const employer_phone_number = {
 const employment_industry = {
   label: 'Employment Industry',
   name: 'industry',
-  options: industryList,
+  options: industryOptions,
   type: 'select',
 };
 
 const employment_length = {
   label: 'Employment Length',
   name: 'timeRange',
-  options: [
-    {
-      name: '0-2 years',
-      value: stringifyRange({ min: 0.0, max: 2.0 }),
-    },
-    {
-      name: '3-4 years',
-      value: stringifyRange({ min: 3.0, max: 4.0 }),
-    },
-    {
-      name: '5+ years',
-      value: stringifyRange({ min: 5.0, max: null }),
-    },
-  ],
+  options: housingLengthOptions,
   type: 'select-easy',
 };
 
 const employment_status = {
   label: 'Employment Status',
   name: 'employmentStatus',
-  options: [
-    {
-      name: 'Full time',
-      value: 'FULL_TIME_EMPLOYMENT',
-    },
-    {
-      name: 'Part time',
-      value: 'PART_TIME_EMPLOYMENT',
-    },
-    {
-      name: 'Self employed',
-      value: 'SELF_EMPLOYED',
-    },
-    {
-      name: 'Retired',
-      value: 'RETIRED',
-    },
-    {
-      name: 'Contract',
-      value: 'CONTRACT',
-    },
-    {
-      name: 'Commission',
-      value: 'COMMISSION',
-    },
-    {
-      name: 'Seasonal',
-      value: 'SEASONAL',
-    },
-    {
-      name: 'Student',
-      value: 'STUDENT',
-    },
-    {
-      name: 'Not employed',
-      value: 'UNEMPLOYED',
-    },
-    {
-      name: 'Homemaker',
-      value: 'HOMEMAKER',
-    },
-  ],
+  options: employmentStatusOptions,
   type: 'select',
 };
 
@@ -438,7 +254,7 @@ const first_name = {
 
 const first_deposit_amount = {
   label: 'Deposit Amount',
-  name: 'firstDeposit.amount',
+  name: 'firstDepositAmount',
   mask: masks.currency(true),
   parse: parse.currency,
   format: format.currency,
@@ -447,43 +263,43 @@ const first_deposit_amount = {
 
 const first_deposit_account_id = {
   label: 'Account ID',
-  name: 'firstDeposit.accountId',
+  name: 'firstDepositAccountId',
   type: 'text',
 };
 
 const first_deposit_account_name = {
   label: 'Account Name',
-  name: 'firstDeposit.accountName',
+  name: 'firstDepositAccountName',
   type: 'text',
 };
 
 const first_deposit_account_number = {
   label: 'Account Number',
-  name: 'firstDeposit.accountNumber',
+  name: 'firstDepositAccountNumber',
   type: 'text',
 };
 
 const first_deposit_institution_name = {
   label: 'Institution Name',
-  name: 'firstDeposit.institutionName',
+  name: 'firstDepositInstitutionName',
   type: 'text',
 };
 
 const first_deposit_institution_number = {
   label: 'Institution Number',
-  name: 'firstDeposit.institutionNumber',
+  name: 'firstDepositInstitutionNumber',
   type: 'text',
 };
 
 const first_deposit_institution_transit = {
   label: 'Institution Transit Number',
-  name: 'firstDeposit.institutionTransit',
+  name: 'firstDepositInstitutionTransit',
   type: 'text',
 };
 
 const first_deposit_transfer_from_tfsa_rrsp = {
   label: 'Transfer from TFSA/RRSP',
-  name: 'firstDeposit.transferFromTFSARRSP',
+  name: 'firstDepositTransferFromTFSARRSP',
   options: radioYesNo,
   type: 'radio',
 };
@@ -496,79 +312,63 @@ const flex_quote = {
 const gender = {
   label: 'Gender',
   name: 'gender',
-  options: [
-    {
-      name: 'Female',
-      value: 'FEMALE',
-    },
-    {
-      name: 'Male',
-      value: 'MALE',
-    },
-    {
-      name: 'Unspecified',
-      value: 'UNSPECIFIED',
-    },
-  ],
+  options: genderOptions,
   type: 'select-easy',
   validate: [validation.required],
 };
 
 const has_different_mailing_address = {
-  label: 'Has different mailing address',
+  label: 'Different Mailing Address',
   name: 'hasDifferentMailingAddress',
   options: radioYesNo,
   type: 'radio',
 };
 
+const mailing_city = {
+  label: 'City',
+  name: 'mailingCity',
+  type: 'text',
+};
+const mailing_postal = {
+  label: 'Postal Code',
+  name: 'mailingPostal',
+  type: 'text',
+};
+const mailing_province = {
+  label: 'Province',
+  name: 'mailingProvince',
+  type: 'select',
+  options: provinceOptions,
+};
+const mailing_street = {
+  label: 'Street',
+  name: 'mailingStreet',
+  type: 'text',
+};
+const mailing_unit = {
+  label: 'Unit',
+  name: 'mailingUnit',
+  type: 'text',
+};
+
 const housing_length = {
   label: 'Housing Length',
   name: 'yearsAtResidency',
-  options: [
-    {
-      name: '0-2 years',
-      value: stringifyRange({ min: 0.0, max: 2.0 }),
-    },
-    {
-      name: '3-4 years',
-      value: stringifyRange({ min: 3.0, max: 4.0 }),
-    },
-    {
-      name: '5+ years',
-      value: stringifyRange({ min: 5.0, max: null }),
-    },
-  ],
+  options: housingLengthOptions,
   type: 'select-easy',
 };
 
 const housing_status = {
   label: 'Housing Status',
   name: 'housingStatus',
-  options: [
-    { name: 'Rent', value: 'RENT' },
-    { name: 'Own', value: 'OWN' },
-    { name: 'Lives with parents', value: 'WITH_PARENTS' },
-  ],
+  options: housingStatusOptions,
   type: 'select-easy',
 };
 
 const interest_transfer = {
   label: 'Interest Transfer from',
   name: 'interestTransfer',
-  options: [
-    {
-      name: 'Existing Bank Account',
-      value: 'CURRENT_FI_ACCOUNT',
-    },
-    {
-      name: 'Account from Another Financial Institution',
-      value: 'OTHER_FI_ACCOUNT',
-    },
-    {
-      name: 'Rollover',
-      value: 'ROLLOVER',
-    },
-  ],
+  options: interestTransferOptions,
   type: 'select',
   validate: [validation.required],
 };
@@ -585,11 +385,7 @@ const income_other = {
 const income_other_source = {
   label: 'Other Income Source',
   name: 'incomeSource',
-  options: [
-    { name: 'Rental', value: 'RENTAL' },
-    { name: 'Investment', value: 'INVESTMENT' },
-    { name: 'Other', value: 'OTHER' },
-  ],
+  options: incomeOtherSourceOptions,
   type: 'select-easy',
 };
 
@@ -608,16 +404,6 @@ const is_canadian_resident = {
   type: 'radio',
 };
 
-const is_canadian_tax_payer = {
-  label: 'Canadian Tax Payer',
-  name: 'canadianTaxPayer',
-  options: radioYesNo,
-  type: 'radio',
-};
-
-/**
- * Bolt-HISA specific
- */
 const is_canadian_tax_resident = {
   label: 'Canadian Tax Resident',
   name: 'canadianTaxPayer',
@@ -629,7 +415,7 @@ const is_canadian_tax_resident = {
  * Bolt-HISA specific
  */
 const is_international_tax_payer = {
-  label: 'International Tax Payer',
+  label: 'International Tax Resident',
   name: 'internationalTaxPayer',
   options: radioYesNo,
   type: 'radio',
@@ -639,15 +425,15 @@ const is_international_tax_payer = {
  * Bolt-HISA specific
  */
 const is_united_states_tax_resident = {
-  label: 'United States Tax Resident',
+  label: 'U.S. Tax Resident/Citizen',
   name: 'americanTaxPayer',
   options: radioYesNo,
   type: 'radio',
 };
 
 const is_international_tax_resident = {
-  label: 'International Tax Payer',
-  name: 'internationalTaxPayer',
+  label: 'International Tax Resident',
+  name: 'isInternationalTaxResident',
   options: radioYesNo,
   tooltip:
     'Canadian FIs are required under Part XVIII and Part XIX of the Income Tax Act to collect information to determine if your account is reportable to CRA. The CRA may share this information with the government of a foreign country that you are resident of for tax purposes. Each account holder must complete this information. Further help with tax residency is available on CRA website “Determining an Individual’s Residence Status” or by calling 1-800-959-8281.',
@@ -655,18 +441,11 @@ const is_international_tax_resident = {
 };
 
 const is_united_states_citizen = {
-  label: 'United States Citizen',
+  label: 'U.S. Citizen',
   name: 'isUnitedStatesCitizen',
   options: radioYesNo,
   tooltip:
     'In March 2010, the Foreign Account Tax Compliance Act (FATCA) was signed into U.S. law.  The purpose of the Act is to identify individuals who may evade US taxes by holding accounts outside of the U.S. On February 5, 2014, Canada signed an intergovernmental agreement with the U.S. regarding FATCA. Under this agreement, Canada agreed to pass laws requiring financial institutions to report annually (in some cases) to the Canada Revenue Agency (CRA) on specified accounts held in Canada by U.S. persons. The CRA may forward this reporting to the IRS under the provisions and safeguards of the Canada-U.S. Tax Convention.',
-  type: 'radio',
-};
-
-const is_united_states_tax_payer = {
-  label: 'United States Tax Payer',
-  name: 'americanTaxPayer',
-  options: radioYesNo,
   type: 'radio',
 };
 
@@ -730,15 +509,7 @@ const loan_insurance = {
 const marital_status = {
   label: 'Marital Status',
   name: 'maritalStatus',
-  options: [
-    { name: 'Select marital status', value: 'Select marital status' },
-    { name: 'Single', value: 'SINGLE' },
-    { name: 'Common law', value: 'COMMONLAW' },
-    { name: 'Married', value: 'MARRIED' },
-    { name: 'Divorced', value: 'DIVORCED' },
-    { name: 'Separated', value: 'SEPARATED' },
-    { name: 'Widow', value: 'WIDOW(ER)' },
-  ],
+  options: maritalStatusOptions,
   type: 'select',
 };
 
@@ -755,31 +526,14 @@ const monthly_housing_cost = {
 const occupation = {
   label: 'Occupation',
   name: 'occupation',
-  options: occupationList,
+  options: defaultOccupationOptions,
   type: 'select',
 };
 
 const payout_frequency = {
   label: 'Payout Frequency',
   name: 'payoutFrequency',
-  options: [
-    {
-      name: 'Monthly',
-      value: 'MONTHLY',
-    },
-    {
-      name: 'Semi-annually',
-      value: 'SEMI_ANNUALLY',
-    },
-    {
-      name: 'Annually',
-      value: 'ANNUALLY',
-    },
-    {
-      name: 'At maturity',
-      value: 'AT_MATURITY',
-    },
-  ],
+  options: payoutFrequencyOptions,
   type: 'select',
   validate: [validation.required],
 };
@@ -792,7 +546,7 @@ const paystub = {
 };
 
 const phone_number = {
-  label: 'Phone Number',
+  label: 'Mobile Phone Number',
   mask: masks.phone,
   format: format.phone,
   name: 'phone',
@@ -820,67 +574,21 @@ const politically_exposed = {
 const politically_exposed_self_relative = {
   label: 'Relative Politically Exposed',
   name: 'politicallyExposedSelfOrRelative',
-  options: [
-    {
-      name: 'Select realtive politically exposed',
-      value: 'Select realtive politically exposed',
-    },
-    {
-      name: 'Self',
-      value: 'SELF',
-    },
-    {
-      name: 'Relative',
-      value: 'RELATIVE',
-    },
-  ],
+  options: pepSelfRelativeOptions,
   type: 'select',
 };
 
 const politically_exposed_position_held = {
-  label: 'Politically Exposed',
+  label: 'Position',
   name: 'politicallyExposedPositionHeld',
-  options: [
-    {
-      name: 'Select politically exposed',
-      value: 'Select politically exposed',
-    },
-    {
-      name: 'Any elected official at any level of government',
-      value: 'GOVERNMENT_ELECTED_OFFICIAL',
-    },
-    {
-      name: 'Senior Executive of a state-owned corporation or bank',
-      value: 'SENIOR_EXECUTIVE_OF_BANK_OR_STATE_CORPORATION',
-    },
-    {
-      name: 'Senior Government Bureaucrat for any level of government',
-      value: 'SENIOR_GOVERNMENT_BUREAUCRAT',
-    },
-    {
-      name: 'Diplomatic or Consular Staff',
-      value: 'DIPLOMATIC_OR_CONSULAR_STAFF',
-    },
-    {
-      name: 'Judge - any level of court',
-      value: 'JUDGE',
-    },
-    {
-      name: 'Senior Executive of an international organization',
-      value: 'SENIOR_EXECUTIVE_OF_INTERNATIONAL_CORPORATION',
-    },
-    {
-      name: 'Head of any level of government',
-      value: 'HEAD_OF_GOVERNMENT',
-    },
-  ],
+  options: pepPositionOptions,
   type: 'select',
 };
 
 const politically_exposed_country_position_held = {
   label: 'Country of Position or Office',
   name: 'politicallyExposedCountryPositionHeld',
-  options: countryList,
+  options: countryOptions,
   type: 'select',
 };
 
@@ -916,22 +624,7 @@ const compliance_document = {
 const province = {
   label: 'Province',
   name: 'province',
-  options: [
-    { name: 'Select province', value: 'Select province' },
-    { name: 'Alberta', value: 'AB' },
-    { name: 'British Columbia', value: 'BC' },
-    { name: 'Manitoba', value: 'MB' },
-    { name: 'New Brunswick', value: 'NB' },
-    { name: 'Newfoundland and Labrador', value: 'NL' },
-    { name: 'Nova Scotia', value: 'NS' },
-    { name: 'Northwest Territories', value: 'NT' },
-    { name: 'Nunavut', value: 'NU' },
-    { name: 'Ontario', value: 'ON' },
-    { name: 'Prince Edward Island', value: 'PE' },
-    { name: 'Quebec', value: 'QC' },
-    { name: 'Saskatchewan', value: 'SK' },
-    { name: 'Yukon', value: 'YT' },
-  ],
+  options: provinceOptions,
   type: 'select',
 };
 
@@ -975,7 +668,7 @@ const tax_identification_number = {
 };
 
 const american_tax_identification_number = {
-  label: 'United States TIN',
+  label: 'U.S. TIN',
   name: 'americanTaxId',
   type: 'tel',
 };
@@ -991,40 +684,7 @@ const term_length = {
   label: 'Term Length',
   name: 'termLength',
   type: 'select',
-  options: [
-    {
-      name: 'No Term',
-      value: 'NO_TERM',
-    },
-    {
-      name: 'Six Months',
-      value: 'SIX_MONTHS',
-    },
-    {
-      name: 'Nine Months',
-      value: 'NINE_MONTHS',
-    },
-    {
-      name: 'One Year',
-      value: 'ONE_YEAR',
-    },
-    {
-      name: 'Two Years',
-      value: 'TWO_YEARS',
-    },
-    {
-      name: 'Three Years',
-      value: 'THREE_YEARS',
-    },
-    {
-      name: 'Four Years',
-      value: 'FOUR_YEARS',
-    },
-    {
-      name: 'Five Years',
-      value: 'FIVE_YEARS',
-    },
-  ],
+  options: termLengthOptions,
   validate: [validation.required],
 };
 
@@ -1037,16 +697,100 @@ const third_party = {
   type: 'radio',
 };
 
+const third_party_instructing = {
+  label: 'Application for Third Party',
+  name: 'isThirdParty',
+  options: radioYesNo,
+  tooltip:
+    "A third party is an individual or entity, other than the account holder or those authorized to give instructions about the account, who directs what happens with the account. It is not about who “owns” the money, but rather about who gives the instructions to deal with the money. If you are acting on someone else's instructions then that individual is considered a third party.",
+  type: 'radio',
+};
+
+const third_party_firstname = {
+  label: 'First Name',
+  name: 'thirdPartyFirstName',
+  type: 'text',
+};
+
+const third_party_lastname = {
+  label: 'Last Name',
+  name: 'thirdPartyLastName',
+  type: 'text',
+};
+
+const third_party_dob = {
+  label: 'Date of Birth',
+  name: 'thirdPartyDOB',
+  mask: masks.dateOfBirth,
+  format: format.date,
+  parse: parse.replace(/\//g, ''),
+  type: 'tel',
+  validate: [validation.required, validation.dob],
+};
+
+const third_party_employment_status = {
+  label: 'Employment Status',
+  name: 'thirdPartyEmploymentStatus',
+  options: employmentStatusOptions,
+  type: 'select',
+};
+
+const third_party_occupation = {
+  label: 'Occupation',
+  name: 'thirdPartyOccupation',
+  options: defaultOccupationOptions,
+  type: 'select',
+};
+
+const third_party_industry = {
+  label: 'Industry',
+  name: 'thirdPartyIndustry',
+  options: industryOptions,
+  type: 'select',
+};
+
+const third_party_unit = {
+  label: 'Unit',
+  name: 'thirdPartyUnit',
+  type: 'text',
+};
+
+const third_party_street = {
+  label: 'Street',
+  name: 'thirdPartyStreet',
+  type: 'text',
+};
+
+const third_party_city = {
+  label: 'City',
+  name: 'thirdPartyCity',
+  type: 'text',
+};
+
+const third_party_province = {
+  label: 'Province',
+  name: 'thirdPartyProvince',
+  type: 'select',
+  options: provinceOptions,
+};
+
+const third_party_postal = {
+  label: 'Postal Code',
+  name: 'thirdPartyPostal',
+  type: 'text',
+};
+
+const third_party_relationship = {
+  label: 'Relationship',
+  name: 'thirdPartyRelationship',
+  options: relationshipOptions,
+  type: 'select',
+};
+
 const title = {
   label: 'Title',
   name: 'title',
-  options: [
-    { name: 'Select title', value: 'Select title' },
-    { name: 'Mrs', value: 'MRS' },
-    { name: 'Mr', value: 'MR' },
-    { name: 'Miss', value: 'MISS' },
-    { name: 'Ms', value: 'MS' },
-  ],
+  options: titleOptions,
   type: 'select',
 };
 
@@ -1089,8 +833,9 @@ const void_cheque = {
 
 const international_tax_form_country = {
   name: 'countryName',
-  type: 'text',
+  type: 'select',
   label: 'Country',
+  options: countryOptions,
 };
 
 const international_tax_form_id = {
@@ -1108,20 +853,7 @@ const international_tax_form_reason = {
 const zag_employment_length = {
   label: 'Employment Length',
   name: 'yearsAtJob',
-  options: [
-    {
-      name: '0-2 years',
-      value: stringifyRange({ min: 0.0, max: 2.0 }),
-    },
-    {
-      name: '3-4 years',
-      value: stringifyRange({ min: 3.0, max: 4.0 }),
-    },
-    {
-      name: '5+ years',
-      value: stringifyRange({ min: 5.0, max: null }),
-    },
-  ],
+  options: zagEmploymentLengthOptions,
   type: 'select-easy',
 };
 
@@ -1135,6 +867,7 @@ export default {
   agree_info_correct,
   agree_to_credit_check,
   agree_to_terms_use,
+  agree_to_terms_service,
   beneficiary_firstname,
   beneficiary_lastname,
   beneficiary_relationship,
@@ -1174,12 +907,10 @@ export default {
   income_other_description,
   interest_transfer,
   is_canadian_resident,
-  is_canadian_tax_payer,
   is_canadian_tax_resident,
   is_international_tax_resident,
   is_international_tax_payer,
   is_united_states_citizen,
-  is_united_states_tax_payer,
   is_united_states_tax_resident,
   is_joint,
   is_loyal_bank,
@@ -1189,6 +920,11 @@ export default {
   loan_joint,
   loan_purpose,
   marital_status,
+  mailing_city,
+  mailing_postal,
+  mailing_province,
+  mailing_street,
+  mailing_unit,
   monthly_housing_cost,
   occupation,
   paystub,
@@ -1210,6 +946,19 @@ export default {
   tax_identification_number,
   term_length,
   third_party,
+  third_party_firstname,
+  third_party_lastname,
+  third_party_dob,
+  third_party_occupation,
+  third_party_postal,
+  third_party_unit,
+  third_party_street,
+  third_party_city,
+  third_party_province,
+  third_party_industry,
+  third_party_employment_status,
+  third_party_relationship,
+  third_party_instructing,
   title,
   unit,
   verification_code,

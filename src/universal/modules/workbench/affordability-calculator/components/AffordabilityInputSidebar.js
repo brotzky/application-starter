@@ -42,6 +42,30 @@ const NoPermissionMessage = styled.p`
   font-size: 1.4rem;
 `;
 
+const CalculatorSidebarInputs = styled.div`
+  height: 100%;
+  margin-bottom: 2rem;
+  border-radius: 2px;
+
+  &:focus,
+  &:active {
+    width: 100%;
+    border-radius: initial;
+  }
+
+  &::-webkit-input-placeholder {
+    color: #9a9a9a;
+  }
+
+  &::-moz-placeholder {
+    color: #9a9a9a;
+  }
+
+  &:-ms-input-placeholder {
+    color: #9a9a9a;
+  }
+`;
+
 const currencyMask = createNumberMask({
   prefix: '$',
   allowDecimal: true,
@@ -75,7 +99,7 @@ class AffordabilityInputSidebar extends Component {
 
     return (
       <ThemeProvider theme={CalculatorSidebarTheme}>
-        <div className="CalculatorSidebar__inputs">
+        <CalculatorSidebarInputs>
           {!hasPermission && (
             <NoPermissionMessage>
               You do not have edit permissions for the affordability calculator.
@@ -99,7 +123,7 @@ class AffordabilityInputSidebar extends Component {
             normalize={this.syncGrossAnnual}
             disabled={!hasPermission}
           />
-        </div>
+        </CalculatorSidebarInputs>
       </ThemeProvider>
     );
   }

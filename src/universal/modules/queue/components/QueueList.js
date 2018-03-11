@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import {
+  QueuePlaceholder,
+  QueueList as QueueListWrapper,
+  QueueApplications,
+} from 'gac-utils/sc';
 import QueueItem from '../containers/QueueItem';
 import { productApplication } from 'grow-utils/productApplicationUtils';
 import { capitalizeString } from 'grow-utils/stringFormatting';
@@ -32,8 +37,8 @@ const QueueList = props => {
 
     const step = currentStep
       ? ` with status ${productApplication(org, {}).getMaskedStatus(
-        currentStep,
-      )}`
+          currentStep,
+        )}`
       : '';
 
     const product = productName
@@ -50,11 +55,11 @@ const QueueList = props => {
   }
 
   return (
-    <div className="QueueApplications">
+    <QueueApplications>
       {isFetching ? (
-        <div className="QueuePlaceholder" />
+        <QueuePlaceholder />
       ) : (
-        <ul className="QueueList">
+        <QueueListWrapper>
           {applications.map(item => (
             <QueueItem
               dispatch={dispatch}
@@ -65,9 +70,9 @@ const QueueList = props => {
               user={props.user}
             />
           ))}
-        </ul>
+        </QueueListWrapper>
       )}
-    </div>
+    </QueueApplications>
   );
 };
 

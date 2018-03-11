@@ -4,6 +4,7 @@ import { productApplication } from 'grow-utils/productApplicationUtils';
 import JointIcons from '../../../ui/joint-icons/';
 import { ChevronDown } from '../../../ui/icons/';
 import moment from 'moment';
+import { SecondaryNavListItem } from 'gac-utils/sc';
 
 const getServingApplications = productApplications =>
   productApplications.filter(
@@ -22,7 +23,7 @@ const SecondaryNavProducts = ({ member, org }) => {
    * Eagle does not need the product page.
    */
   return (
-    <li className="SecondaryNavList__item">
+    <SecondaryNavListItem>
       {/* {      <Link
         className="SecondaryNavList__link"
         activeClassName="SecondaryNavList__link--active"
@@ -51,7 +52,7 @@ const SecondaryNavProducts = ({ member, org }) => {
           })}
         </ul>
       ) : null}} */}
-    </li>
+    </SecondaryNavListItem>
   );
 };
 

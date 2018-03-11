@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Spinner from '../../spinner/spinner';
-import { CheckCircle, ExclamationCircle, InfoCircle } from '../../icons/';
 import { notificationDismiss } from '../actions/';
-import { addClassNameIf } from 'grow-utils/addClassNameIf';
 
 const ErrorNotificationWrapper = styled.div`
   position: relative;
@@ -56,116 +53,29 @@ class Notification extends Component {
     this.props.dispatch(notificationDismiss(this.props.notification.id));
   };
 
-  renderUploadNotification = notification => {
-    const { className, file, kind, message } = notification;
+  renderErrorNotification(notification) {
+    const { kind, message, suggestedActions, reason } = notification;
+
     return (
-      <div
-        className={`
-        Notification
-        Notification--${kind}
-        ${addClassNameIf(file.uploaded, 'Notification--upload-success')}
-        ${addClassNameIf(
-          file.uploaded === false,
-          'Notification--upload-failure',
-        )}
-        ${className || ''}`}
-      >
-        <div
-          className="Notification__img"
-          height="100"
-          width="100"
-          style={{ backgroundImage: `url(${file.preview})` }}
-        />
-        <div className="Notification__upload-content">
-          <span
-            className={`Notification__text ${
-              className ? `${className}__text` : ''
-            }`}
-          >
-            {message}
-          </span>
-          <div className="Notification__progress-bar Notification__progress-bar--bg" />
-          <div
-            className={`
-            Notification__progress-bar
-            Notification__progress-bar--value
-            ${addClassNameIf(
-              file.progress === 100,
-              'Notification__progress-bar--waiting',
-            )}`}
-            style={{ width: `${file.progress}%` }}
-          />
-        </div>
-      </div>
-    );
-  };
-
-  renderIcon = kind => {
-    const className = 'Notification__icon-graphic';
-
-    switch (kind) {
-      case 'error':
-        return <ExclamationCircle className={className} />;
-      case 'info':
-        return <InfoCircle className={className} />;
-      case 'loading':
-        return <Spinner size="24" className={className} />;
-      case 'success':
-        return <CheckCircle className={className} />;
-      default:
-        return <InfoCircle className={className} />;
-    }
-  };
-
-  renderBasicNotification(notification) {
-    const { className, kind, message, suggestedActions, reason } = notification;
-    return kind === 'error' ? (
-      <ErrorNotificationWrapper>
-        <ErrorDismissButton onClick={this.dismissError}>×</ErrorDismissButton>
-        <ErrorTitle>{message}</ErrorTitle>
-        {reason && <ErrorReason>{reason}</ErrorReason>}
-        {suggestedActions && (
-          <SuggestedActions>
-            {suggestedActions.map(action => (
-              <SuggestedAction key={action}>{action}</SuggestedAction>
-            ))}
-          </SuggestedActions>
-        )}
-      </ErrorNotificationWrapper>
-    ) : (
-      <div className={`Notification Notification--${kind} ${className || ''}`}>
-        <div
-          className={`Notification__icon ${
-            className ? `${className}__icon` : ''
-          }`}
-        >
-          {this.renderIcon(kind)}
-        </div>
-        <div
-          className={`Notification__message ${
-            className ? `${className}__message` : ''
-          }`}
-        >
-          <span
-            className={`Notification__text ${
-              className ? `${className}__text` : ''
-            }`}
-          >
-            {message}
-          </span>
-        </div>
-      </div>
+      kind === 'error' && (
+        <ErrorNotificationWrapper>
+          <ErrorDismissButton onClick={this.dismissError}>×</ErrorDismissButton>
+          <ErrorTitle>{message}</ErrorTitle>
+          {reason && <ErrorReason>{reason}</ErrorReason>}
+          {suggestedActions && (
+            <SuggestedActions>
+              {suggestedActions.map(action => (
+                <SuggestedAction key={action}>{action}</SuggestedAction>
+              ))}
+            </SuggestedActions>
+          )}
+        </ErrorNotificationWrapper>
+      )
     );
   }
 
   render() {
-    const { notification } = this.props;
-    const { kind } = notification;
-
-    if (kind === 'upload') {
-      return this.renderUploadNotification(notification);
-    }
-    return this.renderBasicNotification(notification);
+    return this.renderErrorNotification(this.props.notification);
   }
 }
 

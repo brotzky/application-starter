@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { change } from 'redux-form';
 import styled from 'styled-components';
 import moment from 'moment';
 import {
@@ -7,8 +8,15 @@ import {
   ExclamationCircle,
   Upload,
   ExpandIcon,
+  Remove,
 } from '../../../ui/icons';
+import { Button } from '../../../ui/components';
+import { deleteFile } from 'grow-actions/upload-file/delete-file';
+import { DELETE_FROM_LIST } from 'grow-actions/upload-file/constants';
+import ApplicantDeleteFile from './ApplicantDeleteFile';
+import { getMemberProductApplicationMetadata } from 'grow-actions/member/member-category-metadata';
 import { showModal, hideModal } from '../../../ui/modal/actions/actions-modal';
+import { InlineTooltip } from '../../../ui/components';
 
 // ENUM mapping from white-label
 const veriTextMap = new Map();
@@ -34,7 +42,6 @@ const ApplicantProfileImageViewerContainer = styled.div`
   justify-content: space-between;
   padding: 1.28571rem 2.8125rem;
   border-bottom: 1px solid #ebeef0;
-
   &:hover {
     background: #fdfdfd;
   }
@@ -43,20 +50,31 @@ const ApplicantProfileImageViewerContainer = styled.div`
     opacity: 1;
   }
 `;
-
+const FileDeleteIcon = styled.div`
+  position: absolute;
+  opacity: 0;
+  top: -8px;
+  right: -8px;
+  background-color: ${props => props.theme.colors.errorPink};
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    * {
+      stroke: ${props => props.theme.colors.red};
+    }
+  }
+`;
 const ImageContainer = styled.div`
   position: relative;
   font-size: 1.5rem;
   display: inline-block;
   border-radius: 6px;
-  overflow: hidden;
-
-  &:hover .ImageOverlay {
-    opacity: 0.2;
-  }
-
-  &:hover .ImageDetails,
-  &:hover .ImageFullSize {
+  &:hover ${FileDeleteIcon} {
     transform: translateY(0px);
     opacity: 1;
   }
@@ -65,88 +83,50 @@ const ImageRow = styled.div`
   &:not(:last-child) {
     margin-bottom: 1.28571rem;
   }
+  display: flex;
 `;
 
-const Image = styled.img`height: 174px;`;
-
-const ImageOverlay = styled.div`
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: black;
-  pointer-events: none;
-  transition: opacity 200ms ease-out;
+const Image = styled.img`
+  height: 174px;
+  border-radius: 6px;
 `;
 
 const ImageDetails = styled.div`
-  background: white;
-  position: absolute;
-  opacity: 0;
-  top: 0px;
-  left: 0;
-  right: 0;
-  margin: 1rem;
-  padding: 1rem;
-  border-radius: 6px;
-  transform: translateY(-20px);
-  transition: transform 200ms ease-out;
-  will-change: transform;
-  box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.1),
-    0 8px 30px rgba(27, 39, 51, 0.3);
-`;
-
-const ImageFullSize = styled.div`
-  opacity: 0;
-  width: 50px;
-  height: 50px;
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  right: 0;
-  margin: 1rem auto;
-  padding: 1rem;
-  transform: translateY(20px);
-  transition: all 200ms ease-out;
-  box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.1),
-    0 8px 30px rgba(27, 39, 51, 0.3);
-  will-change: transform;
-  text-align: center;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 0 0 0 1px rgba(99, 114, 130, 0.1),
-      0 8px 40px rgba(27, 39, 51, 0.5);
-    background: #fdfdfd;
-  }
+  flex-direction: column;
 `;
 
 const ImageDetailsDate = styled.div`
   opacity: 0.6;
   margin-bottom: 4px;
 `;
-const ImageDetailsName = styled.div`font-weight: 600;`;
+const ImageDetailsName = styled.div`
+  font-weight: 600;
+`;
 
 const ImageEmptyState = styled.div`
   color: ${props => props.theme.colors.greyMidDark};
   font-size: 1.4rem;
 `;
 
-const ApplicantProfileTextEdit = styled.div`
+const ApplicantProfileTextEdit = styled(InlineTooltip.Container)`
   opacity: 0;
   position: absolute;
   right: 2.8125rem;
+  top: 1rem;
   color: ${props => props.theme.colors.blue};
-  cursor: pointer;
   transition: 150ms ease;
 
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:active {
+    pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
+  }
   svg {
     * {
       stroke: ${props => props.theme.colors.blue};
@@ -168,6 +148,10 @@ const StyledExclamationCircle = styled(ExclamationCircle)`
   * {
     stroke: ${props => props.theme.colors.red};
   }
+`;
+
+const ViewFullSizeButton = styled.div`
+  margin-top: 10px;
 `;
 
 const EmptyStateImageIcon = () => (
@@ -307,11 +291,18 @@ const PdfDocumentIcon = () => (
 const PdfLinkContainer = styled.div`
   display: flex;
   align-items: center;
-  cursor: pointer;
   font-size: 1.5rem;
+  position: relative;
+  max-width: 170px;
+  &:hover ${FileDeleteIcon} {
+    transform: translateY(0px);
+    opacity: 1;
+  }
 `;
 
-const PdfLinkText = styled.p`margin: 0 0 0 1rem;`;
+const PdfLinkText = styled.p`
+  margin: 0 0 0 1rem;
+`;
 class ApplicantProfileImageViewer extends Component {
   handlePdfModalClick = image => {
     const { dispatch } = this.props;
@@ -324,84 +315,160 @@ class ApplicantProfileImageViewer extends Component {
     );
   };
 
-  render() {
-    const { dispatch, field, handleToggleClick, fieldValue } = this.props;
+  handleDelete = image => {
+    const { dispatch, field, fieldValue, memberId, workbench } = this.props;
+    dispatch(deleteFile(image.preview)).then(response => {
+      if (!response.error) {
+        dispatch(getMemberProductApplicationMetadata(memberId, workbench.id)); //reinit redux-form
+        dispatch({
+          //remove image from upload/delete queue
+          type: DELETE_FROM_LIST,
+          payload: { fieldName: field.name },
+        });
+        dispatch(
+          //update redux form value
+          change(
+            'workbench',
+            field.name,
+            response.payload.data.uploads.length
+              ? fieldValue.filter(file => {
+                  return file.name !== image.name;
+                })
+              : null,
+          ),
+        );
+      }
+    });
+  };
 
+  render() {
+    const {
+      dispatch,
+      field,
+      handleToggleClick,
+      fieldValue,
+      sameAdmin,
+      files,
+    } = this.props;
     return (
       <ApplicantProfileImageViewerContainer>
-        {fieldValue ? (
-          [
-            <div key={fieldValue}>
-              {fieldValue.map(image => (
-                <ImageRow key={image.name}>
-                  {image.type.includes('pdf') ? (
-                    <PdfLinkContainer
-                      onClick={() => this.handlePdfModalClick(image)}
-                    >
-                      <PdfDocumentIcon />
-                      <PdfLinkText>View {field.label} PDF</PdfLinkText>
-                    </PdfLinkContainer>
-                  ) : (
-                    <ImageContainer key={image.name}>
-                      <Image src={image.preview} />
-                      <ImageOverlay className="ImageOverlay" />
-                      <ImageDetails className="ImageDetails">
-                        <ImageDetailsName>{image.name}</ImageDetailsName>
-                        <ImageDetailsDate>
-                          {moment(image.dateLastModified).format(
-                            'MMM, Do YYYY',
-                          )}
-                        </ImageDetailsDate>
-                        {image.verificationMsg === 'ACCEPTED' ? (
-                          <span>
-                            <StyledCheckCircle height={16} width={16} />Accepted
-                          </span>
-                        ) : (
-                          <span>
-                            <StyledExclamationCircle height={16} width={16} />
-                            {veriTextMap.get(image.verificationMsg)}
-                          </span>
-                        )}
-                      </ImageDetails>
-                      <ImageFullSize
-                        onClick={() =>
-                          dispatch(
-                            showModal('IMAGE_VIEWER', { dispatch, image }),
-                          )}
-                        className="ImageFullSize"
-                      >
-                        <ExpandIcon height="30" width="30" />
-                      </ImageFullSize>
-                    </ImageContainer>
-                  )}
-                </ImageRow>
-              ))}
-            </div>,
-            <ApplicantProfileTextEdit
-              key={2}
-              className="ApplicantProfileTextEdit"
-              onClick={() => handleToggleClick(field.name)}
-            >
-              <Upload height={18} /> Upload
-            </ApplicantProfileTextEdit>,
-          ]
-        ) : (
-          [
-            <ImageEmptyState key={1}>
-              <EmptyStateImageIcon />No {field.label} uploaded
-            </ImageEmptyState>,
-            <ApplicantProfileTextEdit
-              key={2}
-              className="ApplicantProfileTextEdit"
-              onClick={() => handleToggleClick(field.name)}
-            >
-              <Upload height={18} /> Upload
-            </ApplicantProfileTextEdit>,
-          ]
-        )}
+        {fieldValue
+          ? [
+              <div key={`${field.name}-field-values`}>
+                {fieldValue.map(image => (
+                  <ImageRow key={image.preview}>
+                    <div style={{ flex: 2 }}>
+                      {image.type.includes('pdf') ? (
+                        <PdfLinkContainer>
+                          <PdfDocumentIcon />
+                          <FileDeleteIcon
+                            onClick={e => {
+                              e.preventDefault();
+                              dispatch(
+                                showModal('PROMPT_MODAL', {
+                                  header: 'Delete File',
+                                  component: (
+                                    <ApplicantDeleteFile
+                                      image={image}
+                                      onConfirm={this.handleDelete}
+                                    />
+                                  ),
+                                }),
+                              );
+                            }}
+                          >
+                            <Remove height="10" width="10" />
+                          </FileDeleteIcon>
+                          <PdfLinkText>View {field.label} PDF</PdfLinkText>
+                        </PdfLinkContainer>
+                      ) : (
+                        <ImageContainer>
+                          <Image src={image.preview} />
+                          <FileDeleteIcon
+                            onClick={e => {
+                              e.preventDefault();
+
+                              dispatch(
+                                showModal('PROMPT_MODAL', {
+                                  header: 'Delete File',
+                                  component: (
+                                    <ApplicantDeleteFile
+                                      image={image}
+                                      onConfirm={this.handleDelete}
+                                    />
+                                  ),
+                                }),
+                              );
+                            }}
+                          >
+                            <Remove height="10" width="10" />
+                          </FileDeleteIcon>
+                        </ImageContainer>
+                      )}
+                    </div>
+
+                    <ImageDetails>
+                      <ImageDetailsName>{image.name}</ImageDetailsName>
+                      <ImageDetailsDate>
+                        {moment(image.dateLastModified).format('MMM, Do YYYY')}
+                      </ImageDetailsDate>
+                      {image.verificationMsg === 'ACCEPTED' ? (
+                        <span>
+                          <StyledCheckCircle height={16} width={16} />Accepted
+                        </span>
+                      ) : (
+                        <span>
+                          <StyledExclamationCircle height={16} width={16} />
+                          {veriTextMap.get(image.verificationMsg)}
+                        </span>
+                      )}
+                      <ViewFullSizeButton>
+                        <Button
+                          onClick={() => window.open(image.preview, '_blank')}
+                          text="View Full Size"
+                        />
+                      </ViewFullSizeButton>
+                    </ImageDetails>
+                  </ImageRow>
+                ))}
+              </div>,
+              <ApplicantProfileTextEdit
+                key={`${field.name}-field-edit`}
+                onClick={() => handleToggleClick(field.name)}
+                disabled={!sameAdmin || files.isUploading}
+                active={!sameAdmin}
+              >
+                <Upload height={18} /> Upload
+                <InlineTooltip>
+                  Please claim this application to make uploads.
+                </InlineTooltip>
+              </ApplicantProfileTextEdit>,
+            ]
+          : [
+              <ImageEmptyState key={`${field.name}-field-placeholders`}>
+                <EmptyStateImageIcon />No {field.label} uploaded
+              </ImageEmptyState>,
+              <ApplicantProfileTextEdit
+                key={`${field.name}-field-edit`}
+                onClick={() => handleToggleClick(field.name)}
+                disabled={!sameAdmin || files.isUploading}
+                active={!sameAdmin}
+              >
+                <Upload height={18} /> Upload
+                <InlineTooltip>
+                  Please claim this application to make uploads.
+                </InlineTooltip>
+              </ApplicantProfileTextEdit>,
+            ]}
       </ApplicantProfileImageViewerContainer>
     );
   }
 }
-
-export default connect()(ApplicantProfileImageViewer);
+const mapStateToProps = state => {
+  return {
+    memberId: state.member.member.id,
+    workbench: state.workbench,
+    files: state.files,
+  };
+};
+export default connect(mapStateToProps)(ApplicantProfileImageViewer);

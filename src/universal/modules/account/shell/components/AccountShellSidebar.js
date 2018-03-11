@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { FadeIn } from '../../../ui/transitions/';
 import { ProductsIcon, RolesIcon, UsersIcon } from '../../../ui/icons';
+
+const StyledFadeIn = styled(FadeIn)`
+  padding: 1rem 3.5rem;
+`;
 
 const sidebarLinks = [
   {
@@ -26,17 +31,13 @@ const NavList = styled.ul`
   list-style: none;
 `;
 
-const activeClassName = 'WorkbenchShellNav__link--active';
-
-const NavListLink = styled(Link).attrs({
-  activeClassName,
-})`
+const NavListLink = styled(NavLink)`
   display: flex;
-  left: -1.28571rem;
-  min-width: 230px;
-  padding: 0.9rem 1.28571rem;
-  font-weight: 400;
   border: 1px solid transparent;
+  left: -1.28571rem;
+  min-width: 200px;
+  padding: 0.9rem 3rem 0.9rem 2rem;
+  font-weight: 400;
   color: #262626;
   position: relative;
   border-radius: 2px;
@@ -47,14 +48,8 @@ const NavListLink = styled(Link).attrs({
     background-color: hsla(0, 0%, 100%, 0.5);
   }
 
-  &.${activeClassName} {
-    color: #262626;
-    background: #fff;
-    border: 1px solid #e8e8e8;
-  }
-
   svg {
-    margin: 0 28px 1px 0;
+    margin: 0 20px 1px 0;
     height: 22px;
     width: 22px;
 
@@ -62,6 +57,15 @@ const NavListLink = styled(Link).attrs({
       fill: #888;
     }
   }
+
+  ${props =>
+    props.active
+      ? `
+    color: #262626;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    `
+      : ''};
 `;
 
 /**
@@ -69,12 +73,11 @@ const NavListLink = styled(Link).attrs({
  */
 class AccountShellSidebar extends Component {
   buildNav(link) {
+    const isActive = this.props.pathname === `/account${link.path}`;
+
     return (
       <li key={link.text}>
-        <NavListLink
-          activeClassName={activeClassName}
-          to={`/account${link.path}`}
-        >
+        <NavListLink active={isActive} to={`/account${link.path}`}>
           {link.icon()} {link.text}
         </NavListLink>
       </li>
@@ -83,11 +86,15 @@ class AccountShellSidebar extends Component {
 
   render() {
     return (
-      <FadeIn component="div">
+      <StyledFadeIn component="div">
         <NavList>{sidebarLinks.map(link => this.buildNav(link))}</NavList>
-      </FadeIn>
+      </StyledFadeIn>
     );
   }
 }
 
-export default AccountShellSidebar;
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+});
+
+export default connect(mapStateToProps)(AccountShellSidebar);

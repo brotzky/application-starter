@@ -1,46 +1,73 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import Notification from './Notification';
 import { Transition } from '../../transitions/';
 
-const Notifications = props => {
-  const { dispatch, notifications } = props;
+const NotificationWrapper = styled.div`
+  position: fixed;
+  bottom: 2.4rem;
+  left: 2.4rem;
+  z-index: 100;
 
-  const errors = [];
-  const regularNotifications = [];
-  notifications.map(notification => {
-    notification.kind === 'error'
-      ? errors.push(notification)
-      : regularNotifications.push(notification);
-  });
+  > span {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+`;
 
-  return (
-    <Transition transitionName="Notification">
-      <div className="Notifications">
-        <Transition transitionName="Notification">
-          {regularNotifications.map(notification => (
-            <Notification
-              key={notification.id}
-              notification={notification}
-              dispatch={dispatch}
-            />
-          ))}
-        </Transition>
-      </div>
-      <div className="ErrorNotifications">
-        <Transition transitionName="Notification">
-          {errors.map(error => (
-            <Notification
-              key={error.id}
-              notification={error}
-              dispatch={dispatch}
-            />
-          ))}
-        </Transition>
-      </div>
-    </Transition>
-  );
-};
+const ErrorNotifications = styled.div`
+  position: fixed;
+  top: 2.4rem;
+  right: 2.4rem;
+  z-index: 100;
+  width: 440px;
+
+  > span {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+`;
+class Notifications extends PureComponent {
+  render() {
+    const { dispatch, notifications } = this.props;
+
+    const errors = [];
+    const regularNotifications = [];
+    notifications.map(notification => {
+      notification.kind === 'error'
+        ? errors.push(notification)
+        : regularNotifications.push(notification);
+    });
+
+    return (
+      <Transition transitionName="Notification">
+        <NotificationWrapper>
+          <Transition transitionName="Notification">
+            {regularNotifications.map(notification => (
+              <Notification
+                key={notification.id}
+                notification={notification}
+                dispatch={dispatch}
+              />
+            ))}
+          </Transition>
+        </NotificationWrapper>
+        <ErrorNotifications>
+          <Transition transitionName="Notification">
+            {errors.map(error => (
+              <Notification
+                key={error.id}
+                notification={error}
+                dispatch={dispatch}
+              />
+            ))}
+          </Transition>
+        </ErrorNotifications>
+      </Transition>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   notifications: state.notifications || [],

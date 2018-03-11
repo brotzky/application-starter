@@ -15,6 +15,7 @@ import {
   QUEUE_UPDATE_ITEMS_PER_PAGE,
   TOGGLE_ACTION_MENU,
   QUEUE_IS_STALE,
+  QUEUE_IS_NOT_STALE,
 } from '../actions/actions-update-queue-state';
 
 import {
@@ -124,6 +125,10 @@ export function queueReducer(state = initialState, action) {
     case QUEUE_IS_STALE:
       return Object.assign({}, state, {
         isStale: true,
+      });
+    case QUEUE_IS_NOT_STALE:
+      return Object.assign({}, state, {
+        isStale: false,
       });
     default:
       return state;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { authLogout } from 'grow-actions/auth/auth-logout';
 import { capitalizeString } from 'grow-utils/stringFormatting';
@@ -57,47 +57,16 @@ const DropdownList = styled.ul`
   z-index: 2;
   width: 340px;
   color: ${props => props.theme.colors.black};
-  border-radius: 2px;
   padding: 1.125rem 0;
   background: white;
   list-style-type: none;
-  border: 1px solid rgba(0,0,0,.2);
-  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  border-radius: 3px;
+  box-shadow: 0 0 1px rgba(9, 30, 66, 0.31), 0 4px 8px -2px rgba(9, 30, 66, 0.25);
 
   pointer-events:: ${props => (props.isActive ? 'initial' : 'none')};
 `;
 
-const DropdownListItemLink = styled(Link)`
-  display: block;
-  padding: 0.875rem 2.4rem;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: background 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  color: ${props => props.theme.colors.black};
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.03);
-
-    svg {
-      * {
-        fill: ${props => props.theme.colors.greyDark};
-      }
-    }
-  }
-
-  svg {
-    margin: 0 28px 1px 0;
-    height: 22px;
-    width: 22px;
-
-    * {
-      fill: #888888;
-      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-  }
-`;
-
-const DropdownListItem = styled.div`
+const DropdownListItem = styled(Link)`
   display: block;
   padding: 0.875rem 2.4rem;
   font-size: 1.4rem;
@@ -124,7 +93,36 @@ const DropdownListItem = styled.div`
       transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     }
   }
-`;
+}`;
+
+const DropdownListItemRegular = styled.li`
+  display: block;
+  padding: 0.875rem 2.4rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.03);
+
+    svg {
+      * {
+        fill: ${props => props.theme.colors.greyDark};
+      }
+    }
+  }
+
+  svg {
+    margin: 0 28px 1px 0;
+    height: 22px;
+    width: 22px;
+
+    * {
+      fill: #888888;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+  }
+}`;
 
 const DropdownTop = styled.li`
   display: flex;
@@ -169,12 +167,13 @@ class PrimaryNavDropdown extends Component {
 
   handleSignoutClick = async () => {
     const { dispatch } = this.props;
+
     await dispatch(authLogout());
     await dispatch(push('/login'));
   };
 
   handleActionMenuClick = event => {
-    event.nativeEvent.stopImmediatePropagation();
+    event.preventDefault();
     document.addEventListener('click', this.handleCloseActionMenu);
     this.setState({ showDropdownMenu: !this.state.showDropdownMenu });
   };
@@ -218,7 +217,7 @@ class PrimaryNavDropdown extends Component {
               </DropdownTop>
               {dropdownLinks.map(item => (
                 <li key={item.path}>
-                  <DropdownListItemLink
+                  <DropdownListItem
                     to={
                       item.path === '/account/profile/'
                         ? `${item.path}${user.id}`
@@ -226,15 +225,15 @@ class PrimaryNavDropdown extends Component {
                     }
                   >
                     {item.icon()} {item.text}
-                  </DropdownListItemLink>
+                  </DropdownListItem>
                 </li>
               ))}
               <DropdownTopDivider />
-              <li onClick={() => this.handleSignoutClick()}>
-                <DropdownListItem>
-                  <LogoutIcon /> Log out
-                </DropdownListItem>
-              </li>
+              <DropdownListItemRegular
+                onClick={() => this.handleSignoutClick()}
+              >
+                <LogoutIcon /> Log out
+              </DropdownListItemRegular>
             </DropdownList>
           )}
         </Transition>

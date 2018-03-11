@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { SecondaryNavWrapper, SecondaryNavList } from 'gac-utils/sc';
 
 import SecondaryNavMember from '../components/SecondaryNavMember';
 import SecondaryNavApplications from '../components/SecondaryNavApplications';
@@ -9,15 +10,15 @@ const SecondaryNav = props => {
   const { member, auth, params, org } = props;
 
   return (
-    <div className="SecondaryNav">
+    <SecondaryNavWrapper>
       {member.isFetching || auth.isAuthenticating ? null : (
-        <ul className="SecondaryNavList">
+        <SecondaryNavList>
           <SecondaryNavMember member={member} />
           <SecondaryNavApplications member={member} params={params} />
           <SecondaryNavProducts member={member} org={org} />
-        </ul>
+        </SecondaryNavList>
       )}
-    </div>
+    </SecondaryNavWrapper>
   );
 };
 

@@ -1,7 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addClassNameIf } from 'grow-utils/addClassNameIf';
+import styled from 'styled-components';
+import { ease } from 'gac-utils/sc';
 import { Button } from '../../ui/components';
+
+const FiltersButton = styled.span`
+  display: inline-block;
+  border-radius: 4px;
+  margin-right: 1.2rem;
+  padding: 0 1.2rem;
+  text-transform: uppercase;
+  color: ${props => props.theme.colors.greyMidDark};
+  font-weight: 500;
+  cursor: pointer;
+  ${ease('out')};
+
+  &:hover {
+    color: ${props => props.theme.colors.blue};
+    background: ${props => props.theme.colors.greyBg};
+  }
+
+  ${props =>
+    props.active
+      ? `color: ${props.theme.colors.blue};
+        background: ${props.theme.colors.greyBg};`
+      : ''};
+`;
+
+const MemberNotesHeading = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.4rem 3rem;
+`;
 
 const MemberNotesHeader = props => {
   const {
@@ -39,31 +70,27 @@ const MemberNotesHeader = props => {
       heading === 'All' ? undefined : categoryObj[heading];
 
     return (
-      <span
-        className={`MemberNotes__filters-button ${addClassNameIf(
-          !notes.queryParams.category ||
-            notes.queryParams.category === currentCategory,
-          'MemberNotes__filters-button--active',
-        )}`}
+      <FiltersButton
+        key={heading}
+        active={notes.queryParams.category === currentCategory}
         onClick={() =>
           updateData(
             {
               queryParams: { category: currentCategory },
             },
             member.member.id,
-          )}
+          )
+        }
       >
         {heading}
-      </span>
+      </FiltersButton>
     );
   };
 
   return (
-    <header className="MemberNotes__header">
-      <div className="MemberNotes__filters">
-        {appConfig.notes.heading.map(heading => {
-          return renderNotesHeading(heading);
-        })}
+    <MemberNotesHeading>
+      <div style={{ marginBottom: '0.8rem' }}>
+        {appConfig.notes.heading.map(heading => renderNotesHeading(heading))}
       </div>
       <Button
         onClick={handleAddNoteClick}
@@ -72,7 +99,7 @@ const MemberNotesHeader = props => {
         appearance="secondary"
         id="addNoteOpenModal"
       />
-    </header>
+    </MemberNotesHeading>
   );
 };
 

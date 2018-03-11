@@ -17,12 +17,8 @@ import {
   REQ_RESET_PASSWORD_SUCCESS,
 } from 'grow-actions/auth/constants';
 
-// Okay, okay, this is hacky. We need it to show meridian branding.
-// const isMeridian = window.location.origin.includes('meridian');
-
 const initialState = {
   accessToken: null,
-  authChecked: false,
   errors: [],
   hasSentOneTimePass: false,
   isAuthenticated: false,
@@ -54,7 +50,6 @@ export default function authReducer(state = initialState, action) {
         return Object.assign({}, state, {
           ...rest,
           errors: action.payload.errors,
-          authChecked: true,
           isAuthenticated: true,
           isAuthenticating: false,
         });
@@ -96,7 +91,6 @@ export default function authReducer(state = initialState, action) {
         ...action.payload.data,
         isAuthenticated: false,
         isAuthenticating: false,
-        authChecked: true,
       });
     case AUTH_ONE_TIME_PASS_REQUEST:
       return Object.assign({}, state, {

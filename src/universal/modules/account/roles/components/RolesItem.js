@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import styled from 'styled-components';
-import { push } from 'react-router-dom';
 import moment from 'moment';
 import { capitalizeString } from 'grow-utils/stringFormatting';
 import { rolePropType } from 'gac-utils/proptypes';

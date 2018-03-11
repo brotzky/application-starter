@@ -47,15 +47,15 @@ function FileUploadForm(wrappedProps) {
                   file,
                   message: fileUploadFailed
                     ? `Failed to upload ${capitalizeString(
-                      form,
-                      '-',
-                      ' ',
-                    )} file`
+                        form,
+                        '-',
+                        ' ',
+                      )} file`
                     : `Successfully uploaded ${capitalizeString(
-                      form,
-                      '-',
-                      ' ',
-                    )} file`,
+                        form,
+                        '-',
+                        ' ',
+                      )} file`,
                 }),
               );
 
@@ -114,12 +114,7 @@ function FileUploadForm(wrappedProps) {
       }
 
       render() {
-        return (
-          <WrappedComponent
-            className="FileUploadForm"
-            handleFileUpload={this.handleFileUpload}
-          />
-        );
+        return <WrappedComponent handleFileUpload={this.handleFileUpload} />;
       }
     }
 

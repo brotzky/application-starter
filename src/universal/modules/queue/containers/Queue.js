@@ -11,6 +11,7 @@ import QueueHeader from '../components/QueueHeader';
 import QueueList from '../components/QueueList';
 import QueueControls from '../components/QueueControls';
 import { FadeIn } from '../../ui/transitions/';
+import { QUEUE_IS_NOT_STALE } from '../actions/actions-update-queue-state';
 
 class Queue extends Component {
   static propTypes = {
@@ -31,7 +32,6 @@ class Queue extends Component {
 
   componentDidMount() {
     const { dispatch, data, match: { params }, updateData } = this.props;
-
     const itemsPerPage = Number(data.itemsPerPage);
     if (data.applications.length === 0 || data.isStale) {
       if (params.page && Number.isInteger(Number(params.page))) {
@@ -46,6 +46,7 @@ class Queue extends Component {
             state: data.queryParams.state,
           },
         });
+        dispatch({ type: QUEUE_IS_NOT_STALE });
       } else {
         updateData({
           page: 1,
@@ -80,7 +81,7 @@ class Queue extends Component {
      * when they're not on the first page. This will reset and refetch
      * the first page data.
      */
-    if (prevPage > 1 && nextProps.location.pathname === '/applications') {
+    if (prevPage > 1 && nextProps.pathname === '/applications') {
       this.props.updateData({
         page: 1,
         itemsPerPage: 15,
@@ -139,7 +140,7 @@ class Queue extends Component {
     };
 
     return (
-      <FadeIn className="Member__box Queue" component="div">
+      <FadeIn component="div">
         <QueueControls {...queueControlsProps} />
         <QueueHeader {...queueHeaderProps} />
         <QueueList {...queueListProps} />
@@ -154,6 +155,7 @@ const mapStateToProps = state => ({
   permissions: (state.permissions && state.permissions.permissions) || {},
   user: state.user,
   appConfig: state.configs.app.config,
+  pathname: state.router.location.pathname,
 });
 
 Queue = Pagination({

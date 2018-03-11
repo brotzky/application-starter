@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import ChecklistItem from './ChecklistItem';
+
+const ListWrapper = styled.ul`
+  list-style-type: none;
+  background: white;
+`;
 
 const ChecklistList = props => {
   const {
@@ -13,7 +19,7 @@ const ChecklistList = props => {
   } = props;
 
   return (
-    <ul className="ChecklistList">
+    <ListWrapper>
       {checklist
         .filter(list => list.userIds.includes(params.memberId))
         .map(item => (
@@ -27,7 +33,7 @@ const ChecklistList = props => {
             isUserClaimer={isUserClaimer}
           />
         ))}
-    </ul>
+    </ListWrapper>
   );
 };
 

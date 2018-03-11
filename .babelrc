@@ -29,7 +29,8 @@
       [
         { "expose": "grow-actions", "src": "./grow-app-actions/" },
         { "expose": "grow-utils", "src": "./grow-app-utils/" },
-        { "expose": "gac-utils", "src": "./src/universal/utils/" }
+        { "expose": "gac-utils", "src": "./src/universal/utils/" },
+        { "expose": "gac-ui", "src": "./src/universal/modules/ui/" }
       ]
     ]
   ]

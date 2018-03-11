@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { Select, Text } from '../../../forms/fields/';
 import { MagnifyGlass } from '../../../ui/icons/';
@@ -52,11 +52,54 @@ export const searchTheme = {
   },
 };
 
+const UsersSearchFormWrapper = styled.form`
+  width: 100%;
+  margin-bottom: $base-space;
+`;
+
+const UsersSearchFormBar = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #c4c4c4;
+  color: #262626;
+  box-shadow: inset 0 1px 0 0 rgba(63, 63, 68, 0.05);
+  width: 100%;
+  color: #585858;
+  overflow: hidden;
+`;
+
+const UsersSearchFormSelector = styled.div`
+  border-right: 1px solid #c4c4c4;
+`;
+
+const UsersSearchFormInput = styled.div`
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  alignitems: center;
+  flex: 1;
+`;
+
+const StyledMagnifyingGlass = styled(MagnifyGlass)`
+  position: relative;
+  top: 6px;
+  left: 8px;
+  fill: #b2b2b2;
+  width: 30px;
+  height: 30px;
+  margin-right: 1rem;
+`;
+
+const UsersSearchFormSplit = styled.div`
+  display: flex;
+  flex: 1;
+`;
+
 const UsersSearch = props => {
   const { searchBy } = props;
-  const fieldProps = {
-    className: 'UsersSearchForm',
-  };
 
   const searchByOptions = [
     { name: 'All categories', value: 'all' },
@@ -67,30 +110,19 @@ const UsersSearch = props => {
 
   return (
     <ThemeProvider theme={searchTheme}>
-      <form className={fieldProps.className} id="search-form">
-        <div className={`${fieldProps.className}__bar`}>
-          <div className={`${fieldProps.className}__selector`}>
+      <UsersSearchFormWrapper id="search-form">
+        <UsersSearchFormBar>
+          <UsersSearchFormSelector>
             <Field
               name="searchBy"
               component={Select}
               options={searchByOptions}
-              {...fieldProps}
             />
-          </div>
-          <div
-            className={`${fieldProps.className}__input`}
-            style={{
-              borderTopLeftRadius: '2px',
-              borderBottomLeftRadius: '2px',
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <MagnifyGlass className={`${fieldProps.className}__icon`} />
+          </UsersSearchFormSelector>
+          <UsersSearchFormInput>
+            <StyledMagnifyingGlass />
             {searchBy === 'all' && (
               <Field
-                {...fieldProps}
                 name="all"
                 component={Text}
                 type="text"
@@ -99,9 +131,8 @@ const UsersSearch = props => {
               />
             )}
             {searchBy === 'name' && (
-              <div className={`${fieldProps.className}__split`}>
+              <UsersSearchFormSplit>
                 <Field
-                  {...fieldProps}
                   name="firstName"
                   component={Text}
                   type="text"
@@ -109,18 +140,16 @@ const UsersSearch = props => {
                   placeholder="First Name"
                 />
                 <Field
-                  {...fieldProps}
                   name="lastName"
                   component={Text}
                   type="text"
                   label={false}
                   placeholder="Last Name"
                 />
-              </div>
+              </UsersSearchFormSplit>
             )}
             {searchBy === 'email' && (
               <Field
-                {...fieldProps}
                 name="email"
                 component={Text}
                 type="email"
@@ -130,16 +159,15 @@ const UsersSearch = props => {
             )}
             {searchBy === 'role' && (
               <Field
-                {...fieldProps}
                 name="role"
                 component={Text}
                 placeholder="Search role"
                 label={false}
               />
             )}
-          </div>
-        </div>
-      </form>
+          </UsersSearchFormInput>
+        </UsersSearchFormBar>
+      </UsersSearchFormWrapper>
     </ThemeProvider>
   );
 };

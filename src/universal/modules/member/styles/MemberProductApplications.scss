@@ -1,9 +1,0 @@
-.MemberProductApplications {
-  flex: 1;
-  align-self: flex-start;
-
-  .QueueItem {
-    &:first-child,
-    &:nth-child(even) { background: none; }
-  }
-}

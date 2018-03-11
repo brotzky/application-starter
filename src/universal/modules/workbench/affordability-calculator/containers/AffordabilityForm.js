@@ -1,9 +1,10 @@
 import React from 'react';
 import { reduxForm } from 'redux-form';
 import { FadeInFast } from '../../../ui/transitions/';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { media } from 'gac-utils/sc';
 import { theme } from '../../../../themes';
-import AffordabiltiyResults from './AffordabiltiyResults';
+import AffordabilityResults from './AffordabilityResults';
 import AffordabilityInputSidebar from '../components/AffordabilityInputSidebar';
 import AffordabilityInputTable from '../components/AffordabilityInputTable';
 import AffordabilitySave from '../components/AffordabilitySave';
@@ -34,27 +35,54 @@ const CalculatorSidebarTheme = {
   },
 };
 
+const CalculatorForm = styled.form`
+  display: flex;
+  justify-content: center;
+`;
+
+const CalculatorColumn = styled.div`
+  flex: 1;
+
+  &:last-child {
+    flex: 2;
+  }
+`;
+
+const CalculatorSidebar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 300px;
+  padding: 2.4rem;
+  border-right: 1px solid #ebeef0;
+
+  ${media.xlarge`
+    width: 325px;
+    padding: 2.4rem 3rem;
+  `};
+`;
+
 const DSRCalculator = props => {
   const { handleSubmit } = props;
 
   return (
-    <div className="AffordabilityCalculator">
+    <div>
       <FadeInFast>
-        <form className="Calculator" onSubmit={handleSubmit}>
+        <CalculatorForm onSubmit={handleSubmit}>
           <ThemeProvider theme={CalculatorSidebarTheme}>
-            <div className="CalculatorColumn CalculatorSidebar">
+            <CalculatorSidebar>
               <div>
                 <AffordabilityInputSidebar />
-                <AffordabiltiyResults {...props} />
+                <AffordabilityResults {...props} />
               </div>
               <AffordabilitySave />
-            </div>
+            </CalculatorSidebar>
           </ThemeProvider>
 
-          <div className="CalculatorColumn">
+          <CalculatorColumn>
             <AffordabilityInputTable />
-          </div>
-        </form>
+          </CalculatorColumn>
+        </CalculatorForm>
       </FadeInFast>
     </div>
   );

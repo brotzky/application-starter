@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { showModal, hideModal } from '../../../ui/modal/actions/actions-modal';
 import { Button, ProfilePicture } from '../../../ui/components';
 
-const ProfilePictureWrapper = styled.div`margin-bottom: 2rem;`;
+const ProfilePictureWrapper = styled.div`
+  margin-bottom: 2rem;
+`;
 
 class ProfilePictureSection extends Component {
   handleProfilePictureClick = () => {
@@ -23,7 +25,7 @@ class ProfilePictureSection extends Component {
       <div>
         <ProfilePictureWrapper>
           <ProfilePicture
-            size="100"
+            size={100}
             user={profile}
             allowUpdate={isUsersProfile}
           />

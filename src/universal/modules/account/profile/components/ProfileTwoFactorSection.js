@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { enable2FAToUser, disable2FAToUser } from 'grow-actions/user/user';
-import { Button, ProfilePicture } from '../../../ui/components';
+import { Button } from '../../../ui/components';
 
 const ProfileHeader = styled.h3`
   font-size: 1.6rem;
@@ -16,6 +16,7 @@ const ProfileHeader = styled.h3`
 const ProfileText = styled.p`
   font-size: 1.4rem;
   color: ${props => props.theme.colors.greyDark};
+  margin-bottom: 1.5em;
 `;
 
 const UnlockedIcon = () => (
@@ -33,47 +34,47 @@ const UnlockedIcon = () => (
         data-cap="butt"
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeMiterlimit="10"
         d="M7,11.1V6c0-2.8,2.2-5,5-5h0 c2.8,0,5,2.2,5,5"
-        stroke-linejoin="round"
-        stroke-linecap="round"
+        strokeLinejoin="round"
+        strokeLinecap="round"
       />{' '}
       <circle
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         cx="12"
         cy="16"
         r="7"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />{' '}
       <circle
         data-color="color-2"
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         cx="12"
         cy="15"
         r="2"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />{' '}
       <line
         data-color="color-2"
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         x1="12"
         y1="17"
         x2="12"
         y2="19"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />
     </g>
   </svg>
@@ -94,47 +95,47 @@ const LockedIcon = () => (
         data-cap="butt"
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeMiterlimit="10"
         d="M7,11.1V6c0-2.8,2.2-5,5-5h0 c2.8,0,5,2.2,5,5v5.1"
-        stroke-linejoin="round"
-        stroke-linecap="round"
+        strokeLinejoin="round"
+        strokeLinecap="round"
       />{' '}
       <circle
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         cx="12"
         cy="16"
         r="7"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />{' '}
       <circle
         data-color="color-2"
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         cx="12"
         cy="15"
         r="2"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />{' '}
       <line
         data-color="color-2"
         fill="none"
         stroke="#4c4c4c"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
         x1="12"
         y1="17"
         x2="12"
         y2="19"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />
     </g>
   </svg>
@@ -152,7 +153,7 @@ class ProfileTwoFactorSection extends Component {
 
   render() {
     const {
-      profile: { auth0MfaEnabled, auth0InviteStatus, auth0Updating, firstName },
+      profile: { auth0MfaEnabled, auth0InviteStatus, auth0Updating },
       isUsersProfile,
       profileNameVerbConjucation,
     } = this.props;
@@ -196,15 +197,15 @@ class ProfileTwoFactorSection extends Component {
           </div>
         )}
         {!isAuth0StatusNone &&
-        isUsersProfile && (
-          <Button
-            text={toggle2FAText}
-            appearance="default"
-            size="large"
-            onClick={this.toggle2FA}
-            isSubmitting={auth0Updating}
-          />
-        )}
+          isUsersProfile && (
+            <Button
+              text={toggle2FAText}
+              appearance="default"
+              size="large"
+              onClick={this.toggle2FA}
+              isSubmitting={auth0Updating}
+            />
+          )}
       </div>
     );
   }

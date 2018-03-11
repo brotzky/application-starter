@@ -5,34 +5,10 @@ import queryString from 'query-string';
 import { authAuth0Login } from 'grow-actions/auth/auth-auth0-login';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
-import styled, { keyframes } from 'styled-components';
-import { FadeDownSlow } from '../../ui/transitions/';
+import styled from 'styled-components';
 import { resetPassword } from 'grow-actions/auth/auth0-reset-password';
 import { getEnvProperties } from 'grow-actions/auth/auth';
 import AuthFormWrapper from '../../auth/components/AuthFormWrapper';
-
-const NewPasswordContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const NewPasswordWrapper = styled.div`
-  width: 38%;
-  height: 100vh;
-  display: flex;
-  padding: 3.375rem;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ContentWrapper = styled.div`
-  max-width: 400px;
-`;
 
 const NewPasswordHeader = styled.h2`
   font-weight: 600;
@@ -59,8 +35,8 @@ class NewPassword extends Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    const searchQuery = window.location.search;
+    const { dispatch, location } = this.props;
+    const searchQuery = location.search;
 
     dispatch(getEnvProperties());
 
@@ -74,10 +50,14 @@ class NewPassword extends Component {
   };
 
   handleSubmit = data => {
-    const { dispatch, envProperties: { connection } } = this.props;
-    const keyInQuery = queryString.parse(window.location.search).key;
-    const emailInQuery = queryString.parse(window.location.search).email;
-    const hostname = window.location.hostname;
+    const {
+      dispatch,
+      location,
+      envProperties: { connection, clientId },
+    } = this.props;
+    const keyInQuery = queryString.parse(location.search).key;
+    const emailInQuery = queryString.parse(location.search).email;
+    const hostname = location.hostname;
     const redirectUrl = hostname.includes('localhost')
       ? 'http://localhost:3000/redirect'
       : `https://${hostname}/redirect`;
@@ -101,7 +81,7 @@ class NewPassword extends Component {
             password: data.newPassword,
             username: emailInQuery,
             // auth0Client: "eyJuYW1lIjoiYXV0aDAuanMiLCJ2ZXJzaW9uIjoiOS4wLjAifQ==",
-            client_id: 'mZzKUAvep5oZcFIY6tmNb4LeRag2kNvE',
+            client_id: clientId,
             connection,
             response_type: 'token id_token',
             redirect_uri: redirectUrl,
@@ -109,8 +89,10 @@ class NewPassword extends Component {
             tenant: 'growtechnologies',
           }),
         ).then(() => {
-          if (this.form[0]) {
-            this.form[0].submit();
+          const hiddenForm = document.getElementsByName('hiddenform')[0];
+
+          if (hiddenForm) {
+            hiddenForm.submit();
           }
         }),
       );
@@ -122,11 +104,10 @@ class NewPassword extends Component {
   });
 
   render() {
-    const { user, formValues } = this.props;
-    const { tablet, shadow } = this.state;
-    const nameInQuery = queryString.parse(window.location.search).name;
+    const { formValues, location } = this.props;
+    const nameInQuery = queryString.parse(location.search).name;
     const { newPassword, confirmPassword } = formValues;
-    this.form = document.getElementsByName('hiddenform');
+
     const passwordValidationMessage =
       newPassword && confirmPassword && newPassword !== confirmPassword ? (
         <PasswordValidationWrapper>
@@ -147,7 +128,7 @@ class NewPassword extends Component {
             passwordValidationMessage={passwordValidationMessage}
           />
           <div
-            className="hidden"
+            style={{ display: 'none' }}
             dangerouslySetInnerHTML={this.renderHiddenForm()}
           />
         </div>
@@ -168,6 +149,7 @@ const mapStateToProps = state => ({
   formValues: getFormValues('newPassword')(state),
   responsedForm: state.auth.responsedForm,
   envProperties: state.permissions.envProperties,
+  location: state.router.location,
 });
 
 export default connect(mapStateToProps)(NewPassword);

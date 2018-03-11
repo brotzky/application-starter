@@ -1,10 +1,57 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { AUTH_RESET_LOGIN_MESSAGE } from 'grow-actions/auth/constants';
+import {
+  LoginHeaderHeading,
+  LoginHeaderText,
+  LoginForm as FormContainer,
+} from 'gac-ui/components';
 import { FormButton, Text, TextLink } from '../../forms/fields/';
-import { ArrowRight } from '../../ui/icons/';
 import { theme } from '../../../themes/';
+
+const LoginFormSeparator = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem 0;
+`;
+
+const LoginFormSeparatorText = styled.span`
+  position: relative;
+  width: 50px;
+  background-color: #fff;
+  text-align: center;
+  z-index: 1;
+`;
+
+const LoginFormSeparatorLine = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #eaeaea;
+  left: 0;
+  top: 50%;
+`;
+
+const ReturnToLoginButton = styled.button`
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid #eaeaea;
+  border-radius: 2px;
+  background-color: #f8f8f8;
+  padding: 0.28125rem 0;
+  height: 5rem;
+  line-height: 4.375rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  svg {
+    margin-right: 14px;
+  }
+`;
 
 export const LoginFormTheme = {
   ...theme,
@@ -54,22 +101,17 @@ class RequestResetPasswordForm extends Component {
             defaultMessage: 'is required',
           };
 
-    const fieldProps = {
-      className: 'LoginForm',
-    };
-
     return (
-      <form
+      <FormContainer
         onSubmit={handleSubmit}
         onChange={this.handleChange}
-        className="c-form LoginForm"
         id="login-form"
       >
-        <h1 className="LoginHeader__heading">Forgot your password?</h1>
-        <p className="LoginHeader__text">
+        <LoginHeaderHeading>Forgot your password?</LoginHeaderHeading>
+        <LoginHeaderText>
           Please enter your email and we'll send you instructions on how to
           reset your password.
-        </p>
+        </LoginHeaderText>
         <ThemeProvider theme={LoginFormTheme}>
           <div>
             <fieldset>
@@ -80,7 +122,6 @@ class RequestResetPasswordForm extends Component {
                 label="Work email"
                 validate={required}
                 placeholder="you@example.com"
-                {...fieldProps}
               />
             </fieldset>
             <fieldset>
@@ -89,13 +130,21 @@ class RequestResetPasswordForm extends Component {
                 component={FormButton}
                 buttonText="Send reset instructions"
                 isSubmitting={submitting}
-                {...fieldProps}
+                size="xlarge"
+                width="100%"
+                margin="1.92rem 0"
               />
             </fieldset>
-            <TextLink text="Return to login" path="/login" />
+            <LoginFormSeparator>
+              <LoginFormSeparatorText>or</LoginFormSeparatorText>
+              <LoginFormSeparatorLine />
+            </LoginFormSeparator>
+            <ReturnToLoginButton>
+              <TextLink text="Return to login" path="/login" />
+            </ReturnToLoginButton>
           </div>
         </ThemeProvider>
-      </form>
+      </FormContainer>
     );
   }
 }

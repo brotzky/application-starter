@@ -29,7 +29,7 @@ const AuthWrapper = WrappedComponent => {
     }
 
     componentDidMount() {
-      const { auth: authState, dispatch } = this.props;
+      const { auth: authState, dispatch, location } = this.props;
       const { id, oneTimePassword } = this.getQueryStringVariables();
 
       document.addEventListener(
@@ -42,11 +42,16 @@ const AuthWrapper = WrappedComponent => {
         false,
       );
 
+      if (authState.id) {
+        dispatch(getUser(authState.id));
+        dispatch(getRoles());
+      }
+
       // If the query string variables are present, make the Auth request.
       if (id && oneTimePassword) {
         return dispatch(auth({ id, oneTimePassword })).then(response => {
           if (response.error) {
-            return dispatch(push('/login'));
+            return dispatch(push(`/login`));
           }
           /**
            * If Auth returns the accessToken it means the user is authenticated
@@ -64,7 +69,7 @@ const AuthWrapper = WrappedComponent => {
           if (data && data.accessToken) {
             dispatch(getUser(data.id));
             dispatch(getRoles());
-            return dispatch(push('/applications'));
+            return dispatch(push('/'));
           }
         });
       }
@@ -73,9 +78,12 @@ const AuthWrapper = WrappedComponent => {
     }
 
     componentWillReceiveProps(nextProps) {
-      const { auth: authState } = nextProps;
+      const { auth: authState, dispatch } = nextProps;
       const { id, oneTimePassword } = this.getQueryStringVariables();
-
+      // just logged out
+      if (!authState.isAuthenticated && this.props.auth.isAuthenticated) {
+        return;
+      }
       /**
        * If authentication is not happening and there are no query params
        * within the URL run handleCheckAuth
@@ -121,9 +129,8 @@ const AuthWrapper = WrappedComponent => {
 
     render() {
       const { auth: authState, user } = this.props;
-
       return (
-        <div className="AuthWrapper">
+        <div>
           <Shell {...this.props}>
             <FadeInFast>
               {authState.isAuthenticated ? (

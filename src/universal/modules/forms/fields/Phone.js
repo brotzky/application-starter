@@ -1,9 +1,40 @@
 import React from 'react';
 import MaskedInput from 'react-text-mask';
+import styled from 'styled-components';
 import validator from 'validator';
 import FormField from '../components/FormField';
+import { ease } from 'gac-utils/sc';
 
 const PHONE_NUMBER_INVALID = 'Please enter a valid phone number';
+const StyledMaskedInput = styled(MaskedInput)`
+  appearance: none;
+  border: none;
+  width: 100%;
+  height: 20px;
+  padding: 1.6rem;
+  color: ${props => props.theme.colors.blue};
+  background: white;
+  ${ease('out')};
+  flex: 1;
+
+  &:focus,
+  &:active {
+    outline: none;
+    border-color: ${props => props.theme.colors.blue};
+  }
+
+  &::-webkit-input-placeholder {
+    color: #bbb;
+  }
+
+  &::-moz-placeholder {
+    color: #bbb;
+  }
+
+  &:-ms-input-placeholder {
+    color: #bbb;
+  }
+`;
 
 export const isValid = value => {
   let error;
@@ -36,7 +67,7 @@ const Phone = props => (
     inlineMessage={PHONE_NUMBER_INVALID}
     showInlineMessageByDefault={false}
   >
-    <MaskedInput
+    <StyledMaskedInput
       {...props.input}
       mask={[
         '(',
@@ -59,9 +90,7 @@ const Phone = props => (
       id={props.name}
       autoFocus={props.meta.active}
       placeholder={props.placeholder || '(###) ###-####'}
-      className={`FormInput ${props.className}Input`}
     />
   </FormField>
 );
-
 export default Phone;

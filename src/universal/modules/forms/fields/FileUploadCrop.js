@@ -7,6 +7,11 @@ import styled from 'styled-components';
 import { Button } from '../../ui/components';
 import { uploadFile } from 'grow-actions/upload-file/upload-file';
 import { hideModal } from '../../ui/modal/actions/actions-modal';
+import {
+  UPLOAD_PROFILE_PICTURE_FILE_SUCCESS,
+  DELETE_FROM_LIST,
+} from 'grow-actions/upload-file/constants';
+import { AuthLoaderAnimation } from 'gac-ui/components';
 
 const FileUploadContainer = styled.div`
   display: block;
@@ -251,7 +256,10 @@ const StyledDropzoneBackground = styled.div`
   transition: all 220ms ease;
 `;
 
-const StyledDropzoneBackgroundText = styled.p`font-size: 1.8rem;`;
+const StyledDropzoneBackgroundText = styled.p`
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+`;
 
 const StyledDropzoneButton = styled(Button)`
   margin-top: 20px;
@@ -273,7 +281,9 @@ const ButtonContainer = styled.div`
   border-top: 1px solid #e8e8e8;
 `;
 
-const ButtonSpacer = styled.div`margin-right: 2rem;`;
+const ButtonSpacer = styled.div`
+  margin-right: 2rem;
+`;
 
 const UploadingAnimation = styled.div`
   display: flex;
@@ -438,6 +448,7 @@ class FileUploadCrop extends Component {
         preview,
         size: file.size,
         type: file.type,
+        fieldName: 'profile_pic',
       };
 
       dispatch(uploadFile(reqBodyAsString, fileForUser)).then(response =>
@@ -452,14 +463,17 @@ class FileUploadCrop extends Component {
    */
   handleCompleteUpload = (response, preview) => {
     const { dispatch, user } = this.props;
-
     if (response && !response.errors[0]) {
       dispatch({
-        type: 'UPLOAD_PROFILE_PICTURE_SUCCESS',
+        type: UPLOAD_PROFILE_PICTURE_FILE_SUCCESS,
         payload: {
           preview,
           user,
         },
+      });
+      dispatch({
+        type: DELETE_FROM_LIST,
+        payload: { fieldName: 'profile_pic' },
       });
     }
   };
@@ -493,9 +507,7 @@ class FileUploadCrop extends Component {
                 <div>
                   <p>Uploading...</p>
                 </div>
-                <div className="AuthLoader__animation">
-                  <div className="AuthLoader__animation-ball" />
-                </div>
+                <AuthLoaderAnimation />
               </UploadingAnimation>
             ) : (
               <StyledReactCrop
@@ -533,7 +545,8 @@ class FileUploadCrop extends Component {
                   this.state.files[0],
                   this.state.pixelCrop,
                   'yolo',
-                )}
+                )
+              }
               disabled={isUploading || !this.state.files}
               size="large"
               text="Set as profile photo"

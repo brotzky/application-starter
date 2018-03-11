@@ -6,6 +6,7 @@ import FormField from '../components/FormField';
 import FieldLabel from '../components/FieldLabel';
 
 export const TextStyled = styled.input`
+  text-overflow: ellipsis;
   border-width: ${props => props.theme.inputs.border.width};
   border-style: ${props => props.theme.inputs.border.style};
   border-color: ${props =>
@@ -58,6 +59,7 @@ const Text = props => {
     type = 'text',
   } = props;
   const { name, value } = input;
+
   return (
     <FormField flex={flex}>
       {label && (

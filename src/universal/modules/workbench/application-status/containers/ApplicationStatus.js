@@ -70,6 +70,11 @@ const ApplicationStatusListItem = styled.li`
   }
 `;
 
+const AccountSettings = styled(FadeIn)`
+  background: white;
+  padding: 3rem;
+`;
+
 const ApplicationStatus = (props: {
   workbench: { configIsLoaded: boolean, config: {}, errors: {} },
   params: { workbenchTab: string },
@@ -86,63 +91,63 @@ const ApplicationStatus = (props: {
     workbenchConfig.config[params.workbenchTab].groups;
 
   return (
-    <FadeIn className="AccountSettings" component="div">
+    <AccountSettings component="div">
       {(autoDeclinedReasons.length || complianceDeclineReasons.length) && (
         <AccountSettingsAutoDeclined />
       )}
       {workbenchConfig.isLoaded && (
         <div>
           {shouldRenderApplicationStatusSteps &&
-            workbenchConfig.config[
-              params.workbenchTab
-            ].groups.map((group, index) => (
-              <ApplicationStatusStepContainer key={group.header}>
-                <ApplicationStatusCircle>{index + 1}</ApplicationStatusCircle>
-                <ApplicationStatusStep>
-                  <ApplicationStatusHeader>
-                    {group.header}
-                  </ApplicationStatusHeader>
-                  <ApplicationStatusSubheader
-                    dangerouslySetInnerHTML={{ __html: group.subheader }}
-                  />
-                  {group.list && [
-                    <ApplicationStatusListHeader key={group.list.header}>
-                      {group.list.header}
-                    </ApplicationStatusListHeader>,
-                    <ul key={`${group.list.header}-ul`}>
-                      {group.list.items.map(list => (
-                        <ApplicationStatusListItem key={list}>
-                          {list}
-                        </ApplicationStatusListItem>
-                      ))}
-                    </ul>,
-                  ]}
-                  {(() => {
-                    switch (group.type) {
-                      case 'ADMIN_STEPS':
-                        return <AdminStep steps={group.steps} />;
-                      case 'LOAN_APPROVAL':
-                        return <ApplicationStatusApproval />;
-                      case 'LOAN_AGREEMENT':
-                        return <LegalDocuments />;
-                      case 'LOAN_FUND':
-                        return <ApplicationStatusFund />;
-                      case 'EXTERNAL_CHECKLIST':
-                        return null;
-                      default:
-                        return (
-                          <span role="img" aria-label="emoji">
-                            ⚠️ No matching group types in setup configuration
-                          </span>
-                        );
-                    }
-                  })()}
-                </ApplicationStatusStep>
-              </ApplicationStatusStepContainer>
-            ))}
+            workbenchConfig.config[params.workbenchTab].groups.map(
+              (group, index) => (
+                <ApplicationStatusStepContainer key={group.header}>
+                  <ApplicationStatusCircle>{index + 1}</ApplicationStatusCircle>
+                  <ApplicationStatusStep>
+                    <ApplicationStatusHeader>
+                      {group.header}
+                    </ApplicationStatusHeader>
+                    <ApplicationStatusSubheader
+                      dangerouslySetInnerHTML={{ __html: group.subheader }}
+                    />
+                    {group.list && [
+                      <ApplicationStatusListHeader key={group.list.header}>
+                        {group.list.header}
+                      </ApplicationStatusListHeader>,
+                      <ul key={`${group.list.header}-ul`}>
+                        {group.list.items.map(list => (
+                          <ApplicationStatusListItem key={list}>
+                            {list}
+                          </ApplicationStatusListItem>
+                        ))}
+                      </ul>,
+                    ]}
+                    {(() => {
+                      switch (group.type) {
+                        case 'ADMIN_STEPS':
+                          return <AdminStep steps={group.steps} />;
+                        case 'LOAN_APPROVAL':
+                          return <ApplicationStatusApproval />;
+                        case 'LOAN_AGREEMENT':
+                          return <LegalDocuments />;
+                        case 'LOAN_FUND':
+                          return <ApplicationStatusFund />;
+                        case 'EXTERNAL_CHECKLIST':
+                          return null;
+                        default:
+                          return (
+                            <span role="img" aria-label="emoji">
+                              ⚠️ No matching group types in setup configuration
+                            </span>
+                          );
+                      }
+                    })()}
+                  </ApplicationStatusStep>
+                </ApplicationStatusStepContainer>
+              ),
+            )}
         </div>
       )}
-    </FadeIn>
+    </AccountSettings>
   );
 };
 

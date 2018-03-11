@@ -5,7 +5,8 @@ import docCookies from 'grow-utils/cookies';
 import initiGlobalThrottledEvents from 'grow-utils/throttleEvent';
 import Modal from '../../ui/modal/containers/Modal';
 import Notifications from '../../ui/notifications/containers/Notifications';
-import { ErrorBoundary } from '../../ui/components';
+// import { ErrorBoundary } from '../../ui/components';
+import { renderRoutes } from 'react-router-config';
 
 /**
  * <Core />
@@ -15,7 +16,6 @@ import { ErrorBoundary } from '../../ui/components';
 class Core extends Component {
   componentDidMount() {
     initiGlobalThrottledEvents();
-    this.props.dispatch({ type: 'CLIENT_MOUNTED' });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,30 +26,25 @@ class Core extends Component {
      * of the auth state then set the SID cookie to the accessToken value.
      */
     if (auth.accessToken) {
-      // return docCookies.setItem('SID', auth.accessToken);
+      return docCookies.setItem('SID', auth.accessToken);
     }
     return null;
   }
 
   render() {
-    const { children, modal } = this.props;
-
     return (
-      <ErrorBoundary>
-        {/* <div className={`Core ${modal.type ? 'Modal--open' : ''}`}> */}
-        {children}
+      // <ErrorBoundary>
+      <div>
+        {renderRoutes(this.props.route.routes)}
         <Modal />
         <Notifications />
-        {/* </div> */}
-      </ErrorBoundary>
+      </div>
+      // </ErrorBoundary>
     );
   }
 }
 
 Core.propTypes = {
-  modal: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.object, PropTypes.bool, PropTypes.string]),
-  ).isRequired,
   auth: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.array, PropTypes.bool, PropTypes.string]),
   ).isRequired,

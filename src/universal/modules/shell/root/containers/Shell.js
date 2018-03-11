@@ -9,42 +9,29 @@ import { getMember } from 'grow-actions/member/member';
 import { SYNC_MEMBER_FROM_MEMORY_REQUEST } from 'grow-actions/member/constants';
 
 const ShellContainer = styled.div`
-  background: #f9f9f9;
+  background: ${props => props.theme.colors.greyBg};
   min-height: 100vh;
 `;
 class Shell extends Component {
-  /**
-   * getChildContext()
-   * Specific React Router syntax to allow easy passing of React Router props
-   * to children components.
-   * Example: http://stackoverflow.com/a/37523743/3845614
-   */
-  getChildContext() {
-    return {
-      routes: this.props.routes,
-      params: this.props.params,
-    };
-  }
-
   componentDidMount() {
-    const { dispatch, member, match } = this.props;
+    const { dispatch, member, match: { params }, roles } = this.props;
 
     /**
      * The Shell is responsible for making Global member calls if there is a
      * memberId paramter in the URL.
      */
-    if (!member.member.id || member.member.id !== match.params.memberId) {
-      if (match.params.memberId) {
-        dispatch(getMember(match.params.memberId));
+    if (!member.member.id || member.member.id !== params.memberId) {
+      if (params.memberId) {
+        dispatch(getMember(params.memberId));
       }
     }
   }
 
   componentWillUpdate(nextProps) {
-    const { dispatch, match, members } = this.props;
+    const { dispatch, match: { params }, members } = this.props;
     if (
       nextProps.match.params.memberId &&
-      nextProps.match.params.memberId !== match.params.memberId
+      nextProps.match.params.memberId !== params.memberId
     ) {
       if (members.loaded[nextProps.match.params.memberId]) {
         return dispatch({
@@ -59,27 +46,25 @@ class Shell extends Component {
   }
 
   render() {
-    const { children, params } = this.props;
+    const { match: { params }, pathname } = this.props;
 
-    // Quick workaround to hide secondary nav on the applications page
     return (
       <ShellContainer>
         <PrimaryNav params={params} />
-        {/* <SecondaryNav params={params} /> */}
-        <Dynamic>{children}</Dynamic>
+        {(pathname.includes('members') || pathname.includes('analytics')) && (
+          <SecondaryNav params={params} />
+        )}
+        <Dynamic>{this.props.children}</Dynamic>
       </ShellContainer>
     );
   }
 }
 
-Shell.childContextTypes = {
-  routes: PropTypes.array,
-  params: PropTypes.object,
-};
-
 const mapStateToProps = state => ({
   member: state.member,
   members: state.members,
+  roles: state.users.roles,
+  pathname: state.router.location.pathname,
 });
 
 export default connect(mapStateToProps)(Shell);

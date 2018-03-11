@@ -28,7 +28,7 @@ class AccountShellDynamic extends Component {
     this.asyncLoadComponetTab(this.props.params);
   }
 
-  /**
+  /* *
    * When a new tab is clicked on run asyncLoadComponetTab() to
    * asynchronously import the correct component.
    */

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { unlockMember } from 'grow-actions/member/member';
 import { permissionSelector } from 'gac-utils/selectors';
 import styled from 'styled-components';
-
 import AuthWrapper from '../../auth/containers/AuthWrapper';
 import MemberProductApplications from './MemberProductApplications';
 import MemberNotes from './MemberNotes';
@@ -19,30 +18,17 @@ const ButtonMarginLeft = styled.span`
   margin-left: 2rem;
 `;
 
+const MemberContainer = styled.div`
+  padding: 3.5rem 8rem;
+  max-width: 1270px;
+  margin: 0 auto;
+`;
+
+const MemberHeading = styled.h2`
+  margin: 1.92rem 0 0.8rem;
+  font-size: 2rem;
+`;
 class Member extends Component {
-  // componentDidMount() {
-  //   const { match: { params: { memberId } } } = this.props;
-
-  //   const currentMemberId = this.props.member.member.id;
-  //   const currentMemberProfileData = this.props.member.profileData;
-
-  //   if (!currentMemberId || currentMemberId !== memberId) {
-  //     return this.fetchData(memberId);
-  //   }
-  // }
-
-  // componentWillUpdate(nextProps) {
-  //   const { match: { params: { prevParams } } } = this.props;
-  //   const { matc: { params: { nextParams } } } = nextProps;
-
-  //   const { memberId: prevMemberId } = prevParams;
-  //   const { memberId: nextMemberId } = nextParams;
-
-  //   if (prevMemberId !== nextMemberId) {
-  //     return this.fetchData(nextMemberId);
-  //   }
-  // }
-
   unlockMembersAccount = membersId => {
     const {
       unlockMember,
@@ -84,18 +70,18 @@ class Member extends Component {
     } = this.props;
 
     return (
-      <div className="Member Container">
+      <MemberContainer>
         {appConfigIsLoaded &&
           member.member.firstName &&
           !member.member.locked && (
-            <h2 className="Member__heading">
+            <MemberHeading>
               {`${member.member.firstName}'s`} account is active.
-            </h2>
+            </MemberHeading>
           )}
         {appConfigIsLoaded &&
           hasPermission &&
           member.member.locked && (
-            <h2 className="Member__heading">
+            <MemberHeading>
               <span>
                 {`${member.member.firstName} ${member.member.lastName}'s`}{' '}
                 account is locked.
@@ -106,25 +92,25 @@ class Member extends Component {
                   onClick={() => this.unlockMembersAccount(member.member.id)}
                 />
               </ButtonMarginLeft>
-            </h2>
+            </MemberHeading>
           )}
         {appConfigIsLoaded && (
-          <div className="Member__body">
-            <h2 className="Member__heading">About</h2>
-            <h2 className="Member__heading">In Progress Applications</h2>
+          <div>
+            <MemberHeading>About</MemberHeading>
+            <MemberHeading>In Progress Applications</MemberHeading>
             <MemberProductApplications
               dispatch={dispatch}
               member={member}
               user={user}
             />
-            <h2 className="Member__heading">Completed Applications</h2>
+            <MemberHeading>Completed Applications</MemberHeading>
             <MemberProductApplications
               dispatch={dispatch}
               member={member}
               products={true}
               user={user}
             />
-            <h2 className="Member__heading">Notes</h2>
+            <MemberHeading>Notes</MemberHeading>
             <MemberNotes />
           </div>
         )}
@@ -134,10 +120,14 @@ class Member extends Component {
           notes={notes}
           permissions={permissions}
         />
-      </div>
+      </MemberContainer>
     );
   }
 }
+
+Member.contextTypes = {
+  params: PropTypes.object,
+};
 
 const mapStateToProps = state => ({
   member: state.member,

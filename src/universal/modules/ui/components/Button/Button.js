@@ -3,13 +3,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Spinner from '../../spinner/spinner';
+import { Spinner } from 'gac-ui/components/';
 import ButtonPermissionTooltip from './ButtonPermissionTooltip';
 import { permissionsPropType } from 'gac-utils/proptypes';
 
 const ButtonContainer = styled.div`
   position: relative;
   display: inline-block;
+  ${props => (props.width ? `width: ${props.width}` : '')};
+  ${props => (props.margin ? `margin: ${props.margin}` : '')};
 
   &:hover > #ButtonPermissionTooltip {
     opacity: 1;
@@ -23,6 +25,7 @@ const ButtonContainer = styled.div`
  * primary, secondary, and transparent. Each one has its own styles.
  */
 const BaseButton = styled.button`
+  ${props => (props.width ? `width: ${props.width}` : '')};
   position: relative;
   display: inline-block;
   margin: 0;
@@ -98,11 +101,11 @@ const PrimaryButton = BaseButton.extend`
     ${props =>
       props.hasPermission && props.showDefaultStyles
         ? `
-    background: linear-gradient(to bottom, #448aff, #3480ff);
-    border-color: #3480ff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  `
-        : ''};
+          background: linear-gradient(to bottom, #448aff, #3480ff);
+          border-color: #3480ff;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+        `
+        : ``};
   }
 
   &:active {
@@ -235,6 +238,8 @@ const Button = props => {
     size,
     text,
     type,
+    width,
+    margin,
   } = props;
 
   /**
@@ -247,11 +252,12 @@ const Button = props => {
     ? Boolean(userPermissions[permission])
     : true;
 
+  const largeOrBigger = size === 'large' || size === 'xlarge';
   const isDisabled = disabled || !hasPermission || isSubmitting;
   const isNotDisabled = !isDisabled;
   const showDefaultStyles = !disabled;
-  const spinnerSize = size === 'large' ? 20 : 16;
-  const strokeWidth = size === 'large' ? 6 : 7;
+  const spinnerSize = largeOrBigger ? 21 : 16;
+  const strokeWidth = largeOrBigger ? 6 : 7;
   const requiredPermission = gacPermissions.find(
     gacPerm => gacPerm.name === permission,
   );
@@ -283,7 +289,7 @@ const Button = props => {
   // Go through the different button options object and return the correct styled component
   const GeneratedButton = Buttons[appearance];
   return (
-    <ButtonContainer>
+    <ButtonContainer width={width} margin={margin}>
       <GeneratedButton
         type={type || 'submit'}
         disabled={isDisabled}
@@ -291,6 +297,7 @@ const Button = props => {
         onClick={handleClick}
         id={id}
         size={size}
+        width={width}
         showDefaultStyles={showDefaultStyles}
       >
         {buttonText}
@@ -321,7 +328,8 @@ Button.defaultProps = {
 
 Button.propTypes = {
   disabled: PropTypes.bool,
-  text: PropTypes.string.isRequired,
+
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   isSubmitting: PropTypes.bool,
   userPermissions: permissionsPropType,
   gacPermissions: PropTypes.arrayOf(PropTypes.object),

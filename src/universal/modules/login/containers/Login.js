@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import styled from 'styled-components';
 import { reduxForm, formValueSelector } from 'redux-form';
 import queryString from 'query-string';
 import docCookies from 'grow-utils/cookies';
@@ -12,7 +11,7 @@ import { authToken } from 'grow-actions/auth/auth-token';
 import { capitalizeString } from 'grow-utils/stringFormatting';
 import LoginForm from './LoginForm';
 import LoginFormAuth0 from './LoginFormAuth0';
-
+import { LoginWrapper, LoginFormWrapper } from 'gac-utils/sc';
 import AuthFromWrapper from '../../auth/components/AuthFormWrapper';
 
 class Login extends Component {
@@ -23,17 +22,14 @@ class Login extends Component {
   componentDidMount() {
     const { auth, dispatch, location } = this.props;
     const { id, oneTimePassword } = this.getQueryStringVariables();
-
     dispatch(getEnvProperties());
     // If the user is already authenticated, redirect them to '/'.
     if (auth.isAuthenticated) {
       return dispatch(push('/'));
     }
-
     if (oneTimePassword) {
       return dispatch(push(`/?key=${id}&code=${oneTimePassword}`));
     }
-
     if (!docCookies.getItem('SID')) {
       /**
        * We fire off for authToken if there's no SID already set and it'll
@@ -50,7 +46,6 @@ class Login extends Component {
   getQueryStringVariables = () => {
     const locationSearch = queryString.parse(location.search);
     const { key: id, code: oneTimePassword } = locationSearch;
-
     return {
       id,
       oneTimePassword,
@@ -58,28 +53,26 @@ class Login extends Component {
   };
 
   handleSubmit = data => {
-    const { dispatch, envProperties: { connection } } = this.props;
-
+    const {
+      isAuth0FormVisible,
+      dispatch,
+      envProperties: { connection, clientId },
+    } = this.props;
     const hostname = window.location.hostname;
-    const hiddenForm = document.getElementsByName('hiddenform');
-
     const redirectUrl = hostname.includes('localhost')
       ? 'http://localhost:3000/redirect'
       : `https://${hostname}/redirect`;
-
-    if (!this.state.isAuth0FormVisible) {
+    if (!isAuth0FormVisible) {
       return dispatch(authOneTimePass(data));
     }
-
     const isFormFilled = data.password && data.email;
-
     if (isFormFilled) {
       return dispatch(
         authAuth0Login({
           password: data.password,
           username: data.email,
           // auth0Client: "eyJuYW1lIjoiYXV0aDAuanMiLCJ2ZXJzaW9uIjoiOS4wLjAifQ==",
-          client_id: 'mZzKUAvep5oZcFIY6tmNb4LeRag2kNvE',
+          client_id: clientId,
           connection,
           response_type: 'token id_token',
           redirect_uri: redirectUrl,
@@ -87,8 +80,10 @@ class Login extends Component {
           tenant: 'growtechnologies',
         }),
       ).then(() => {
+        const hiddenForm = document.getElementsByName('hiddenform')[0];
+
         if (hiddenForm) {
-          hiddenForm[0].submit();
+          hiddenForm.submit();
         }
       });
     }
@@ -96,29 +91,23 @@ class Login extends Component {
 
   emailLinkHandler = () => {
     const { change } = this.props;
-    const { isAuth0FormVisible } = this.state;
-
-    change('isAuth0FormVisible', !isAuth0FormVisible);
-    this.setState({ isAuth0FormVisible: !isAuth0FormVisible });
+    change('isAuth0FormVisible', !this.state.isAuth0FormVisible);
+    this.setState({ isAuth0FormVisible: !this.state.isAuth0FormVisible });
   };
 
   renderMessage = message => {
     if (Array.isArray(message)) {
-      return (
-        <div className="LoginMessage">
-          {message.map(text => <span key={text}>{text}</span>)}
-        </div>
-      );
+      return <div>{message.map(text => <span key={text}>{text}</span>)}</div>;
     }
-    return <div className="LoginMessage">{message}</div>;
+    return <div>{message}</div>;
   };
 
   renderLoginForm() {
-    const { auth, loginEmail } = this.props;
+    const { auth, loginEmail, isAuth0FormVisible } = this.props;
 
-    if (!this.state.isAuth0FormVisible) {
+    if (!isAuth0FormVisible) {
       return (
-        <div className="Login__form-wrapper">
+        <LoginFormWrapper>
           <LoginForm
             auth={auth}
             loginEmail={loginEmail}
@@ -130,17 +119,17 @@ class Login extends Component {
             this.renderMessage(
               auth.errors.map(err => capitalizeString(err, '_', ' ')),
             )}
-        </div>
+        </LoginFormWrapper>
       );
     }
 
     return (
-      <div className="Login__form-wrapper">
+      <LoginFormWrapper>
         <LoginFormAuth0
           onSubmit={this.handleSubmit}
           emailLinkHandler={this.emailLinkHandler}
         />
-      </div>
+      </LoginFormWrapper>
     );
   }
 
@@ -151,13 +140,15 @@ class Login extends Component {
   render() {
     return (
       <AuthFromWrapper>
-        <div className="Login__wrapper">
+        <LoginWrapper>
           {this.renderLoginForm()}
-          <div
-            className="hidden"
-            dangerouslySetInnerHTML={this.renderHiddenForm()}
-          />
-        </div>
+          {this.props.responsedForm && (
+            <div
+              style={{ display: 'none' }}
+              dangerouslySetInnerHTML={this.renderHiddenForm()}
+            />
+          )}
+        </LoginWrapper>
       </AuthFromWrapper>
     );
   }
@@ -168,14 +159,18 @@ const selectorLoginWrapper = formValueSelector('loginWrapper');
 
 Login = reduxForm({
   form: 'loginWrapper',
+  initialValues: {
+    isAuth0FormVisible: true,
+  },
 })(Login);
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  isAuth0Form: !!state.form.loginAuth0,
+  isAuth0FormVisible: selectorLoginWrapper(state, 'isAuth0FormVisible'),
   responsedForm: state.auth.responsedForm,
   loginEmail: selector(state, 'email'),
   envProperties: state.permissions.envProperties,
 });
 
 export default connect(mapStateToProps)(Login);
-// export default () => <AuthFromWrapper>Login</AuthFromWrapper>;

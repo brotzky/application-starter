@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { getWorkbench } from 'grow-actions/workbench/workbench';
 import { RESET_WORKBENCH } from 'grow-actions/workbench/constants';
 import { getChecklist } from 'grow-actions/checklist/checklist';
 import { getMemberProductApplicationMetadata } from 'grow-actions/member/member-category-metadata';
+import { workbenchShell, container } from 'gac-utils/sc';
 import { GET_WORKBENCH_CONFIG_SUCCESS } from '../../../../configs/constants';
 import AuthWrapper from '../../../auth/containers/AuthWrapper';
 import WorkbenchShellSidebar from './WorkbenchShellSidebar';
@@ -21,6 +23,9 @@ import {
 } from 'gac-utils/proptypes';
 import { permissionSelector } from 'gac-utils/selectors';
 
+const WorkbenchShellContainer = styled(FadeInFast)`
+  ${workbenchShell};
+`;
 /**
  * WorkbenchShell - The highest level component for the Workbench view.
  * Contained within here is the Sidebar, Nav, and Dynamic content.
@@ -48,6 +53,9 @@ class WorkbenchShell extends Component {
     }
 
     return null;
+  }
+  componentWillUnmount() {
+    this.props.dispatch({ type: RESET_WORKBENCH });
   }
 
   componentWillUnmount() {
@@ -119,7 +127,7 @@ class WorkbenchShell extends Component {
      * <WorkbenchShellDynamic /> handles the dynamic tab rendering
      */
     return (
-      <FadeInFast className="WorkbenchShell Container" component="div">
+      <WorkbenchShellContainer component="div">
         <WorkbenchShellSidebar params={params} />
         <WorkbenchShellDynamic
           workbench={workbench}
@@ -131,13 +139,13 @@ class WorkbenchShell extends Component {
           member={member}
           params={params}
         />
-      </FadeInFast>
+      </WorkbenchShellContainer>
     );
   }
 }
 
 WorkbenchShell.propTypes = {
-  // match: PropTypes.objectOf(paramsPropType.isRequired).isRequired,
+  params: paramsPropType.isRequired,
   dispatch: dispatchPropType.isRequired,
   workbench: workbenchPropType.isRequired,
   user: userPropType.isRequired,
@@ -151,7 +159,11 @@ const mapStateToProps = state => ({
   user: state.user,
   roles: state.users.roles,
   workbench: state.workbench,
-  organization: state.auth.organization,
+  // tailor made for 1st choice until we have a better solution
+  organization:
+    state.auth.organization === '_1STCHOICE'
+      ? '1stchoice'
+      : state.auth.organization,
   hasPermissionToViewChecklists:
     permissionSelector(state, 'VIEW_VERIFICATION_CHECKLIST_OVERVIEWS') || false,
 });

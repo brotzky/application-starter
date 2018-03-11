@@ -4,9 +4,16 @@ import AccountShellWrapper from '../../shell/containers/AccountShellWrapper';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
 import AccountShellSection from '../../shell/components/AccountShellSection';
 import AccountShellCreateSection from '../../shell/components/AccountShellCreateSection';
+import AccountShellSubmitFooter from '../../shell/components/AccountShellSubmitFooter';
 import UsersCreatePersonalFormWrapper from '../components/UsersCreatePersonalForm';
 import UsersCreateSubmitForm from '../components/UsersCreateSubmitForm';
 import { Card } from '../../../ui/components';
+
+const UsersCreateSectionSubmit = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 3.6rem 4.8rem;
+`;
 
 const ProfileCard = styled(Card)`
   flex: 0.6;
@@ -28,9 +35,9 @@ const UsersCreate = () => (
         <UsersCreatePersonalFormWrapper isCreateUserForm />
       </ProfileCard>
     </AccountShellCreateSection>
-    <div className="UsersCreateSectionSubmit">
+    <AccountShellSubmitFooter>
       <UsersCreateSubmitForm />
-    </div>
+    </AccountShellSubmitFooter>
   </AccountShellSection>
 );
 

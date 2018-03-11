@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { initialize } from 'redux-form';
+import styled from 'styled-components';
+import { ease, colors } from 'gac-utils/sc';
 import { createNote } from 'grow-actions/member/member';
 import { addClassNameIf } from 'grow-utils/addClassNameIf';
 import { permissionSelector } from 'gac-utils/selectors';
@@ -13,6 +15,61 @@ import { notificationPush } from '../../ui/notifications/actions/';
 import { Fab } from '../../ui/components';
 import { Pencil, PencilPaper, Remove } from '../../ui/icons/';
 import { Transition } from '../../ui/transitions/';
+
+const StyledFab = styled(Fab)`
+  margin: 0 0 0 auto;
+  transform: rotate(0);
+  ${ease('out')};
+`;
+
+const NoteComposerWrapper = styled.div`
+  $p: &;
+  position: fixed;
+  z-index: 10;
+  bottom: ${props => `${props.theme.space}rem`};
+  right: ${props => `${props.theme.space}rem`};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const MemberComposerBody = styled.div`
+  min-height: 400px;
+  width: 396px;
+  margin-bottom: ${props => `${props.theme.space / 1.5}rem`};
+  overflow: hidden;
+  transform-origin: 90% bottom;
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 0 1px rgba(9, 30, 66, 0.31),
+    0 4px 8px -2px rgba(9, 30, 66, 0.25);
+`;
+
+const Header = styled.header`
+  display: flex;
+  align-items: center;
+  padding: 1.6rem 1.2rem;
+  background: white;
+  color: ${props => props.theme.colors.black};
+`;
+
+const HeaderIcon = styled(PencilPaper)`
+  margin-right: 1.2rem;
+  * {
+    stroke: ${props => props.theme.colors.black};
+  }
+`;
+
+const StyledRemove = styled(Remove)`
+  * {
+    fill: white;
+  }
+`;
+const StyledPencil = styled(Pencil)`
+  * {
+    stroke: white;
+  }
+`;
 
 class MemberNoteComposer extends Component {
   constructor(props) {
@@ -103,52 +160,36 @@ class MemberNoteComposer extends Component {
     const { productApplications, showNoteComposer } = member;
 
     return (
-      <div
-        className={`MemberNoteComposer ${addClassNameIf(
-          showNoteComposer,
-          'MemberNoteComposer--active',
-        )}`}
-      >
+      <NoteComposerWrapper>
         <Transition transitionName="MemberNoteComposer">
           {showNoteComposer === true && (
-            <div className="Member__box MemberNoteComposer__body">
-              <header className="MemberNoteComposer__header">
-                <PencilPaper className="MemberNoteComposer__header-icon" />
+            <MemberComposerBody>
+              <Header>
+                <HeaderIcon />
                 <strong>
                   Add Note for {member.member.firstName}{' '}
                   {member.member.lastName}
                 </strong>
-              </header>
+              </Header>
               <NoteForm
                 params={params}
                 productApplications={productApplications}
                 onSubmit={this.handleSubmit}
               />
-            </div>
+            </MemberComposerBody>
           )}
         </Transition>
 
         {hasPermission ? (
-          <Fab
-            title="Add note"
-            className="MemberNoteComposer__fab"
-            handleClick={this.handleFabClick}
-          >
-            {showNoteComposer ? (
-              <Remove className="MemberNoteComposer__fab-icon MemberNoteComposer__fab-icon--path" />
-            ) : (
-              <Pencil className="MemberNoteComposer__fab-icon MemberNoteComposer__fab-icon--stroke" />
-            )}
-          </Fab>
+          <StyledFab title="Add note" handleClick={this.handleFabClick}>
+            {showNoteComposer ? <StyledRemove /> : <StyledPencil />}
+          </StyledFab>
         ) : (
-          <Fab
-            title="Add note"
-            className="PermissionRequired MemberNoteComposer__fab"
-          >
-            <Pencil className="MemberNoteComposer__fab-icon MemberNoteComposer__fab-icon--stroke" />
-          </Fab>
+          <StyledFab>
+            <StyledPencil />
+          </StyledFab>
         )}
-      </div>
+      </NoteComposerWrapper>
     );
   }
 }

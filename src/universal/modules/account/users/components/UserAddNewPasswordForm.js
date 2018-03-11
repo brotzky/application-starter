@@ -1,16 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
+import styled from 'styled-components';
 import { Text } from '../../../forms/fields/';
 import { Button } from '../../../ui/components';
-import styled from 'styled-components';
 
 const ButtonWrapper = styled.div`
   display: inline-block;
   margin: 1rem 2rem 0 0;
 `;
 
-let UserAddNewPasswordForm = ({
+const MarginBottom = styled.div`
+  margin-bottom: 2rem;
+  overflow: auto;
+  border-bottom: 1px dashed #e2dddd;
+  padding-bottom: 1.4rem;
+`;
+
+let UserAddNewPwdForm = ({
   toggleNewPasswordFormVisibility,
   addPassword,
   passwordValidationMessage,
@@ -19,7 +26,6 @@ let UserAddNewPasswordForm = ({
   updatePasswordHandler,
   isUpdatingPassword,
 }) => {
-  const fieldProps = { className: 'UsersCreateForm' };
   const required = value =>
     value
       ? undefined
@@ -34,14 +40,15 @@ let UserAddNewPasswordForm = ({
       )}
     >
       {auth0InviteStatus !== 'NONE' ? (
-        <Field
-          name="oldPassword"
-          component={Text}
-          label="Old Password"
-          validate={required}
-          type="password"
-          {...fieldProps}
-        />
+        <MarginBottom>
+          <Field
+            name="oldPassword"
+            component={Text}
+            label="Old Password"
+            validate={required}
+            type="password"
+          />
+        </MarginBottom>
       ) : null}
       <Field
         name="newPassword"
@@ -49,7 +56,6 @@ let UserAddNewPasswordForm = ({
         label="New Password"
         validate={required}
         type="password"
-        {...fieldProps}
       />
       <Field
         name="confirmPassword"
@@ -57,7 +63,6 @@ let UserAddNewPasswordForm = ({
         label="Confirm Password"
         validate={required}
         type="password"
-        {...fieldProps}
       />
       {passwordValidationMessage}
       <ButtonWrapper>
@@ -77,12 +82,12 @@ let UserAddNewPasswordForm = ({
   );
 };
 
-UserAddNewPasswordForm = reduxForm({
+UserAddNewPwdForm = reduxForm({
   form: 'new-password',
-})(UserAddNewPasswordForm);
+})(UserAddNewPwdForm);
 
-UserAddNewPasswordForm = connect(state => ({
+const UserAddNewPasswordForm = connect(state => ({
   isUpdatingPassword: state.user.isUpdatingPassword,
-}))(UserAddNewPasswordForm);
+}))(UserAddNewPwdForm);
 
 export default UserAddNewPasswordForm;

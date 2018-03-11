@@ -1,9 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
+import styled from 'styled-components';
 import { productApplication } from 'grow-utils/productApplicationUtils';
 import { capitalizeString } from 'grow-utils/stringFormatting';
+import {
+  QueueItemHeading,
+  QueueHeader,
+  QueueItemList,
+  QueueItemCell,
+  QueueItemIsRep,
+  QueueItemLink,
+} from 'gac-utils/sc';
 import { Button, EmptyState } from '../../ui/components';
 import QueueItem from '../../queue/containers/QueueItem';
 import QueuePlaceholder from '../../queue/components/QueuePlaceholder';
@@ -14,38 +22,70 @@ import {
   handleUnclaimClick,
 } from '../../../utils/claim-unclaim';
 
+const QueueItemWrapper = styled.ul`
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+`;
+
+const MemberProductApplicationsWrapper = styled.div`
+  flex: 1;
+  align-self: flex-start;
+  background: white;
+  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05),
+    0 1px 3px 0 rgba(63, 63, 68, 0.15);
+`;
+
+const StyledQueueList = styled.ul`
+  list-style-type: none;
+`;
+
+const StyledQueueItem = styled.li`
+  padding: (0) (${props => `${props.theme.space}rem`});
+  position: relative;
+  background: white;
+`;
+
+const StyledQueueItemWrapper = styled.ul`
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+`;
+
 class MemberProductApplications extends QueueItem {
   render() {
     const { member, products, user, org, dispatch } = this.props;
     const { isFetching, productApplications } = member;
 
     return (
-      <div className="Member__box MemberProductApplications">
-        <header className="QueueHeader">
-          <ul className="QueueList QueueHeader__list">
-            <li className="QueueItem QueueHeader__item">
-              <ul className="QueueItem__wrapper QueueHeader__item-wrapper">
-                <li className="QueueItem__cell">
-                  <span className="QueueItem__heading">Product</span>
-                </li>
-                <li className="QueueItem__cell">
-                  <span className="QueueItem__heading">Manager</span>
-                </li>
-                <li className="QueueItem__cell">
-                  <span className="QueueItem__heading">Status</span>
-                </li>
-                <li className="QueueItem__cell">
-                  <span className="QueueItem__heading">Date Created</span>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </header>
+      <MemberProductApplicationsWrapper>
+        <QueueHeader style={{ padding: '0 2.4rem' }}>
+          <StyledQueueList>
+            <StyledQueueItem>
+              <StyledQueueItemWrapper>
+                <QueueItemCell>
+                  <QueueItemHeading>Product</QueueItemHeading>
+                </QueueItemCell>
+                <QueueItemCell>
+                  <QueueItemHeading>Manager</QueueItemHeading>
+                </QueueItemCell>
+                <QueueItemCell>
+                  <QueueItemHeading>Status</QueueItemHeading>
+                </QueueItemCell>
+                <QueueItemCell>
+                  <QueueItemHeading>Date Created</QueueItemHeading>
+                </QueueItemCell>
+              </StyledQueueItemWrapper>
+            </StyledQueueItem>
+          </StyledQueueList>
+        </QueueHeader>
         {isFetching ? (
           <QueuePlaceholder />
         ) : (
           <div>
-            <ul className="QueueList">
+            <ul style={{ listStyleType: 'none' }}>
               {productApplications.map(application => {
                 if (application.currentStep === 'serving' && !products) {
                   return null;
@@ -63,25 +103,24 @@ class MemberProductApplications extends QueueItem {
                     : Application.getMaskedStatus();
 
                 return (
-                  <li key={application.id} className="QueueItem">
-                    <ul className="QueueItem__wrapper">
-                      <li className="QueueItem__cell">
-                        <Link className="QueueItem__link" to={workbenchLink}>
+                  <QueueItemList key={application.id}>
+                    <QueueItemWrapper>
+                      <QueueItemCell>
+                        <QueueItemLink to={workbenchLink}>
                           <JointIcons application={application} />{' '}
                           {application.prettyName}
-                        </Link>
-                      </li>
-                      <li className="QueueItem__cell">
+                        </QueueItemLink>
+                      </QueueItemCell>
+                      <QueueItemCell>
                         {application.primaryRep.email ? (
                           application.primaryRep.email === user.email ? (
-                            <span
-                              className="QueueItem__isRep"
+                            <QueueItemIsRep
                               onClick={() =>
                                 handleUnclaimClick(dispatch, Application)
                               }
                             >
                               {application.primaryRep.email}
-                            </span>
+                            </QueueItemIsRep>
                           ) : (
                             application.primaryRep.email
                           )
@@ -99,23 +138,19 @@ class MemberProductApplications extends QueueItem {
                             permission="CLAIM_UNCLAIM_APPLICATION"
                           />
                         )}
-                      </li>
-                      <li className="QueueItem__cell">
-                        <Link
-                          id="queueStep"
-                          className="QueueItem__link"
-                          to={workbenchLink}
-                        >
+                      </QueueItemCell>
+                      <QueueItemCell>
+                        <QueueItemLink id="queueStep" to={workbenchLink}>
                           {currentStep}
-                        </Link>
-                      </li>
-                      <li className="QueueItem__cell">
+                        </QueueItemLink>
+                      </QueueItemCell>
+                      <QueueItemCell>
                         {moment(application.dateCreated).format(
                           'MMM D YYYY, h:mm a',
                         )}
-                      </li>
-                    </ul>
-                  </li>
+                      </QueueItemCell>
+                    </QueueItemWrapper>
+                  </QueueItemList>
                 );
               })}
             </ul>
@@ -145,7 +180,7 @@ class MemberProductApplications extends QueueItem {
             ) : null}
           </div>
         )}
-      </div>
+      </MemberProductApplicationsWrapper>
     );
   }
 }

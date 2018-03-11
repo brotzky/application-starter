@@ -56,7 +56,7 @@ class StatusDeclineButton extends Component {
     // make sure no hacks around it
     if (this.state.canEdit) {
       return dispatch(
-        showModal('STATUS_MODAL', {
+        showModal('STATUS_MANAGEMENT_MODAL', {
           dispatch,
           workbench,
           changeToStatus: 'decline',
@@ -97,7 +97,6 @@ StatusDeclineButton.propTypes = {
 
 const mapStateToProps = state => ({
   workbench: state.workbench,
-  recommendation: state.recommendation,
   user: state.user,
   permissions: state.permissions.permissions,
   state: state.workbench.state,

@@ -29,17 +29,14 @@ class PullCreditBureau extends Component {
     const { creditBureau, currentStep } = this.props;
 
     return (
-      <div className="CreditBureauBody__pull">
-        <h6 className="CreditBureauBody__header">Pull Credit Bureau</h6>
-        <Button
-          onClick={() => this.handleCreditPull()}
-          isSubmitting={creditBureau.isPullingBureau}
-          permission="EDIT_CREDIT_BUREAU"
-          disabled={currentStep === 'inquiry'}
-          text="Pull Credit Bureau"
-          size="large"
-        />
-      </div>
+      <Button
+        onClick={() => this.handleCreditPull()}
+        isSubmitting={creditBureau.isPullingBureau}
+        permission="EDIT_CREDIT_BUREAU"
+        disabled={currentStep === 'inquiry'}
+        text="Pull Credit Bureau"
+        size="large"
+      />
     );
   }
 }

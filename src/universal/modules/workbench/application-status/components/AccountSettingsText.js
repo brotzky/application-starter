@@ -1,16 +1,28 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const AccountSettingsTextWrapper = styled.div`
+  margin: 1rem 3rem;
+`;
+
+const AccountSettingsTextHeader = styled.h4`
+  font-size: ${props => props.theme.font.size2};
+`;
+
+const AccountSettingsTextSubheader = styled.p`
+  opacity: 0.75;
+  margin: 4px 0 0;
+  font-size: 1.4rem;
+`;
 
 export const AccountSettingsText = ({ header, subheader, showSubheader }) => {
   return (
-    <div className="AccountSettingsText">
-      <h4 className="AccountSettingsText__header">
-        {header}
-      </h4>
-      {!showSubheader &&
-        <p className="AccountSettingsText__subheader">
-          {subheader}
-        </p>}
-    </div>
+    <AccountSettingsTextWrapper>
+      <AccountSettingsTextHeader>{header}</AccountSettingsTextHeader>
+      {!showSubheader && (
+        <AccountSettingsTextSubheader>{subheader}</AccountSettingsTextSubheader>
+      )}
+    </AccountSettingsTextWrapper>
   );
 };
 

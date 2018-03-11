@@ -3,13 +3,30 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { TriangleUp } from '../../../ui/icons/';
 
-const TableRow = styled.tr`cursor: pointer;`;
+const TableRow = styled.tr`
+  cursor: pointer;
+`;
 
 const TableHeader = styled.th`
+  &:first-of-type {
+    min-width: 165px;
+    max-width: 200px;
+  }
+
+  &:nth-of-type(2) {
+    min-width: 238px;
+    max-width: 267px;
+  }
+
+  &:nth-of-type(3),
+  &:last-of-type {
+    width: 330px;
+  }
+
   font-weight: 500;
   text-align: left;
-  color: color(black);
-  padding: 13px 15px;
+  color: ${props => props.theme.colors.black};
+  padding: 10px 16px;
   user-select: none;
   border-bottom: 1px solid #ebeef0;
   background: transparent;
@@ -30,7 +47,9 @@ const StyledTriangleUp = styled(TriangleUp)`
   transform: ${props => (props.sortByAsc ? 'rotate(0deg)' : 'rotate(180deg)')};
 `;
 
-const Head = styled.thead`width: 100%;`;
+const Head = styled.thead`
+  width: 100%;
+`;
 
 const RolesListHeader = ({ activeSort, sortByAsc, handleClick }) => (
   <Head>

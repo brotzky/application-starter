@@ -138,7 +138,7 @@ export const theme = {
       value: black,
     },
     fontSize: '1.5rem',
-    height: '4rem',
+    height: '3.4rem',
     width: '100%',
     padding: '1.2rem',
     paddingRight: '3.1rem',

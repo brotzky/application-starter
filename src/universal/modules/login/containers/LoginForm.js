@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import { reduxForm, Field, reset } from 'redux-form';
 import styled, { ThemeProvider } from 'styled-components';
 import { AUTH_RESET_LOGIN_MESSAGE } from 'grow-actions/auth/constants';
+import {
+  Button,
+  LoginHeaderHeading,
+  LoginHeaderText,
+  LoginForm as FormContainer,
+} from 'gac-ui/components';
 import { FormButton, Text } from '../../forms/fields/';
-import { ArrowRight } from '../../ui/icons/';
 import { theme } from '../../../themes/';
-// import { FadeIn } from '../../ui/transitions/';
+import { FadeIn } from '../../ui/transitions/';
 
 export const LoginFormTheme = {
   ...theme,
@@ -34,6 +39,7 @@ export const LoginFormTheme = {
 
 const LoginFormSeparator = styled.div`
   position: relative;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,14 +48,16 @@ const LoginFormSeparator = styled.div`
 
 const LoginFormSeparatorText = styled.span`
   position: relative;
+  top: 0;
   width: 50px;
   background-color: #fff;
   text-align: center;
   z-index: 1;
 `;
 
-const LoginFormSeparatorLine = styled.span`
+const LoginFormSeparatorLine = styled.div`
   position: absolute;
+  top: 0;
   width: 100%;
   height: 1px;
   background-color: #eaeaea;
@@ -57,7 +65,8 @@ const LoginFormSeparatorLine = styled.span`
   top: 50%;
 `;
 
-const EmailMeALinkButton = styled.div`
+const EmailMeALinkButton = styled.button`
+  width: 100%;
   cursor: pointer;
   text-align: center;
   border: 1px solid #eaeaea;
@@ -68,10 +77,6 @@ const EmailMeALinkButton = styled.div`
   line-height: 4.375rem;
   font-size: 1.5rem;
   font-weight: 600;
-
-  svg {
-    margin-right: 14px;
-  }
 `;
 
 const EmailSentContainer = styled.div`
@@ -113,7 +118,6 @@ class LoginForm extends Component {
       emailLinkHandler,
       handleSubmit,
       loginEmail,
-      authhasSentOneTimePass,
       submitting,
     } = this.props;
     const required = value =>
@@ -123,32 +127,29 @@ class LoginForm extends Component {
             defaultMessage: ' is required',
           };
 
-    const fieldProps = {
-      className: 'LoginForm',
-    };
-
     return (
       <div>
-        <form
+        <FormContainer
           onSubmit={handleSubmit}
           onChange={this.handleRest}
-          className="c-form LoginForm"
           id="login-form"
         >
-          <h1 className="LoginHeader__heading">Login with email</h1>
-          <p className="LoginHeader__text">
+          <LoginHeaderHeading>Login with email</LoginHeaderHeading>
+          <LoginHeaderText>
             We'll send you a one time password to get started.
-          </p>
+          </LoginHeaderText>
 
           {auth.hasSentOneTimePass ? (
-            <EmailSentContainer>
-              <p>
-                A one time link has been sent to <strong>{loginEmail}</strong>
-              </p>
-              <p onClick={this.handleRest}>
-                Use a <u>different email</u>
-              </p>
-            </EmailSentContainer>
+            <FadeIn>
+              <EmailSentContainer>
+                <p>
+                  A one time link has been sent to <strong>{loginEmail}</strong>
+                </p>
+                <p onClick={this.handleRest}>
+                  Use a <u>different email</u>
+                </p>
+              </EmailSentContainer>
+            </FadeIn>
           ) : (
             <ThemeProvider theme={LoginFormTheme}>
               <div>
@@ -160,17 +161,16 @@ class LoginForm extends Component {
                     label="Email"
                     placeholder="name@example.com"
                     validate={required}
-                    {...fieldProps}
                   />
                 </fieldset>
                 <fieldset>
-                  <Field
-                    name="submitButton"
-                    component={FormButton}
+                  <Button
+                    type="submit"
                     buttonText="Continue"
                     isSubmitting={submitting}
-                    icon={ArrowRight}
-                    {...fieldProps}
+                    size="xlarge"
+                    width="100%"
+                    margin="1.92rem 0"
                   />
                 </fieldset>
               </div>
@@ -183,7 +183,7 @@ class LoginForm extends Component {
           <EmailMeALinkButton onClick={emailLinkHandler}>
             Use email and password
           </EmailMeALinkButton>
-        </form>
+        </FormContainer>
       </div>
     );
   }

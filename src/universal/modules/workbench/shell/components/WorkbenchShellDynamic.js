@@ -6,10 +6,31 @@ import WorkbenchShellJointNav from '../containers/WorkbenchShellJointNav';
 import { capitalizeString } from 'grow-utils/stringFormatting';
 import { productApplication } from 'grow-utils/productApplicationUtils';
 import { Card, ViewPermission } from '../../../ui/components';
+import { media } from 'gac-utils/sc';
 
 const StyledCard = styled(Card)`
   box-shadow: 0 1px 0 1px rgba(63, 63, 68, 0.05),
     0 2px 3px 0 rgba(63, 63, 68, 0.15);
+`;
+
+const WorkbenchShellDynamicContainer = styled.div`
+  flex: 1;
+  margin-left: 0;
+  transition: all 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  ${props =>
+    props.isJoint &&
+    `
+      transform: translateY(58px);
+    `};
+
+  ${media.large`
+    margin-left: 1.92rem;
+  `};
+
+  ${media.largest`
+    margin-left: 2.4rem;
+  `};
 `;
 
 /**
@@ -34,7 +55,7 @@ class WorkbenchShellDynamic extends Component {
     this.importUtil(`checklist/containers/Checklist`, 'asyncChecklist');
   }
 
-  /* *
+  /**
    * When a new tab is clicked on run asyncLoadComponetTab() to
    * asynchronously import the correct component.
    */
@@ -92,11 +113,8 @@ class WorkbenchShellDynamic extends Component {
       isMemberLoaded;
 
     return (
-      <div
-        className={`WorkbenchShellDynamic ${Application.getJointDetails()
-          .isJoint
-          ? 'WorkbenchShellDynamic--joint'
-          : ''}`}
+      <WorkbenchShellDynamicContainer
+        isJoin={Application.getJointDetails().isJoint}
       >
         <StyledCard>
           <WorkbenchShellJointNav params={params} />
@@ -108,7 +126,7 @@ class WorkbenchShellDynamic extends Component {
             </div>
           </ViewPermission>
         </StyledCard>
-      </div>
+      </WorkbenchShellDynamicContainer>
     );
   }
 }

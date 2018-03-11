@@ -53,7 +53,11 @@ class AppConfig extends Component {
 
 const mapStateToProps = state => ({
   workbench: state.workbench,
-  org: state.auth.organization,
+  // tailor made for 1st choice until we have a better solution
+  org:
+    state.auth.organization === '_1STCHOICE'
+      ? '1stchoice'
+      : state.auth.organization,
 });
 
 export default connect(mapStateToProps)(AppConfig);

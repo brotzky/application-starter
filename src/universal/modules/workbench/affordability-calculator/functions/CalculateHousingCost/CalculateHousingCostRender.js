@@ -11,24 +11,21 @@ class CalculateHousingCostRender extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    const { calculator, dispatch } = this.props;
+    const { calculator, dispatch, val } = this.props;
 
     if (
       !isEqual(
         getObjectValues(calculator, 'housingCost'),
         getObjectValues(nextProps.calculator, 'housingCost'),
-      )
+      ) ||
+      nextProps.val !== val
     ) {
       dispatch(updateHousingCost(nextProps.val));
     }
   }
 
   render() {
-    return (
-      <span className="CalculatorResult">
-        {numeral(this.props.val).format('$0,0.00')}
-      </span>
-    );
+    return <span>{numeral(this.props.val).format('$0,0.00')}</span>;
   }
 }
 

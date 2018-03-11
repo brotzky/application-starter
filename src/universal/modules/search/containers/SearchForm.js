@@ -1,11 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { theme } from '../../../themes';
 import { FormButton, Phone, Select, Text } from '../../forms/fields/';
 import { MagnifyGlass } from '../../ui/icons/';
+
+const SearchForm = styled.form`
+  max-width: 740px;
+  width: 100%;
+  margin: 0 auto;
+`;
+const SearchFormBar = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+const SearchFormSplit = styled.div`
+  display: flex;
+  flex: 1;
+`;
+const SearchFormSelector = styled.div`
+  width: 108px;
+  position: relative;
+  right: -3px;
+`;
+const SearchFormInput = styled.div`
+  flex: 1;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  overflow: hidden;
+`;
+const StyledMagGlass = styled(MagnifyGlass)`
+  position: relative;
+  top: -2px;
+  fill: #717070;
+`;
+
+const StyledFormButton = styled.div`
+  background: #f0f0f0;
+  box-shadow: 0 1px 0 rgba(black, 0.1);
+  border-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  height: 32px;
+  padding: 0;
+  min-height: auto;
+  min-width: 70px;
+  margin: 0;
+  overflow: hidden;
+`;
 
 const SearchBarTheme = {
   ...theme,
@@ -42,10 +87,7 @@ const SearchBarTheme = {
 };
 
 let SearchBar = props => {
-  const { handleSubmit, searchBy, submitting } = props;
-  const fieldProps = {
-    className: 'SearchForm',
-  };
+  const { handleSubmit, searchBy } = props;
 
   const searchByOptions = [
     { name: 'Name', value: 'name' },
@@ -56,22 +98,16 @@ let SearchBar = props => {
 
   return (
     <ThemeProvider theme={SearchBarTheme}>
-      <form
-        onSubmit={handleSubmit}
-        className={fieldProps.className}
-        id="search-form"
-      >
-        <div className={`${fieldProps.className}__bar`}>
-          <div className={`${fieldProps.className}__selector`}>
+      <SearchForm onSubmit={handleSubmit} id="search-form">
+        <SearchFormBar>
+          <SearchFormSelector>
             <Field
               name="searchBy"
               component={Select}
               options={searchByOptions}
-              {...fieldProps}
             />
-          </div>
-          <div
-            className={`${fieldProps.className}__input`}
+          </SearchFormSelector>
+          <SearchFormInput
             style={{
               borderTopLeftRadius: '2px',
               borderBottomLeftRadius: '2px',
@@ -79,9 +115,8 @@ let SearchBar = props => {
             }}
           >
             {(searchBy === 'name' || searchBy === undefined) && (
-              <div className={`${fieldProps.className}__split`}>
+              <SearchFormSplit>
                 <Field
-                  {...fieldProps}
                   name="firstName"
                   component={Text}
                   type="text"
@@ -89,19 +124,17 @@ let SearchBar = props => {
                   placeholder="First Name"
                 />
                 <Field
-                  {...fieldProps}
                   name="lastName"
                   component={Text}
                   type="text"
                   label={false}
                   placeholder="Last Name"
                 />
-              </div>
+              </SearchFormSplit>
             )}
 
             {searchBy === 'email' && (
               <Field
-                {...fieldProps}
                 name="email"
                 component={Text}
                 type="email"
@@ -111,38 +144,30 @@ let SearchBar = props => {
             )}
 
             {searchBy === 'phone' && (
-              <Field
-                {...fieldProps}
-                name="phone"
-                component={Phone}
-                label={false}
-              />
+              <Field name="phone" component={Phone} label={false} />
             )}
 
             {searchBy === 'id' && (
               <Field
-                {...fieldProps}
                 name="id"
                 component={Text}
                 label={false}
                 placeholder="application id"
               />
             )}
-          </div>
+          </SearchFormInput>
 
-          <div className={`${fieldProps.className}__submit-button`}>
+          <StyledFormButton>
             <Field
-              {...fieldProps}
               name="submit"
               component={FormButton}
-              buttonText={
-                <MagnifyGlass className="Topbar__search-trigger-icon" />
-              }
+              buttonText={<StyledMagGlass />}
               type="submit"
+              appearance="transparent"
             />
-          </div>
-        </div>
-      </form>
+          </StyledFormButton>
+        </SearchFormBar>
+      </SearchForm>
     </ThemeProvider>
   );
 };
@@ -174,6 +199,7 @@ SearchBar = reduxForm({
     appId: '',
     searchBy: 'name',
   },
+  destroyOnUnmount: false,
 })(SearchBar);
 
 export default connect(mapStateToProps)(SearchBar);

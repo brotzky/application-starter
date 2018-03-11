@@ -70,7 +70,7 @@ const TooltipTitle = styled.h6`
   margin-bottom: 3px;
 `;
 
-const ButtonPermissionTooltip = ({ dispatch, permission }) => {
+const ButtonPermissionTooltip = ({ permission }) => {
   if (!permission) return null;
 
   return (

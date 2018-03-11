@@ -4,26 +4,46 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
+import {
+  QueueItemCell,
+  QueueItemLink,
+  QueueItem as QueueItemList,
+  QueueActions,
+  QueueActionsItemButton,
+  QueueActionsItemLink,
+  QueueActionsItemLinkSub,
+  QueueActionsItemLinkMain,
+  QueueItemMenuDotsIcon,
+} from 'gac-utils/sc';
 import { productApplication } from 'grow-utils/productApplicationUtils';
+import { capitalizeString } from 'grow-utils/stringFormatting';
 import {
   TOGGLE_ACTION_MENU,
   updateQueueState,
 } from '../actions/actions-update-queue-state';
-import { Button, ProfilePicture } from '../../ui/components';
-import { capitalizeString } from 'grow-utils/stringFormatting';
-import { addClassNameIf } from 'grow-utils/addClassNameIf';
+import { Button, Ellipsis, ProfilePicture, Pill } from '../../ui/components';
 import { showModal } from '../../ui/modal/actions/actions-modal';
-import { MenuDots } from '../../ui/icons/';
-import { FadeIn, Transition } from '../../ui/transitions';
+import { FadeIn } from '../../ui/transitions';
 import JointIcons from '../../ui/joint-icons/';
 import {
   handleClaimClick,
   handleUnclaimClick,
 } from '../../../utils/claim-unclaim';
 
+const StatePill = Pill.withComponent(Link);
+
 const UserContainer = styled.div`
   display: flex;
   align-items: center;
+
+  &:hover {
+    ${props =>
+      props.isRep &&
+      `
+      cursor: pointer;
+      text-decoration: line-through
+    `};
+  }
 `;
 
 const ProfilePictureContainer = styled.div`
@@ -34,32 +54,6 @@ const UserTextContainer = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-`;
-
-const StatePill = styled(Link)`
-  padding: 2px 10px 3px;
-
-  ${props => {
-    switch (props.state) {
-      case 'active':
-        return `
-          color: #159e70;
-          background: rgba(37, 180, 126, 0.14);
-          font-size: 1.2rem;
-          font-weight: 500;
-        `;
-      case 'declined':
-        return `
-          color: ${props.theme.colors.red};
-          background: #ffecec;
-          font-size: 1.2rem;
-          font-weight: 500;
-        `;
-      default:
-        return `font-size: 1.4rem;`;
-    }
-  }};
-  border-radius: 30px;
 `;
 
 const ExistingUserNotification = styled.span`
@@ -77,14 +71,19 @@ const ExistingUserNotification = styled.span`
   min-height: 8px;
   min-width: 8px;
 `;
-class QueueItem extends Component {
-  constructor(props) {
-    super(props);
-    this.handleActionMenuClick = this.handleActionMenuClick.bind(this);
-    this.handleCloseActionMenu = this.handleCloseActionMenu.bind(this);
-  }
 
-  handleActionMenuClick(event, id) {
+const QueueItemWrapper = styled.ul`
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+`;
+const QueueActionsItemMenuButton = styled.button`
+  border: none;
+`;
+
+class QueueItem extends Component {
+  handleActionMenuClick = (event, id) => {
     event.nativeEvent.stopImmediatePropagation();
     const { dispatch, showQueueMenu } = this.props;
     if (id) {
@@ -94,29 +93,42 @@ class QueueItem extends Component {
       }
       return dispatch(updateQueueState(TOGGLE_ACTION_MENU, id));
     }
-  }
+  };
 
-  handleCloseActionMenu() {
+  handleCloseActionMenu = () => {
     this.props.dispatch(updateQueueState(TOGGLE_ACTION_MENU));
     document.removeEventListener('click', this.handleCloseActionMenu);
-  }
+  };
 
-  handleAssignClick(application) {
+  handleAssignClick = application => {
     const { dispatch } = this.props;
     return dispatch(
       showModal('QUEUE_ASSIGN_APPLICATION_MODAL', {
         application,
       }),
     );
-  }
+  };
 
   hasPermission(permission) {
     const { permissions } = this.props;
     return Boolean(permissions[permission]);
   }
 
+  pillColor = value => {
+    switch (value) {
+      case 'active':
+        return 'success';
+      case 'declined':
+      case 'fraud':
+      case 'cancelled':
+        return 'error';
+      default:
+        return null;
+    }
+  };
+
   render() {
-    const { item, showQueueMenu, user, org, dispatch } = this.props;
+    const { item, showQueueMenu, user, queue, org, dispatch } = this.props;
     const Application = productApplication(org, item);
     const workbenchLink = Application.getWorkbenchLink();
     const memberLink = Application.getMemberLink();
@@ -126,118 +138,77 @@ class QueueItem extends Component {
     const isExistingUser = item.creator.isExisting;
 
     return (
-      <li className="QueueItem">
+      <QueueItemList>
         <FadeIn>
-          <ul className="Queue__wrapper QueueItem__wrapper">
-            <li
-              className="QueueItem__cell"
-              title={productName}
-              style={{ flex: '1.2' }}
-            >
-              <Link className="QueueItem__link" to={workbenchLink}>
-                <div
-                  className="QueueItem__link-main"
-                  style={{ display: 'flex' }}
-                >
+          <QueueItemWrapper>
+            <QueueItemCell title={productName} style={{ flex: '1.3' }}>
+              <QueueItemLink to={workbenchLink}>
+                <QueueActionsItemLinkMain style={{ display: 'flex' }}>
                   <JointIcons application={item} />
-                  <span className="QueueItem__link-product">{productName}</span>
-                </div>
-                <div className="QueueItem__link-sub">
+                  <Ellipsis>{productName}</Ellipsis>
+                </QueueActionsItemLinkMain>
+                <QueueActionsItemLinkSub>
                   {moment(item.dateCreated).format('MMM D YYYY, h:mm a')}
-                </div>
-              </Link>
-            </li>
-            <li
-              className="QueueItem__cell"
+                </QueueActionsItemLinkSub>
+              </QueueItemLink>
+            </QueueItemCell>
+            <QueueItemCell
               title={`${item.creator.firstName} ${item.creator.lastName}`}
               style={{ flex: '1.25' }}
             >
-              <Link className="QueueItem__link" to={memberLink}>
-                <div
-                  className="QueueItem__link-main"
+              <QueueItemLink to={memberLink}>
+                <QueueActionsItemLinkMain
                   style={{ display: 'flex', alignItems: 'flex-start' }}
                 >
                   <ExistingUserNotification isExistingUser={isExistingUser} />
                   <div>
                     {item.creator.firstName} {item.creator.lastName}
-                    <div className="QueueItem__link-sub">
+                    <QueueActionsItemLinkSub>
                       {item.creator.email}
-                    </div>
+                    </QueueActionsItemLinkSub>
                   </div>
-                </div>
-              </Link>
-            </li>
-            <li
-              className="QueueItem__cell"
-              title={currentStep}
-              style={{ flex: '0.7' }}
-            >
-              <Link className="QueueItem__link" to={workbenchLink}>
-                {currentStep}
-              </Link>
-            </li>
-            <li
-              className="QueueItem__cell"
-              title={item.state}
-              style={{ flex: '0.6' }}
-            >
-              <Link className="QueueItem__link" to={workbenchLink}>
+                </QueueActionsItemLinkMain>
+              </QueueItemLink>
+            </QueueItemCell>
+            <QueueItemCell title={currentStep} style={{ flex: '0.7' }}>
+              <QueueItemLink to={workbenchLink}>{currentStep}</QueueItemLink>
+            </QueueItemCell>
+            <QueueItemCell title={item.state} style={{ flex: '0.7' }}>
+              <QueueItemLink to={workbenchLink}>
                 {item.adminSteps ? (
                   item.adminSteps.currentStep.prettyName
                 ) : (
                   <span style={{ opacity: '0.6' }}>–</span>
                 )}
-              </Link>
-            </li>
-            <li
-              className="QueueItem__cell"
-              title={item.state}
-              style={{ flex: '0.7' }}
-            >
-              <StatePill state={item.state} to={workbenchLink}>
+              </QueueItemLink>
+            </QueueItemCell>
+            <QueueItemCell title={item.state} style={{ flex: '0.7' }}>
+              <StatePill state={this.pillColor(item.state)} to={workbenchLink}>
                 {capitalizeString(item.state, '-', ' ')}
               </StatePill>
-            </li>
-            <li
-              className="QueueItem__cell"
-              title={item.primaryRep.email}
-              style={{ overflow: 'visible', width: '0px' }}
-            >
+            </QueueItemCell>
+            <QueueItemCell title={item.primaryRep.email} style={{ flex: '1' }}>
               {item.primaryRep.email ? (
-                item.primaryRep.email === user.email ? (
-                  <button
-                    className="QueueItem__isRep"
-                    onClick={() => handleUnclaimClick(dispatch, Application)}
-                  >
-                    <UserContainer>
-                      <ProfilePictureContainer>
-                        <ProfilePicture size={34} user={item.primaryRep} />
-                      </ProfilePictureContainer>
-                      <UserTextContainer>
-                        <div className="QueueItem__link-main">
-                          {item.primaryRep.firstName} {item.primaryRep.lastName}
-                        </div>
-                        <div className="QueueItem__link-sub">
-                          {item.primaryRep.email}
-                        </div>
-                      </UserTextContainer>
-                    </UserContainer>
-                  </button>
-                ) : (
-                  <UserContainer>
-                    <ProfilePictureContainer>
-                      <ProfilePicture size={34} user={item.primaryRep} />
-                    </ProfilePictureContainer>
-                    <UserTextContainer>
-                      <div className="QueueItem__link-main">
-                        {item.primaryRep.firstName} {item.primaryRep.lastName}
-                      </div>
-                      <div className="QueueItem__link-sub">
-                        {item.primaryRep.email}
-                      </div>
-                    </UserTextContainer>
-                  </UserContainer>
-                )
+                <UserContainer
+                  onClick={
+                    item.primaryRep.email === user.email
+                      ? () => handleUnclaimClick(dispatch, Application)
+                      : () => {}
+                  }
+                  isRep={item.primaryRep.email === user.email}
+                >
+                  <ProfilePictureContainer>
+                    <ProfilePicture size={34} user={item.primaryRep} />
+                  </ProfilePictureContainer>
+                  <UserTextContainer>
+                    <QueueActionsItemLinkMain>
+                      {item.primaryRep.firstName} {item.primaryRep.lastName}
+                    </QueueActionsItemLinkMain>
+                    <QueueActionsItemLinkSub>
+                      {item.primaryRep.email}
+                    </QueueActionsItemLinkSub>
+                  </UserTextContainer>
+                </UserContainer>
               ) : (
                 <Button
                   onClick={() =>
@@ -245,62 +216,50 @@ class QueueItem extends Component {
                   }
                   text="Claim"
                   permission="CLAIM_UNCLAIM_APPLICATION"
+                  isSubmitting={queue.isUpdating}
                 />
               )}
-            </li>
-            <li className="QueueItem__cell QueueItem__cell--sm QueueItem__cell--align-right">
-              <button
-                className="QueueItem__menu-dots"
+            </QueueItemCell>
+            <QueueItemCell style={{ flex: '0.2', textAlign: 'right' }}>
+              <QueueActionsItemMenuButton
                 onClick={event => this.handleActionMenuClick(event, item.id)}
               >
-                <MenuDots
-                  className={`QueueItem__menu-dots-icon ${addClassNameIf(
-                    showQueueMenu === item.id,
-                    'QueueItem__menu-dots-icon--active',
-                  )}`}
-                />
-              </button>
-              <Transition transitionName="QueueActions">
-                {showQueueMenu === item.id && (
-                  <div className="QueueActions">
-                    {/* Removing this for cherry POC. We don't support a product page anywhere in GAC */}
-                    {false &&
-                      productLink && (
-                        <Link className="QueueActions__item" to={productLink}>
-                          View Product
-                        </Link>
-                      )}
-                    <Link className="QueueActions__item" to={memberLink}>
-                      View Member Profile
-                    </Link>
-                    <Link className="QueueActions__item" to={workbenchLink}>
-                      Application
-                    </Link>
-                    {item.primaryRep.email && (
-                      <button
-                        className="QueueActions__item"
-                        onClick={() =>
-                          handleUnclaimClick(dispatch, Application)
-                        }
-                      >
-                        Unclaim Application
-                      </button>
+                <QueueItemMenuDotsIcon vertical={true} />
+              </QueueActionsItemMenuButton>
+              {showQueueMenu === item.id && (
+                <QueueActions>
+                  {false &&
+                    productLink && (
+                      <QueueActionsItemLink to={productLink}>
+                        View Product
+                      </QueueActionsItemLink>
                     )}
-                    {this.hasPermission('ASSIGN_APPLICATION') && (
-                      <button
-                        className="QueueActions__item"
-                        onClick={() => this.handleAssignClick(Application)}
-                      >
-                        Assign Application
-                      </button>
-                    )}
-                  </div>
-                )}
-              </Transition>
-            </li>
-          </ul>
+                  <QueueActionsItemLink to={memberLink}>
+                    View Member Profile
+                  </QueueActionsItemLink>
+                  <QueueActionsItemLink to={workbenchLink}>
+                    Application
+                  </QueueActionsItemLink>
+                  {item.primaryRep.email === user.email && (
+                    <QueueActionsItemButton
+                      onClick={() => handleUnclaimClick(dispatch, Application)}
+                    >
+                      Unclaim Application
+                    </QueueActionsItemButton>
+                  )}
+                  {this.hasPermission('ASSIGN_APPLICATION') && (
+                    <QueueActionsItemButton
+                      onClick={() => this.handleAssignClick(Application)}
+                    >
+                      Assign Application
+                    </QueueActionsItemButton>
+                  )}
+                </QueueActions>
+              )}
+            </QueueItemCell>
+          </QueueItemWrapper>
         </FadeIn>
-      </li>
+      </QueueItemList>
     );
   }
 }
@@ -314,7 +273,7 @@ QueueItem.propTypes = {
   item: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   ).isRequired,
-  showQueueMenu: PropTypes.string,
+  showQueueMenu: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   permissions: PropTypes.objectOf(PropTypes.bool).isRequired,
   org: PropTypes.string.isRequired,
   user: PropTypes.objectOf(
@@ -329,6 +288,7 @@ QueueItem.propTypes = {
 
 const mapStateToProps = state => ({
   org: state.auth.organization,
+  queue: state.queue,
 });
 
 export default connect(mapStateToProps)(QueueItem);

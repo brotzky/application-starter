@@ -18,6 +18,7 @@ import {
 } from 'grow-actions/workbench/constants';
 import { FRAUD, FSR_AND_FSA, OTHER_ON_HOLD } from '../constants';
 import { getPermission } from 'grow-utils/permissionCheck';
+import { QUEUE_IS_STALE } from '../../shell/actions/actions-update-queue-state';
 
 const Form = styled.form`
   max-width: 900px;
@@ -41,6 +42,21 @@ const Checkboxes = styled.div`
     width: 250px;
   }
 `;
+
+const StatusTextarea = styled.textarea`
+  overflow: auto;
+  outline: none;
+  width: 100%;
+  min-height: 145px;
+  padding: 1.5rem;
+  border: 1px solid #dee4e7;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  resize: none;
+  line-height: 1.5;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+`;
+
 class StatusOnHoldForm extends PureComponent {
   constructor(props) {
     super(props);
@@ -102,6 +118,9 @@ class StatusOnHoldForm extends PureComponent {
             type: UPDATE_LAST_ON_HOLD_TRANSITIONS,
             payload: response.payload.data,
           });
+          dispatch({
+            type: QUEUE_IS_STALE,
+          });
         }
       });
     } else {
@@ -157,18 +176,15 @@ class StatusOnHoldForm extends PureComponent {
         {otherCheckbox && (
           <FadeIn>
             <Field
-              component="textarea"
+              component={StatusTextarea}
               autoFocus
               name="onHoldOtherComment"
-              className="RecommendationFormTextarea"
               placeholder="Please provide your on hold reason"
             />
           </FadeIn>
         )}
         {this.state.submitError && (
-          <p className="LoanBookEditPaymentScheduleForm__error">
-            Please provide at least one on hold reason
-          </p>
+          <p>Please provide at least one on hold reason</p>
         )}
         <Field
           name="submitButton"

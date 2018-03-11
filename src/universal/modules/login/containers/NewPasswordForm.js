@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { ThemeProvider } from 'styled-components';
 import { AUTH_RESET_LOGIN_MESSAGE } from 'grow-actions/auth/constants';
-import { FormButton, Text, TextLink } from '../../forms/fields/';
+import { LoginForm as FormContainer } from 'gac-ui/components';
+import { FormButton, Text } from '../../forms/fields/';
 import { ArrowRight } from '../../ui/icons/';
 import { theme } from '../../../themes/';
 
@@ -57,15 +58,10 @@ class NewPasswordForm extends Component {
             defaultMessage: 'is required',
           };
 
-    const fieldProps = {
-      className: 'LoginForm',
-    };
-
     return (
-      <form
+      <FormContainer
         onSubmit={handleSubmit}
         onChange={this.handleChange}
-        className="c-form LoginForm"
         id="login-form"
       >
         <ThemeProvider theme={LoginFormTheme}>
@@ -77,7 +73,6 @@ class NewPasswordForm extends Component {
                 type="password"
                 validate={required}
                 label="New password"
-                {...fieldProps}
               />
             </fieldset>
             <fieldset>
@@ -87,7 +82,6 @@ class NewPasswordForm extends Component {
                 type="password"
                 validate={required}
                 label="Confirm password"
-                {...fieldProps}
               />
             </fieldset>
             {passwordValidationMessage}
@@ -98,12 +92,11 @@ class NewPasswordForm extends Component {
                 buttonText="Continue"
                 isSubmitting={submitting}
                 icon={ArrowRight}
-                {...fieldProps}
               />
             </fieldset>
           </div>
         </ThemeProvider>
-      </form>
+      </FormContainer>
     );
   }
 }

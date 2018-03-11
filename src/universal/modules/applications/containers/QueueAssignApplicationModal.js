@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { getUsers } from 'grow-actions/user/user';
 import { updateProductApplication } from 'grow-actions/product-applications/product-applications';
 import ModalContent from '../../ui/modal/components/ModalContent';
@@ -9,6 +10,64 @@ import { FadeIn } from '../../ui/transitions/';
 import { Button } from '../../ui/components';
 import Spinner from '../../ui/spinner/spinner';
 
+const QueueItem = styled.li`
+  padding: 0 2.4rem;
+  position: relative;
+  background: white;
+
+  &:nth-child(even) {
+    background: #fafafa;
+  }
+`;
+
+const QueueItemCellBase = styled.div`
+  display: block;
+  flex: 1;
+  padding: 1.37rem 1.37rem 1.37rem 0;
+  text-overflow: ellipsis;
+  color: ${props => props.theme.colors.black};
+  font-size: 1.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:last-child {
+    padding-right: 0;
+  }
+`;
+
+const QueueItemCell = QueueItemCellBase.extend`
+  flex: 2;
+`;
+
+const QueueItemButtonWrap = QueueItemCellBase.withComponent('span');
+
+const QueueItemButtonWrapper = QueueItemButtonWrap.extend`
+  text-align: right;
+`;
+
+const QueueWrapper = styled.div`
+  margin: 0 auto;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+`;
+
+const QueueList = styled.ul`
+  list-style-type: none;
+  max-height: 250px;
+  overflow-y: scroll;
+  border: 1px solid #e3e3e3;
+  border-radius: 2px;
+`;
+
+const Heading = styled.h3`
+  display: block;
+  margin-bottom: 3.4rem;
+  font-size: 5rem;
+  font-weight: 600;
+  line-height: 1.5;
+`;
 class QueueAssignApplicationModal extends Component {
   static propTypes = {
     application: PropTypes.object,
@@ -29,16 +88,16 @@ class QueueAssignApplicationModal extends Component {
     const { application, dispatch } = this.props;
     const body = { primaryRep: user.email, currentStep: null };
 
-    return dispatch(
-      updateProductApplication(application.getId(), body),
-    ).then(() => {
-      dispatch(hideModal());
-    });
+    return dispatch(updateProductApplication(application.getId(), body)).then(
+      () => {
+        dispatch(hideModal());
+      },
+    );
   }
 
   renderUsersList(users, currentUser, primaryRep) {
     return (
-      <ul className="QueueList QueueAssignApplication">
+      <QueueList>
         <FadeIn>
           {users
             .filter(
@@ -46,30 +105,27 @@ class QueueAssignApplicationModal extends Component {
                 user.email !== currentUser.email && user.email !== primaryRep,
             )
             .map(user => (
-              <li key={user.email} className="QueueItem">
-                <div className="Queue__wrapper QueueItem__wrapper">
-                  <div style={{ flex: 2 }} className="QueueItem__cell">
+              <QueueItem key={user.email}>
+                <QueueWrapper>
+                  <QueueItemCell>
                     <div style={{ fontWeight: 500 }}>
                       {user.firstName} {user.lastName}
                     </div>
                     <div>{user.email}</div>
-                  </div>
+                  </QueueItemCell>
 
-                  <span
-                    className="QueueItem__cell"
-                    style={{ textAlign: 'right' }}
-                  >
+                  <QueueItemButtonWrapper>
                     <Button
                       onClick={() => this.handleAssignClick(user)}
                       permission="CLAIM_UNCLAIM_APPLICATION"
                       text="Assign"
                     />
-                  </span>
-                </div>
-              </li>
+                  </QueueItemButtonWrapper>
+                </QueueWrapper>
+              </QueueItem>
             ))}
         </FadeIn>
-      </ul>
+      </QueueList>
     );
   }
 
@@ -86,11 +142,11 @@ class QueueAssignApplicationModal extends Component {
         modalAction={() => dispatch(hideModal())}
         modalFullscreen={false}
       >
-        <div className="QueueAssignApplicationModal">
-          <h3 className="u-heading-5">
+        <div>
+          <Heading>
             Assign this {application.getPrettyName()} application
-          </h3>
-          <p className="QueueAssignApplicationModal__copy">
+          </Heading>
+          <p style={{ marginBottom: '4.8rem' }}>
             Select the user you would like to assign this application to.
           </p>
           {isFetching ? (

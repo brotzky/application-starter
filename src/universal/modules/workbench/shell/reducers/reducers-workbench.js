@@ -8,6 +8,7 @@ import {
   UPDATE_LAST_ON_HOLD_TRANSITIONS,
   UPDATE_LAST_FRAUD_TRANSITIONS,
   UPDATE_LAST_ACTIVE_TRANSITIONS,
+  UPDATE_LAST_CANCELLED_TRANSITIONS,
 } from 'grow-actions/workbench/constants';
 
 import {
@@ -191,6 +192,7 @@ export function workbenchReducer(state = initialState, action) {
           onHold: { reasons: [], note: '' },
           fraud: { reasons: [], note: '' },
           declined: action.payload,
+          cancelled: { reasons: [], note: '' },
         },
       });
     case UPDATE_LAST_ON_HOLD_TRANSITIONS:
@@ -199,6 +201,7 @@ export function workbenchReducer(state = initialState, action) {
           declined: { reasons: [], note: '' },
           fraud: { reasons: [], note: '' },
           onHold: action.payload,
+          cancelled: { reasons: [], note: '' },
         },
       });
     case UPDATE_LAST_FRAUD_TRANSITIONS:
@@ -207,17 +210,19 @@ export function workbenchReducer(state = initialState, action) {
           onHold: { reasons: [], note: '' },
           declined: { reasons: [], note: '' },
           fraud: action.payload,
+          cancelled: { reasons: [], note: '' },
         },
       });
     case UPDATE_LAST_ACTIVE_TRANSITIONS:
+    case UPDATE_LAST_CANCELLED_TRANSITIONS: //TODO update reasons for cancelled transitions
       return Object.assign({}, state, {
         transitions: {
           declined: { reasons: [], note: '' },
           onHold: { reasons: [], note: '' },
           fraud: { reasons: [], note: '' },
+          cancelled: { reasons: [], note: '' },
         },
       });
-
     case RESET_WORKBENCH:
       return Object.assign({}, state, {
         id: '',

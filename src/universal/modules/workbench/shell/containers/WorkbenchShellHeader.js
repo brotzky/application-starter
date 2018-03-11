@@ -31,6 +31,25 @@ const ChevronContainer = styled.span`
   transform: rotate(${props => (props.show ? '180' : '0')}deg);
 `;
 
+const HeaderContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  background: #fff;
+  padding: 1.7rem 2.8125rem;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+`;
+
+const Header = styled.h1`
+  display: flex;
+  align-items: center;
+  font-size: 2.2rem;
+  font-weight: 600;
+  cursor: pointer;
+`;
 class WorkbenchShellHeader extends PureComponent {
   state = {
     showOverview: false,
@@ -41,17 +60,15 @@ class WorkbenchShellHeader extends PureComponent {
   };
 
   render() {
-    const { dispatch, params, workbench, user, org } = this.props;
+    const { dispatch, member, params, workbench, user, org } = this.props;
     const { showOverview } = this.state;
     const Application = productApplication(org, this.props.workbench);
     const userHasClaimedApplication = workbench.primaryRep.email === user.email;
+
     return (
       <div>
-        <div className="WorkbenchShellHeader">
-          <h1
-            className="WorkbenchShellHeader__header"
-            onClick={this.toggleDetails}
-          >
+        <HeaderContainer>
+          <Header onClick={this.toggleDetails}>
             {capitalizeString(params.workbenchProduct, '-', ' ')} Application{' '}
             <ChevronContainer
               id="WorkbenchShellHeaderChevron"
@@ -59,17 +76,18 @@ class WorkbenchShellHeader extends PureComponent {
             >
               <ChevronDown width="12" height="12" />
             </ChevronContainer>
-          </h1>
+          </Header>
           <FadeIn>
             {!workbench.isFetching && (
-              <div className="WorkbenchShellHeader__actions">
+              <div style={{ display: 'flex' }}>
                 <Button
                   onClick={() =>
                     dispatch(
                       showModal('QUEUE_ASSIGN_APPLICATION_MODAL', {
                         application: Application,
                       }),
-                    )}
+                    )
+                  }
                   text="Assign"
                   id="Assign"
                   appearance="transparent"
@@ -80,10 +98,12 @@ class WorkbenchShellHeader extends PureComponent {
                     onClick={() =>
                       userHasClaimedApplication
                         ? handleUnclaimClick(dispatch, Application)
-                        : handleClaimClick(dispatch, Application, user.email)}
+                        : handleClaimClick(dispatch, Application, user.email)
+                    }
                     appearance={
                       userHasClaimedApplication ? 'secondary' : 'primary'
                     }
+                    isSubmitting={member.isUpdating}
                     text={userHasClaimedApplication ? 'Unclaim' : 'Claim'}
                     id={userHasClaimedApplication ? 'Unclaim' : 'Claim'}
                     permission="CLAIM_UNCLAIM_APPLICATION"
@@ -92,7 +112,7 @@ class WorkbenchShellHeader extends PureComponent {
               </div>
             )}
           </FadeIn>
-        </div>
+        </HeaderContainer>
         {showOverview && <WorkbenchShellOverview params={params} />}
       </div>
     );
@@ -111,6 +131,7 @@ const mapStateToProps = state => ({
   workbench: state.workbench,
   user: state.user,
   org: state.auth.organization,
+  member: state.member,
 });
 
 export default connect(mapStateToProps)(WorkbenchShellHeader);

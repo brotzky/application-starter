@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { initialize } from 'redux-form';
 import { getRole } from 'grow-actions/roles/roles';
 import styled from 'styled-components';
-
+import {
+  isFetchingRolePropType,
+  rolePropType,
+  permissionsPropType,
+} from 'gac-utils/proptypes';
 import { Card } from '../../../ui/components';
 import buildPermissionsConfig from '../../utils/buildPermissionsConfig';
 import RoleFormPlaceholder from '../components/RoleFormPlaceholder';
@@ -18,6 +22,7 @@ import { FadeIn } from '../../../ui/transitions/';
 const ButtonRow = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding: 0 3.375rem;
 `;
 
 const ProfileCard = styled(Card)`
@@ -45,10 +50,10 @@ class Role extends Component {
 
   /**
    * handleInitializeForm()
-   * 
+   *
    * Takes in the roles object returned form backed on getRole() action and formats
    * it for redux-forms specific way. This will initialize the form properly
-   * 
+   *
    * @memberof Role
    */
   handleInitializeForm = role => {
@@ -93,9 +98,9 @@ class Role extends Component {
               </ProfileCard>
             </AccountShellCreateSection>
             {/**
-                * Loop over all the permissionConfigs[] defined on Frontend and
-                * create a form that can be updated or created.
-                */}
+             * Loop over all the permissionConfigs[] defined on Frontend and
+             * create a form that can be updated or created.
+             */}
             {buildPermissionsConfig(permissions).map(perm => (
               <AccountShellCreateSection header={perm.name}>
                 <ProfileCard>
@@ -116,6 +121,12 @@ class Role extends Component {
     );
   }
 }
+
+Role.propTypes = {
+  isFetchingRole: isFetchingRolePropType.isRequired,
+  role: rolePropType.isRequired,
+  permissions: permissionsPropType.isRequired,
+};
 
 const mapStateToProps = state => ({
   role: state.users.role,

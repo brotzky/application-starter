@@ -1,6 +1,7 @@
 {
   "license": "ISC",
   "scripts": {
+    "start": "yarn dev",
     "dev": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development node ./src/server/entry.js",
     "prod": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production node ./src/server/entry.js",
     "build:client": "NODE_ENV=development webpack --config ./webpack/webpack.production.config.js",
@@ -31,6 +32,7 @@
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
+    "react-select": "^1.2.1",
     "react-text-mask": "^5.1.0",
     "redial": "^0.5.0",
     "redux": "^3.7.2",

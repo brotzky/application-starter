@@ -45,6 +45,7 @@ import {
   MEMBER_DOES_NOT_WANT_TO_PROCEED_WITH_APPLICATION,
   OTHER_DECLINED,
 } from '../constants';
+import { QUEUE_IS_STALE } from '../../shell/actions/actions-update-queue-state';
 import { getPermission } from 'grow-utils/permissionCheck';
 
 const Form = styled.form`
@@ -69,6 +70,21 @@ const Checkboxes = styled.div`
     width: 400px;
   }
 `;
+
+const StatusTextarea = styled.textarea`
+  overflow: auto;
+  outline: none;
+  width: 100%;
+  min-height: 145px;
+  padding: 1.5rem;
+  border: 1px solid #dee4e7;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  resize: none;
+  line-height: 1.5;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+`;
+
 class StatusDeclineForm extends PureComponent {
   constructor(props) {
     super(props);
@@ -124,6 +140,9 @@ class StatusDeclineForm extends PureComponent {
           dispatch({
             type: UPDATE_LAST_DECLINED_TRANSITIONS,
             payload: response.payload.data,
+          });
+          dispatch({
+            type: QUEUE_IS_STALE,
           });
         }
       });
@@ -431,7 +450,7 @@ class StatusDeclineForm extends PureComponent {
               component="textarea"
               autoFocus
               name="declinedOtherComment"
-              className="RecommendationFormTextarea"
+              className={StatusTextarea}
               placeholder="Please provide your decline reason"
             />
           </FadeIn>

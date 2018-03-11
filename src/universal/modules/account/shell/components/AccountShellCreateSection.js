@@ -8,9 +8,13 @@ const AccountShellCreateSectionContainer = styled.div`
   padding: 2.25rem 3.375rem 4.5rem;
 `;
 
-const AccountShellCreateSectionLeft = styled.div`flex: 0.45;`;
+const AccountShellCreateSectionLeft = styled.div`
+  flex: 0.45;
+`;
 
-const AccountShellCreateSectionRight = styled.div`flex: 0.55;`;
+const AccountShellCreateSectionRight = styled.div`
+  flex: 0.55;
+`;
 
 const AccountShellCreateSectionHeader = styled.h2`
   font-size: 1.6rem;
@@ -27,7 +31,7 @@ const AccountShellCreateSectionText = styled.p`
 
 /**
  * <AccountShellCreateSection />
- * 
+ *
  */
 const AccountShellCreateSection = ({ children, header, text }) => {
   return (

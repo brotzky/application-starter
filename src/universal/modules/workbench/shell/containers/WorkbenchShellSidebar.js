@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { WorkbenchShellSidebar as SideBarWrapper } from 'gac-utils/sc';
 import WorkbenchShellNav from './WorkbenchShellNav';
 import WorkbenchShellDepositAccount from '../components/WorkbenchShellDepositAccount';
-// import WorkbenchShellSidebarProgressPlaceholder from '../components/WorkbenchShellSidebarProgressPlaceholder';
-// import WorkbenchShellSidebarProgress from '../components/WorkbenchShellSidebarProgress';
+import WorkbenchShellSidebarProgressPlaceholder from '../components/WorkbenchShellSidebarProgressPlaceholder';
+import WorkbenchShellSidebarProgress from '../components/WorkbenchShellSidebarProgress';
 
 /**
  * WorkbenchShellSidebar is the sidebar of the workbench.
@@ -21,7 +22,7 @@ class WorkbenchShellSidebar extends Component {
           {links.depositAccountDetails && (
             <WorkbenchShellDepositAccount workbench={workbench} />
           )}
-          {/* <WorkbenchShellSidebarProgress /> */}
+          <WorkbenchShellSidebarProgress />
         </div>
       )
     );
@@ -38,16 +39,16 @@ class WorkbenchShellSidebar extends Component {
     const isLoading = isFetching || user.isFetching || !isLoaded;
 
     return (
-      <div className="WorkbenchShellSidebar">
+      <SideBarWrapper>
         <WorkbenchShellNav params={params} />
-        {/* {isLoading &&
-        isLoaded && (
-          <WorkbenchShellSidebarProgressPlaceholder
-            length={config.progress.steps.length}
-          />
-        )} */}
+        {isLoading &&
+          isLoaded && (
+            <WorkbenchShellSidebarProgressPlaceholder
+              length={config.progress.steps.length}
+            />
+          )}
         {!isLoading && this.renderWorkbenchShellApplication()}
-      </div>
+      </SideBarWrapper>
     );
   }
 }

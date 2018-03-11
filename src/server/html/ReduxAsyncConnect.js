@@ -1,21 +1,19 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Route } from 'react-router';
+import { withRouter, Route } from 'react-router-dom';
 import { trigger } from 'redial';
 // import NProgress from 'nprogress';
 import asyncMatchRoutes from '../utils/asyncMatchRoutes';
 
-@withRouter
-export default class ReduxAsyncConnect extends Component {
+class ReduxAsyncConnect extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     history: PropTypes.objectOf(PropTypes.any).isRequired,
-    location: PropTypes.objectOf(PropTypes.any).isRequired
+    location: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   state = {
-    previousLocation: null
+    previousLocation: null,
   };
 
   componentWillMount() {
@@ -23,9 +21,7 @@ export default class ReduxAsyncConnect extends Component {
   }
 
   async componentWillReceiveProps(nextProps) {
-    const {
-      history, location, routes, store, helpers
-    } = this.props;
+    const { history, location, routes, store, helpers } = this.props;
     const navigated = nextProps.location !== location;
 
     if (navigated) {
@@ -34,7 +30,10 @@ export default class ReduxAsyncConnect extends Component {
       this.setState({ previousLocation: location });
 
       // load data while the old screen remains
-      const { components, match, params } = await asyncMatchRoutes(routes, nextProps.location.pathname);
+      const { components, match, params } = await asyncMatchRoutes(
+        routes,
+        nextProps.location.pathname,
+      );
 
       await trigger('fetch', components, {
         ...helpers,
@@ -42,7 +41,7 @@ export default class ReduxAsyncConnect extends Component {
         match,
         params,
         history,
-        location: nextProps.location
+        location: nextProps.location,
       });
       if (__CLIENT__) {
         await trigger('defer', components, {
@@ -50,7 +49,7 @@ export default class ReduxAsyncConnect extends Component {
           store,
           match,
           history,
-          location: nextProps.location
+          location: nextProps.location,
         });
       }
 
@@ -66,6 +65,10 @@ export default class ReduxAsyncConnect extends Component {
 
     // use a controlled <Route> to trick all descendants into
     // rendering the old location
-    return <Route location={previousLocation || location} render={() => children} />;
+    return (
+      <Route location={previousLocation || location} render={() => children} />
+    );
   }
 }
+
+export default withRouter(ReduxAsyncConnect);

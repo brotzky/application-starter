@@ -1,23 +1,29 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider, injectGlobal } from 'styled-components';
-import { Router } from 'react-router';
+import { Router } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
-import Routes from '../routes';
+import { renderRoutes } from 'react-router-config';
+import { routes } from '../routes';
 import { theme } from '../themes/';
-
+import ReduxAsyncConnect from '../../server/html/ReduxAsyncConnect';
 /**
  * <App />
  * the highest level component responsible for Providing the
  * redux store to our entire application and also the routes.
  * This component is not visually rendered.
  */
+
+const providers = {};
+
 const App = ({ store, history }) => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <ConnectedRouter history={history}>
-          <Routes />
+          <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
+            {renderRoutes(routes)}
+          </ReduxAsyncConnect>
         </ConnectedRouter>
       </ThemeProvider>
     </Provider>
@@ -90,6 +96,7 @@ export const globalStyles = () => injectGlobal`
   h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     line-height: 1.25;
+    color ${theme.colors.black};
   }
 
   button,
@@ -98,33 +105,13 @@ export const globalStyles = () => injectGlobal`
     cursor: pointer;
   }
 
-  button {
-    cursor: pointer;
-    background: transparent;
-    -webkit-tap-highlight-color: transparent;
-
-    &:focus,
-    &:active {
-      outline: none;
-    }
+  a {
+    color: ${theme.colors.black};
   }
 
-  .submitting {
-    cursor: wait;
+  p {
+    color: ${theme.colors.black};
   }
-
-  main {
-    display: block; 
-  }
-
-  pre {
-    overflow: auto;
-  }
-
-  textarea {
-    overflow: auto;
-  }
-
   [hidden] {
     display: none;
   }
@@ -142,9 +129,24 @@ export const globalStyles = () => injectGlobal`
     vertical-align: middle;
   }
 
-  select::-ms-expand {
-    display: none;
-  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+
+    &::-ms-expand {
+      display: none;
+    }
+
+    option {
+      color: #262626;
+    }
+}
+
 
   input, textarea, select, button {
     font-family: '-apple-system',
@@ -185,6 +187,7 @@ export const globalStyles = () => injectGlobal`
   button {
     appearance: none;
     border: none;
+    outline: none;
   }
 
   table {
@@ -226,6 +229,343 @@ export const globalStyles = () => injectGlobal`
       &::-webkit-search-cancel-button,
       &::-webkit-search-decoration {
         -webkit-appearance: none;
+      }
+    }
+  }
+
+
+  /**
+  * transition styles for all reactcsstransitiongroup
+  * components we are using within the application
+  */
+
+  /* ========================
+  * FadeIn
+  =========================*/
+  .FadeIn-appear {
+    opacity: 0.01;
+  }
+
+  .FadeIn-appear.FadeIn-appear-active {
+    opacity: 1;
+    transition: opacity 366ms cubic-bezier(0.39, 0.575, 0.565, 1);
+  }
+
+  .FadeIn {
+    &-enter {
+      opacity: 0.01;
+    }
+
+    &-enter-active {
+      opacity: 1;
+      transition: all 366ms ease-out;
+    }
+
+    &-leave {
+      opacity: 1;
+    }
+
+    &-leave-active {
+      opacity: 0;
+      transition: all 366ms ease-out;
+    }
+  }
+
+  /* ========================
+  * FadeInFast
+  =========================*/
+  .FadeInFast-appear {
+    opacity: 0.01;
+  }
+  .FadeInFast-appear.FadeInFast-appear-active {
+    opacity: 1;
+    transition: opacity 200ms cubic-bezier(0.39, 0.575, 0.565, 1);
+  }
+
+  .QueueActions {
+    position: absolute;
+    right: 3rem;
+    top: 42px;
+    z-index: 2;
+    border-radius: 2px;
+    padding: 1rem 0;
+    background: white;
+    box-shadow: 0 0 0 1px rgba(99,114,130,.1), 0 8px 30px rgba(27,39,51,.08);
+    transition: all 200ms ease;
+
+    &-enter {
+      transform-origin: right top;
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    &-enter-active {
+      transform: scale(1);
+      opacity: 1;
+      transition: all 280ms ease;
+
+    }
+
+    &-leave {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-leave-active {
+      opacity: 0;
+      transform: translateY(5%);
+      transition: all 200ms ease;
+    }
+  }
+
+  .MemberNoteComposer {
+    position: fixed;
+    z-index: 10;
+    bottom: 2.4rem;
+    right: 2.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    &-enter {
+      transform: scale(0.8);
+    }
+
+    &-enter-active {
+      transform: none;
+      transition: all 250ms ease-out;
+    }
+
+    &-leave {
+      transform: none;
+    }
+
+    &-leave-active {
+      transform: scale(0.7);
+      opacity: 0;
+      transition: all 150ms ease-out;
+    }
+  }
+
+
+  .Modal {
+    position: fixed;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+
+    &-enter {
+      .ModalBackground {
+        opacity: 0;
+      }
+
+      .ModalDialog {
+        opacity: 0;
+        transform: translateY(8%);
+      }
+    }
+
+    &-enter-active {
+
+      .ModalBackground {
+        opacity: 1;
+      },
+
+      .ModalDialog {
+        opacity: 1;
+        transform:none;
+        transition: all 300ms cubic-bezier(0.39, 0.575, 0.565, 1);
+      }
+    }
+
+    &-leave {
+      opacity: 1;
+    }
+
+    &-leave-active {
+
+      .ModalDialog {
+        opacity: 0;
+        transform: translateY(-8%);
+        transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+    }
+  }
+
+  .Notification {
+    transition: all 200ms ease-out;
+
+
+    &:first-child {
+      margin-bottom: 0;
+    }
+
+    &-appear,
+    &-enter {
+      opacity: 0.01;
+      transform: translateY(-20%);
+    }
+
+    &-appear.Notification-appear-active,
+    &-enter.Notification-enter-active {
+      opacity: 1;
+      transform: none;
+      transition: all 300ms ease-out;
+    }
+
+    &-leave {
+      opacity: 1;
+    }
+
+    &-leave.Notification-leave-active {
+      opacity: 0.01;
+      transition: all 300ms ease-out;
+    }
+  }
+
+
+  .QueueActions--reverse {
+    position: absolute;
+    right: 3rem;
+    top: 42px;
+    z-index: 2;
+    border-radius: 2px;
+    padding: 0.6rem 0;
+    background: white;
+    box-shadow: 0 0 0 1px rgba(99,114,130,.1), 0 8px 30px rgba(27,39,51,.08);
+    transition: all 500ms  cubic-bezier(0.23, 1, 0.32, 1);
+
+    &-enter {
+      transform-origin: left top;
+      transform: scale(0.2);
+      opacity: 0;
+    }
+
+    &-enter-active {
+      transform: scale(1);
+      opacity: 1;
+      transition: all 500ms  cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    &-leave {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-leave-active {
+      opacity: 0;
+      transform: translateY(5%);
+      transition: all 300ms  cubic-bezier(0.23, 1, 0.32, 1);
+
+    }
+
+    &__item {
+      display: block;
+      padding: (0.8rem) (2.4rem) (0.8rem) (1.6rem);
+      color: color(black);
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        background: #f1f1f1;
+      }
+    }
+  }
+
+  .QueueActions--reverse--bottom {
+    position: absolute;
+    right: 3rem;
+    top: 42px;
+    z-index: 2;
+    border-radius: 2px;
+    padding: 0.6rem 0;
+    background: white;
+    box-shadow: 0 0 0 1px rgba(99,114,130,.1), 0 8px 30px rgba(27,39,51,.08);
+    transition: all 500ms  cubic-bezier(0.23, 1, 0.32, 1);
+
+    &-enter {
+      transform-origin: left bottom;
+      transform: scale(0.2);
+      opacity: 0;
+    }
+
+    &-enter-active {
+      transform: scale(1);
+      opacity: 1;
+      transition: all 500ms  cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    &-leave {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-leave-active {
+      opacity: 0;
+      transform: translateY(5%);
+      transition: all 300ms  cubic-bezier(0.23, 1, 0.32, 1);
+
+    }
+
+    &__item {
+      display: block;
+      padding: (0.8rem) (2.4rem) (0.8rem) (1.6rem);
+      color: color(black);
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        background: #f1f1f1;
+      }
+    }
+  }
+
+  .QueueActions--reverse--top {
+    position: absolute;
+    right: 3rem;
+    top: 42px;
+    z-index: 2;
+    border-radius: 2px;
+    padding: 0.6rem 0;
+    background: white;
+    box-shadow: 0 0 0 1px rgba(99,114,130,.1), 0 8px 30px rgba(27,39,51,.08);
+    transition: all 500ms  cubic-bezier(0.23, 1, 0.32, 1);
+
+    &-enter {
+      transform-origin: left top;
+      transform: scale(0.2);
+      opacity: 0;
+    }
+
+    &-enter-active {
+      transform: scale(1);
+      opacity: 1;
+      transition: all 500ms  cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    &-leave {
+      opacity: 1;
+      transform: none;
+    }
+
+    &-leave-active {
+      opacity: 0;
+      transform: translateY(5%);
+      transition: all 300ms  cubic-bezier(0.23, 1, 0.32, 1);
+
+    }
+
+    &__item {
+      display: block;
+      padding: (0.8rem) (2.4rem) (0.8rem) (1.6rem);
+      color: color(black);
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        background: #f1f1f1;
       }
     }
   }

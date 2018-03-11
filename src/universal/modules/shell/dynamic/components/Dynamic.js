@@ -1,8 +1,5 @@
 import React from 'react';
 
-const Dynamic = ({ children }) =>
-  <div className="Dynamic">
-    {children}
-  </div>;
+const Dynamic = ({ children }) => <div>{children}</div>;
 
 export default Dynamic;

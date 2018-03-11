@@ -12,11 +12,12 @@ import ProfileFormPlaceholder from '../components/ProfileFormPlaceholder';
 import AccountShellWrapper from '../../shell/containers/AccountShellWrapper';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
 import AccountShellSection from '../../shell/components/AccountShellSection';
-import UsersCreateTitle from '../../users/components/UsersCreateTitle';
 import UsersCreatePersonalFormWrapper from '../../users/components/UsersCreatePersonalForm';
 import { FadeIn } from '../../../ui/transitions/';
 
 import UsersCreateSubmitForm from '../../users/components/UsersCreateSubmitForm';
+import AccountShellCreateSection from '../../shell/components/AccountShellCreateSection';
+import AccountShellSubmitFooter from '../../shell/components/AccountShellSubmitFooter';
 
 import ProfilePictureSection from '../components/ProfilePictureSection';
 import ProfileTwoFactorSection from '../components/ProfileTwoFactorSection';
@@ -26,6 +27,19 @@ import ProfilePasswordSection from '../components/ProfilePasswordSection';
 const ProfileCard = styled(Card)`
   flex: 0.6;
   padding: 2.4rem;
+`;
+
+const UsersCreateSection = styled.div`
+  display: flex;
+  border-top: 1px solid #dadada;
+  justify-content: space-between;
+  padding: 2.4rem 3.6rem 4.8rem;
+`;
+
+const UsersCreateSectionSubmit = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 3.6rem 4.8rem;
 `;
 
 const profileSections = [
@@ -115,11 +129,10 @@ class Profile extends Component {
           padding
         />
 
-        <div className="UsersCreateSection">
-          <UsersCreateTitle
-            header="Account information"
-            text="Email address cannot be updated"
-          />
+        <AccountShellCreateSection
+          header="Account information"
+          text="Email address cannot be updated"
+        >
           <ProfileCard>
             {profileHasLoaded ? (
               <FadeIn>
@@ -129,14 +142,17 @@ class Profile extends Component {
               <ProfileFormPlaceholder />
             )}
           </ProfileCard>
-        </div>
+        </AccountShellCreateSection>
 
         {profileSections.map(section => {
           const SectionComponent = section.component;
 
           return (
-            <div className="UsersCreateSection">
-              <UsersCreateTitle header={section.header} text={section.text} />
+            <AccountShellCreateSection
+              key={section.text}
+              header={section.header}
+              text={section.text}
+            >
               <ProfileCard>
                 {profileHasLoaded ? (
                   <FadeIn>
@@ -150,13 +166,13 @@ class Profile extends Component {
                   <ProfileFormPlaceholder />
                 )}
               </ProfileCard>
-            </div>
+            </AccountShellCreateSection>
           );
         })}
 
-        <div className="UsersCreateSectionSubmit">
+        <AccountShellSubmitFooter>
           <UsersCreateSubmitForm buttonText="Save" />
-        </div>
+        </AccountShellSubmitFooter>
       </AccountShellSection>
     );
   }

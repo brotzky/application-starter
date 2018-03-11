@@ -77,6 +77,7 @@ class Users extends Component {
               users={this.state.filteredUsers}
               isFetching={isFetching}
               permissions={permissions}
+              dispatch={dispatch}
             />
           )}
         </AccountShellSection>

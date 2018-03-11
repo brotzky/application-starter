@@ -1,8 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 import { ChevronDown } from '../../../ui/icons/';
 import SecondaryNavApplicationsItem from './SecondaryNavApplicationsItem';
+import { SecondaryNavListItem, SecondaryNavListNested } from 'gac-utils/sc';
+
+const StyledChevronDown = styled(ChevronDown)`     
+width: 12px;
+height: 12px;
+margin-left: 0.6rem;
+position: relative;
+* {
+  fill: ${props => props.theme.colors.greyMid};
+}
+}`;
+
+const activeClassName = 'secondary-link-active';
+const StyledLink = styled(NavLink).attrs({
+  activeClassName,
+})`
+  display: block;
+  position: relative;
+  padding: 0 1rem;
+  margin: 0 1.8rem;
+  height: 50px;
+  line-height: 48px;
+  border-bottom: 2px solid transparent;
+  color: #777;
+  transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &.${activeClassName} {
+    border-color: ${props => props.theme.colors.blue};
+    color: ${props => props.theme.colors.black};
+  }
+`;
 
 class SecondaryNavApplications extends Component {
   constructor(props) {
@@ -21,7 +53,11 @@ class SecondaryNavApplications extends Component {
   render() {
     const { member, params, org } = this.props;
     const { productApplications } = member;
-    const location = window.location.pathname;
+
+    if (!productApplications[0]) {
+      return null;
+    }
+
     const firstApplicationLink = productApplications.length
       ? `/members/${member.member.id}/workbench/${
           productApplications[0].id
@@ -30,27 +66,13 @@ class SecondaryNavApplications extends Component {
     const moreThanOneApp = productApplications.length > 1;
 
     return (
-      <li className="SecondaryNavList__item">
-        <Link
-          className={`SecondaryNavList__link ${
-            location.includes('workbench')
-              ? 'SecondaryNavList__link--active'
-              : ''
-          }`}
-          to={firstApplicationLink}
-        >
+      <SecondaryNavListItem>
+        <StyledLink activeClassName={activeClassName} to={firstApplicationLink}>
           {`Application${moreThanOneApp ? 's' : ''}`}
-          {moreThanOneApp ? (
-            <ChevronDown className="SecondaryNavList__chevron" />
-          ) : (
-            ''
-          )}
-        </Link>
+          {moreThanOneApp ? <StyledChevronDown /> : ''}
+        </StyledLink>
         {moreThanOneApp && this.state.showDropdown ? (
-          <ul
-            className="SecondaryNavListNested"
-            onClick={() => this.hideDropdownOnClick()}
-          >
+          <SecondaryNavListNested onClick={() => this.hideDropdownOnClick()}>
             {member.productApplications.map(application => (
               <SecondaryNavApplicationsItem
                 key={application.id}
@@ -60,9 +82,9 @@ class SecondaryNavApplications extends Component {
                 org={org}
               />
             ))}
-          </ul>
+          </SecondaryNavListNested>
         ) : null}
-      </li>
+      </SecondaryNavListItem>
     );
   }
 }

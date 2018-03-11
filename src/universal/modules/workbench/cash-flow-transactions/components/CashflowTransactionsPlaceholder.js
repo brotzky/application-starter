@@ -1,24 +1,40 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const CashflowTransactionsPlaceholderHeader = styled.div`
+  height: 131.5px;
+  background: ${props => props.theme.colors.greyWhite};
+  padding: 3rem;
+`;
+
+const CashflowTransactionsPlaceholderList = styled.ul`
+  list-style: none;
+`;
+
+const CashflowTransactionsPlaceholderListItem = styled.li`
+  height: 58px;
+  background: ${props => props.theme.colors.greyWhite};
+
+  &:nth-child(odd) {
+    background: white;
+  }
+`;
 
 const CashflowTransactionsPlaceholder = () => (
-  <div className="CashflowTransactionsPlaceholder">
-    <div className="CashflowTransactionsPlaceholderHeader">
-      <div className="CashflowTransactionsPlaceholderHeader__heading" />
-    </div>
-    <div className="CashflowTransactionsPlaceholderSubHeader">
-      <div className="CashflowTransactionsPlaceholderSubHeader__heading" />
-    </div>
-    <ul className="CashflowTransactionsPlaceholderList">
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-      <li className="CashflowTransactionsPlaceholderList__item" />
-    </ul>
+  <div>
+    <CashflowTransactionsPlaceholderHeader />
+    <CashflowTransactionsPlaceholderHeader />
+    <CashflowTransactionsPlaceholderList>
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+      <CashflowTransactionsPlaceholderListItem />
+    </CashflowTransactionsPlaceholderList>
   </div>
 );
 

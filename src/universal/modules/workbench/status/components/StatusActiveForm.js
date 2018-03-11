@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { reduxForm, formValueSelector } from 'redux-form';
 import { hideModal } from '../../../ui/modal/actions/actions-modal';
 import {
   notificationPush,
   notificationEdit,
 } from '../../../ui/notifications/actions/';
+import { Button } from '../../../ui/components';
 import { updateOverrideNote } from 'grow-actions/status/status';
 import {
   UPDATE_APPLICATION_STATE,
   UPDATE_LAST_ACTIVE_TRANSITIONS,
 } from 'grow-actions/workbench/constants';
 import { dispatchPropType, workbenchPropType } from 'gac-utils/proptypes';
-
+import { QUEUE_IS_STALE } from '../../shell/actions/actions-update-queue-state';
+const Container = styled.div`
+  text-align: center;
+`;
 class StatusActiveForm extends Component {
   getSelectedQuote = (offers, selectedTerm) =>
     offers.filter(offer => offer.term === selectedTerm)[0];
@@ -58,21 +63,22 @@ class StatusActiveForm extends Component {
         dispatch({
           type: UPDATE_LAST_ACTIVE_TRANSITIONS,
         });
+        dispatch({
+          type: QUEUE_IS_STALE,
+        });
       }
     });
   };
 
   render() {
     return (
-      <div className="FormField ProfileFormField">
-        <button
+      <Container>
+        <Button
           type="button"
-          className="c-button FormButton ProfileFormButton"
+          text="Confirm Active"
           onClick={this.handleActiveClick}
-        >
-          <span>Confirm Active</span>
-        </button>
-      </div>
+        />
+      </Container>
     );
   }
 }

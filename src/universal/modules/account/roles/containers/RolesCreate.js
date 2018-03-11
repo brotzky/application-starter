@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -37,9 +37,9 @@ const RolesCreate = props => {
         </ProfileCard>
       </AccountShellCreateSection>
       {/**
-        * Loop over all the permissionConfigs[] defined on Frontend and
-        * create a form that can be updated or created.
-        */}
+       * Loop over all the permissionConfigs[] defined on Frontend and
+       * create a form that can be updated or created.
+       */}
       {permissionsConfig.map(perm => (
         <AccountShellCreateSection
           header={perm.name}

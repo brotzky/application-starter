@@ -4,15 +4,38 @@ import Collapse from 'react-collapse';
 import styled from 'styled-components';
 import { activeChecklistsSelector } from 'gac-utils/selectors';
 import { FadeIn } from '../../../ui/transitions';
-import ChecklistHeader from '../components/ChecklistHeader';
+// import ChecklistHeader from '../components/ChecklistHeader';
 import ChecklistList from './ChecklistList';
 import ChecklistFilter from './ChecklistFilter';
+import { mapRouteToConst } from '../../../../utils/checklist-constants';
+import { getKeyByValue } from 'grow-utils/objectFormatting';
+import { capitalizeString } from 'grow-utils/stringFormatting';
 
 const ChecklistNotFound = styled.div`
   text-align: center;
   padding: 2.5rem;
   color: ${props => props.theme.colors.greyMid};
   border-bottom: 1px solid #ebeef0;
+`;
+
+const HeaderHeadingGroup = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const SectionHeader = styled.header`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.37rem 3rem;
+  border-bottom: 1px solid #ebeef0;
+  background: #fafafa;
+`;
+
+const SectionHeaderHeading = styled.h5`
+  margin: 0;
+  font-size: 1.6rem;
 `;
 
 const Checklist = props => {
@@ -48,20 +71,29 @@ const Checklist = props => {
       {groupedChecklists
         .filter(checklist => checklist.length)
         .map(checklist => {
-          const itemsNotVerified = checklist.filter(
-            item => item.verified !== 'VERIFIED',
-          );
+          // only includes the checklist items related to current page
+          const inTheList = currVal => {
+            /**
+             * when you're at Checklist Overview, we render all checklists,
+             * else render only the ENUM defined for each sidebar section
+             */
+            if (!params.profileSection && !params.workbenchTab) {
+              return true;
+            }
+            return (
+              mapRouteToConst[params.profileSection || params.workbenchTab] &&
+              mapRouteToConst[
+                params.profileSection || params.workbenchTab
+              ].includes(currVal.name)
+            );
+          };
 
-          const firstChecklistItem = checklist[0] || {};
-          const category = firstChecklistItem.category
-            .replace(/APPLICANT_PROFILE_/, '')
-            .replace(/_/g, '-')
-            .toLowerCase();
+          const shouldRenderChecklist = checklist.every(inTheList);
 
-          const shouldRenderChecklist =
-            params.workbenchTab === category ||
-            params.profileSection === category ||
-            (!params.workbenchTab && !params.profileSection);
+          const checklistTitle =
+            params.profileSection ||
+            params.workbenchTab ||
+            getKeyByValue(mapRouteToConst, checklist[0].name);
 
           return (
             <Collapse
@@ -69,13 +101,16 @@ const Checklist = props => {
               isOpened={shouldRenderChecklist}
               springConfig={{ stiffness: 171, damping: 23 }}
             >
-              <div className="Checklist">
-                <div className="Checklist__box">
-                  <ChecklistHeader
-                    heading={firstChecklistItem.category}
-                    remaining={itemsNotVerified.length}
-                  />
-
+              <div style={{ listStyleType: 'none' }}>
+                <div>
+                  <SectionHeader>
+                    <HeaderHeadingGroup>
+                      <SectionHeaderHeading>
+                        {capitalizeString(checklistTitle, '-', ' ')} Checklist
+                        Item(s)
+                      </SectionHeaderHeading>
+                    </HeaderHeadingGroup>
+                  </SectionHeader>
                   <ChecklistList
                     checklist={checklist}
                     checklistDetails={checklistDetails}

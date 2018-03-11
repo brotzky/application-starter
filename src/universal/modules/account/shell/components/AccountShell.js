@@ -1,11 +1,17 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
+import { workbenchShell, container } from 'gac-utils/sc';
 import AuthWrapper from '../../../auth/containers/AuthWrapper';
 import AccountShellWrapper from '../containers/AccountShellWrapper';
 import AccountShellSidebar from '../components/AccountShellSidebar';
 import AccountShellDynamic from '../components/AccountShellDynamic';
 import { FadeInFast } from '../../../ui/transitions/';
 import { theme } from '../../../../themes';
+
+const WorkbenchShellContainer = styled(FadeInFast)`
+  ${workbenchShell};
+  ${container};
+`;
 
 const AccountTheme = {
   ...theme,
@@ -35,18 +41,17 @@ const AccountTheme = {
  * AccountShell - The highest level component for the Workbench view.
  * Contained within here is the Sidebar, Nav, and Dynamic content.
  */
-const AccountShell = props => {
-  const { match: { params } } = props;
+const AccountShell = ({ match: { params } }) => {
   /**
    * <AccountShellSidebar /> is the dedicated information that stays fixed
    * <AccountShellDynamic /> handles the dynamic tab rendering
    */
   return (
     <ThemeProvider theme={AccountTheme}>
-      <FadeInFast className="WorkbenchShell Container" component="div">
+      <WorkbenchShellContainer component="div">
         <AccountShellSidebar />
         <AccountShellDynamic params={params} />
-      </FadeInFast>
+      </WorkbenchShellContainer>
     </ThemeProvider>
   );
 };

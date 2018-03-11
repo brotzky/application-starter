@@ -20,8 +20,9 @@ import { AUTH_UPDATE_PERMISSION } from 'grow-actions/auth/constants';
 const FormButton = styled.form`
   display: flex;
   justify-content: flex-end;
-  margin: 4rem
-    ${props => (props.buttonText === 'Delete Role' ? '3.375rem' : '0')} 0 0;
+  padding: 2rem 3rem;
+  margin: 0 ${props => (props.buttonText === 'Delete Role' ? '3.375rem' : '0')}
+    0 0;
 `;
 
 class RolesCreateFormSubmit extends Component {
@@ -126,6 +127,7 @@ class RolesCreateFormSubmit extends Component {
       <FormButton
         buttonText={buttonText}
         onSubmit={handleSubmit(this.handleCreateRole)}
+        appearance={buttonText === 'Delete Role' ? 'secondary' : 'primary'}
       >
         <Field
           name="submitButton"
@@ -135,7 +137,6 @@ class RolesCreateFormSubmit extends Component {
           permission="EDIT_ROLE"
           size="large"
           isSubmitting={isLoading}
-          appearance={buttonText === 'Delete Role' ? 'secondary' : 'primary'}
         />
       </FormButton>
     );

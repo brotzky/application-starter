@@ -2,6 +2,9 @@ import {
   GET_USERS_REQUEST,
   GET_USERS_SUCCESS,
   GET_USERS_FAILURE,
+  GET_INVITE_REQUEST,
+  GET_INVITE_SUCCESS,
+  GET_INVITE_FAILURE,
   CREATE_USER_REQUEST,
   CREATE_USER_SUCCESS,
   CREATE_USER_FAILURE,
@@ -62,6 +65,11 @@ export default function usersReducer(state = initialState, action) {
         creatingUser: false,
         users: [action.payload.data.user, ...state.users],
       });
+    case GET_INVITE_FAILURE:
+      return Object.assign({}, state, {
+        errors: action.payload.error,
+      });
+
     case UPDATE_USER_PROFILE_SUCCESS:
       const position = state.users.findIndex(
         user => user.id === action.payload.data.user.id,

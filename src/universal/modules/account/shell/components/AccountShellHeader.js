@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { push } from 'react-router-redux';
 import { ChevronLeft } from '../../../ui/icons/';
 

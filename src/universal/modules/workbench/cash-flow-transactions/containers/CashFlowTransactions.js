@@ -12,6 +12,17 @@ import { FadeIn } from '../../../ui/transitions';
 const BankAccountsContainer = styled.div`
   padding: 2.25rem 2.8125rem;
 `;
+
+const ChecklistPlaceholder = styled.div`
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0, 0.1);
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+`;
+
 class CashFlowTransactions extends Component {
   componentDidMount() {
     const {
@@ -29,7 +40,7 @@ class CashFlowTransactions extends Component {
   renderNoData() {
     const { member, cashflowTransactions } = this.props;
     return (
-      <div className="ChecklistPlaceholder">
+      <ChecklistPlaceholder>
         <EmptyState
           Icon={EmptyCashflow}
           text={`${member.firstName} ${
@@ -37,7 +48,7 @@ class CashFlowTransactions extends Component {
           } has not connected any bank accounts yet`}
           errors={cashflowTransactions.errors}
         />
-      </div>
+      </ChecklistPlaceholder>
     );
   }
 

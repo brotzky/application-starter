@@ -1,10 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
+import {
+  CalculatorColumnOne,
+  CalculatorColumnTwo,
+  CalculatorColumnThree,
+  media,
+} from 'gac-utils/sc';
+
+const AffordabilityPlaceholderContainer = styled.div`
+  max-width: 1200px;
+  min-height: 767px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 4px;
+  overflow: hidden;
+`;
+
+const CalculatorSidebarPlaceholder = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 300px;
+  padding: 2.4rem;
+  border-right: 1px solid #ebeef0;
+
+  ${media.xlarge`
+    width: 325px;
+    padding: 2.4rem 3rem;
+  `};
+`;
 
 const ContentHeader = styled.div`
   height: 69.34px;
   width: 100%;
-  background: rgba(0, 0, 0, 0.04);
+  background: #fafafa;
   padding: 1.28571rem 1.2rem 0.75rem;
   display: flex;
   align-items: flex-end;
@@ -21,14 +50,19 @@ const ContentRow = styled.div`
 
 const ContentBottomRow = styled.div`
   border-bottom: 1px solid #efefef;
-  padding: 15px 12px 33px;
   height: 79px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.92rem 1.6rem 3.6rem;
+  background-color: white;
 `;
 
 const PlaceholderLine = styled.div`
   height: ${props => (props.height ? props.height : '10px')};
   background: #f1f1f1;
-  animation: checklist-loading 1.25s linear infinite;
+  animation: ${props => props.theme.animations.flicker} 1.25s linear infinite;
   width: ${props => props.width};
   margin-bottom: ${props => (props.header ? '8px' : '0')};
 `;
@@ -37,18 +71,12 @@ const Content = headerWidth => {
   return (
     <div>
       <ContentHeader>
-        <div className="CalculatorColumn__one">
-          <PlaceholderLine header height="25px" width={headerWidth} />
-        </div>
-        <div className="CalculatorColumn__two">
-          <PlaceholderLine header height="25px" width="52px" />
-        </div>
-        <div className="CalculatorColumn__three" />
+        <CalculatorColumnOne />
+        <CalculatorColumnTwo />
+        <CalculatorColumnThree />
       </ContentHeader>
       <ContentRow />
-      <ContentBottomRow className="CalculatorBottomRow">
-        <PlaceholderLine header height="25px" width="92px" />
-      </ContentBottomRow>
+      <ContentBottomRow />
     </div>
   );
 };
@@ -64,7 +92,7 @@ const Sidebar = () => {
         <PlaceholderLine header width="88px" />
         <PlaceholderLine height="40px" width="100%" />
       </div>
-      <div className="CalculatorResults">
+      <div>
         <PlaceholderLine header height="25px" width="126px" />
         <PlaceholderLine header height="25px" width="126px" />
         <PlaceholderLine header height="25px" width="126px" />
@@ -92,22 +120,20 @@ const Save = () => {
 };
 
 const AffordabilityPlaceholder = () => (
-  <div className="AffordabilityPlaceholder">
-    <div className="Calculator">
-      <div className="CalculatorColumn CalculatorSidebar">
+  <AffordabilityPlaceholderContainer>
+    <div style={{ display: 'flex' }}>
+      <CalculatorSidebarPlaceholder>
         <Sidebar />
         <Save />
-      </div>
-      <div className="CalculatorColumn">
-        <div className="CalculatorInputTable">
-          {Content('200px')}
-          {Content('190px')}
-          {Content('180px')}
-          {Content('150px')}
-        </div>
+      </CalculatorSidebarPlaceholder>
+      <div style={{ flex: '1' }}>
+        {Content('200px')}
+        {Content('190px')}
+        {Content('180px')}
+        {Content('150px')}
       </div>
     </div>
-  </div>
+  </AffordabilityPlaceholderContainer>
 );
 
 export default AffordabilityPlaceholder;

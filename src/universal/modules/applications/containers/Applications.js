@@ -16,7 +16,7 @@ import { FadeIn } from '../../ui/transitions/';
 import { Card } from '../../ui/components';
 import Table from '../../ui/components/Table/Table';
 import { getQueryParameters } from 'grow-utils/filters';
-import Spinner from '../../ui/Spinner';
+import { Spinner } from 'gac-ui/components/';
 
 const ApplicationsCard = styled(Card)`
   padding: 2.5rem;

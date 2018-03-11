@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import { reduxForm, Field, change } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import styled, { ThemeProvider } from 'styled-components';
 import { AUTH_RESET_LOGIN_MESSAGE } from 'grow-actions/auth/constants';
-import { FormButton, Text, TextLink, Button } from '../../forms/fields/';
+import {
+  LoginHeaderHeading,
+  LoginHeaderText,
+  LoginForm as FormContainer,
+} from 'gac-ui/components';
+import { FormButton, Text, TextLink } from '../../forms/fields/';
 import { LoginFormTheme } from './LoginForm';
-
 const LoginFormSeparator = styled.div`
   position: relative;
   display: flex;
@@ -30,7 +34,8 @@ const LoginFormSeparatorLine = styled.span`
   top: 50%;
 `;
 
-const EmailMeALinkButton = styled.div`
+const EmailMeALinkButton = styled.button`
+  width: 100%;
   cursor: pointer;
   text-align: center;
   border: 1px solid #eaeaea;
@@ -105,21 +110,16 @@ class LoginFormAuth0 extends Component {
             defaultMessage: 'is required',
           };
 
-    const fieldProps = {
-      className: 'LoginForm',
-    };
-
     return (
-      <form
+      <FormContainer
         onSubmit={handleSubmit}
         onChange={this.handleChange}
-        className="c-form LoginForm"
         id="login-form"
       >
-        <h1 className="LoginHeader__heading">Welcome back!</h1>
-        <p className="LoginHeader__text">
+        <LoginHeaderHeading>Welcome back!</LoginHeaderHeading>
+        <LoginHeaderText>
           Sign into your account with email and password or use a login link.
-        </p>
+        </LoginHeaderText>
         <ThemeProvider theme={LoginFormTheme}>
           <div>
             <fieldset>
@@ -130,7 +130,6 @@ class LoginFormAuth0 extends Component {
                 placeholder="you@example.com"
                 label="Email"
                 validate={required}
-                {...fieldProps}
               />
             </fieldset>
             <fieldset>
@@ -141,7 +140,6 @@ class LoginFormAuth0 extends Component {
                 placeholder="password"
                 label="Password"
                 validate={required}
-                {...fieldProps}
               />
             </fieldset>
             <fieldset>
@@ -150,7 +148,9 @@ class LoginFormAuth0 extends Component {
                 component={FormButton}
                 buttonText="Sign in"
                 isSubmitting={submitting}
-                {...fieldProps}
+                size="xlarge"
+                width="100%"
+                margin="1.92rem 0"
               />
             </fieldset>
             <TextLink text="Forgot password?" path="/login/password-reset" />
@@ -164,7 +164,7 @@ class LoginFormAuth0 extends Component {
             </EmailMeALinkButton>
           </div>
         </ThemeProvider>
-      </form>
+      </FormContainer>
     );
   }
 }

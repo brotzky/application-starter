@@ -7,8 +7,13 @@ import {
   addPasswordToUserFromProfile,
   updatePassword,
 } from 'grow-actions/user/user';
+import { capitalizeString } from 'grow-utils/stringFormatting';
 import UserAddNewPasswordForm from '../../users/components/UserAddNewPasswordForm';
 import { Button } from '../../../ui/components';
+import {
+  notificationPush,
+  notificationEdit,
+} from '../../../ui/notifications/actions';
 
 const ProfileHeader = styled.h3`
   font-size: 1.6rem;
@@ -18,6 +23,7 @@ const ProfileHeader = styled.h3`
 const ProfileText = styled.p`
   font-size: 1.4rem;
   color: ${props => props.theme.colors.greyDark};
+  margin-bottom: 1.5em;
 `;
 
 const PasswordValidationWrapper = styled.div`
@@ -68,7 +74,13 @@ class ProfilePasswordSection extends Component {
   updatePasswordHandler = () => {
     const { dispatch, profile: { email }, formValues } = this.props;
     const { oldPassword, newPassword } = formValues;
-
+    dispatch(
+      notificationPush({
+        id: email,
+        kind: 'loading',
+        message: `Updating password...`,
+      }),
+    );
     dispatch(
       updatePassword({
         oldPassword,
@@ -76,7 +88,18 @@ class ProfilePasswordSection extends Component {
         email,
       }),
     ).then(({ payload }) => {
-      if (!payload) {
+      dispatch(
+        notificationPush({
+          id: email,
+          kind: payload.errors.length ? 'error' : 'success',
+          message: payload.errors.length
+            ? capitalizeString(payload.errors[0], '_', ' ')
+            : `Successfully updated password`,
+          dismissAfter: 5000,
+        }),
+      );
+      if (!payload.errors.length) {
+        //only toggle form if successful reset
         return this.toggleNewPasswordFormVisibility();
       }
     });
@@ -105,34 +128,37 @@ class ProfilePasswordSection extends Component {
 
     return (
       <div>
-        {auth0InviteStatus === 'NONE' ? !isAddPasswordFormVisible ? (
-          <div>
-            <ProfileHeader>
-              {profileNameVerbConjucation} not enabled password authentication.
-            </ProfileHeader>
-            <ProfileText>
-              Add a password to enable login with email and password.
-            </ProfileText>
-            {isUsersProfile && (
-              <Button
-                text="Add new password"
-                appearance="default"
-                size="large"
-                onClick={this.toggleNewPasswordFormVisibility}
-              />
-            )}
-          </div>
-        ) : (
-          <UserAddNewPasswordForm
-            toggleNewPasswordFormVisibility={
-              this.toggleNewPasswordFormVisibility
-            }
-            addPassword={this.addPassword}
-            passwordValidationMessage={passwordValidationMessage}
-            updatePasswordHandler={this.updatePasswordHandler}
-            formValues={formValues}
-            auth0InviteStatus={auth0InviteStatus}
-          />
+        {auth0InviteStatus === 'NONE' ? (
+          !isAddPasswordFormVisible ? (
+            <div>
+              <ProfileHeader>
+                {profileNameVerbConjucation} not enabled password
+                authentication.
+              </ProfileHeader>
+              <ProfileText>
+                Add a password to enable login with email and password.
+              </ProfileText>
+              {isUsersProfile && (
+                <Button
+                  text="Add new password"
+                  appearance="default"
+                  size="large"
+                  onClick={this.toggleNewPasswordFormVisibility}
+                />
+              )}
+            </div>
+          ) : (
+            <UserAddNewPasswordForm
+              toggleNewPasswordFormVisibility={
+                this.toggleNewPasswordFormVisibility
+              }
+              addPassword={this.addPassword}
+              passwordValidationMessage={passwordValidationMessage}
+              updatePasswordHandler={this.updatePasswordHandler}
+              formValues={formValues}
+              auth0InviteStatus={auth0InviteStatus}
+            />
+          )
         ) : (
           <div>
             {!isAddPasswordFormVisible ? (

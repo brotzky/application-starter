@@ -1,16 +1,51 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { Select, Text } from '../../../forms/fields/';
 import { MagnifyGlass } from '../../../ui/icons/';
 import { searchTheme } from '../../users/containers/UsersSearch';
 
+const UserSearchForm = styled.form`
+  width: 100%;
+  margin-bottom: 2.4rem;
+`;
+
+const UserSearhFormBar = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #c4c4c4;
+  color: #262626;
+  box-shadow: inset 0 1px 0 0 rgba(63, 63, 68, 0.05);
+  width: 100%;
+  color: #585858;
+  overflow: hidden;
+`;
+
+const UserSearchFormSelector = styled.div`
+  border-right: 1px solid #c4c4c4;
+`;
+
+const UserSearchFormInput = styled.div`
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex: 1;
+`;
+
+const MagnifyGlassIcon = styled(MagnifyGlass)`
+  position: relative;
+  left: 9px;
+  fill: #b2b2b2;
+  height: 19px;
+`;
+
 let UsersSearch = props => {
-  const { handleSubmit, searchBy } = props;
-  const fieldProps = {
-    className: 'UsersSearchForm',
-  };
+  const { searchBy } = props;
 
   const searchByOptions = [
     { name: 'All Categories', value: 'all' },
@@ -20,31 +55,20 @@ let UsersSearch = props => {
 
   return (
     <ThemeProvider theme={searchTheme}>
-      <form className={fieldProps.className} id="search-form">
-        <div className={`${fieldProps.className}__bar`}>
-          <div className={`${fieldProps.className}__selector`}>
+      <UserSearchForm id="search-form">
+        <UserSearhFormBar>
+          <UserSearchFormSelector>
             <Field
               name="searchBy"
               component={Select}
               placeholder="Search roles"
               options={searchByOptions}
-              {...fieldProps}
             />
-          </div>
-          <div
-            className={`${fieldProps.className}__input`}
-            style={{
-              borderTopLeftRadius: '2px',
-              borderBottomLeftRadius: '2px',
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <MagnifyGlass className={`${fieldProps.className}__icon`} />
+          </UserSearchFormSelector>
+          <UserSearchFormInput>
+            <MagnifyGlassIcon />
             {searchBy === 'all' && (
               <Field
-                {...fieldProps}
                 name="all"
                 component={Text}
                 type="text"
@@ -53,24 +77,14 @@ let UsersSearch = props => {
               />
             )}
             {searchBy === 'role' && (
-              <Field
-                {...fieldProps}
-                name="role"
-                component={Text}
-                label={false}
-              />
+              <Field name="role" component={Text} label={false} />
             )}
             {searchBy === 'description' && (
-              <Field
-                {...fieldProps}
-                name="description"
-                component={Text}
-                label={false}
-              />
+              <Field name="description" component={Text} label={false} />
             )}
-          </div>
-        </div>
-      </form>
+          </UserSearchFormInput>
+        </UserSearhFormBar>
+      </UserSearchForm>
     </ThemeProvider>
   );
 };

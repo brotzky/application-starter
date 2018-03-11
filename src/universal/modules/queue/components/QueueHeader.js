@@ -1,14 +1,67 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import {
+  QueueHeader as QueueHeaderWrapper,
+  QueueItemTitle,
+  QueueItemHeading,
+  QueueSortOptionSelectWrap,
+  QueueSortOptionSelect,
+} from 'gac-utils/sc';
 import { ChevronDown } from '../../ui/icons/';
-import { capitalizeString } from 'grow-utils/stringFormatting';
 import getMaskedSteps from 'grow-utils/steps';
 
 const ResetButtonText = styled.span`
   &:hover {
     color: red;
   }
+`;
+
+const QueueListHeader = styled.div`
+  padding: 0 ${props => props.theme.space}rem;
+  position: relative;
+  background: #fff;
+`;
+
+const HeaderWrapper = styled.div`
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+`;
+
+const HeaderItemCell = styled.div`
+  display: block;
+  flex: 1;
+  padding: 1.37rem 1.37rem 1.37rem 0;
+  text-overflow: ellipsis;
+  color: #262626;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  &:last-child {
+    padding-right: 0;
+  }
+  svg {
+    top: 52%;
+    left: -0.5625rem;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    right: 0.75rem;
+    pointer-events: none;
+  }
+`;
+
+const HeaderItemCellChevron = styled.div`
+  display: block;
+  flex: 1;
+  padding: 1.28571rem 1.28571rem 1.28571rem 0;
+  text-overflow: ellipsis;
+  color: #262626;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const QueueHeader = ({
@@ -20,171 +73,158 @@ const QueueHeader = ({
   org,
   steps,
 }) => (
-  <header className="QueueHeader">
-    <ul className="QueueList QueueHeader__list">
-      <li className="QueueItem QueueHeader__item">
-        <ul className="Queue__wrapper QueueItem__wrapper">
-          <li
-            className="QueueItem__cell QueueItem__cell-header"
-            style={{ flex: '1.3' }}
-          >
-            <div className="QueueItem__title">Product</div>
-            <span className="QueueSortOptions__select-wrap">
-              <select
-                id="queueItems"
-                className="QueueSortOptions__value QueueSortOptions__button QueueHeader__button QueueSortOptions__select"
-                name="queue-products"
-                value={queryParams.productName}
-                onChange={event =>
-                  updateData({
-                    page: 1,
-                    queryParams: {
-                      productName: event.target.value,
-                      start: 0,
-                      end: itemsPerPage,
-                    },
-                  })}
-              >
-                <option value="">All Products</option>
-                {products.map(product => (
-                  <option value={product.productName} key={product.id}>
-                    {product.prettyName}
+  <QueueHeaderWrapper>
+    <QueueListHeader>
+      <HeaderWrapper>
+        <HeaderItemCell style={{ flex: '1.3' }}>
+          <QueueItemTitle>Product</QueueItemTitle>
+          <QueueSortOptionSelectWrap>
+            <QueueSortOptionSelect
+              id="queueItems"
+              name="queue-products"
+              value={queryParams.productName}
+              onChange={event =>
+                updateData({
+                  page: 1,
+                  queryParams: {
+                    productName: event.target.value,
+                    start: 0,
+                    end: itemsPerPage,
+                  },
+                })
+              }
+            >
+              <option value="">All Products</option>
+              {products.map(product => (
+                <option value={product.productName} key={product.id}>
+                  {product.prettyName}
+                </option>
+              ))}
+            </QueueSortOptionSelect>
+            <ChevronDown />
+          </QueueSortOptionSelectWrap>
+        </HeaderItemCell>
+        <HeaderItemCell style={{ flex: '1.25' }}>
+          <QueueItemTitle>Creator</QueueItemTitle>
+          <QueueItemHeading>Name</QueueItemHeading>
+        </HeaderItemCell>
+        <HeaderItemCell style={{ flex: '0.7' }}>
+          <QueueItemTitle>Step</QueueItemTitle>
+          <QueueSortOptionSelectWrap>
+            <QueueSortOptionSelect
+              name="queue-status"
+              value={queryParams.currentStep}
+              onChange={event =>
+                updateData({
+                  page: 1,
+                  queryParams: {
+                    currentStep: event.target.value,
+                    start: 0,
+                    end: itemsPerPage,
+                  },
+                })
+              }
+            >
+              <option value="">All</option>
+              {steps &&
+                steps.map(step => (
+                  <option value={step} key={step}>
+                    {getMaskedSteps(org, step)}
                   </option>
                 ))}
-              </select>
-              <ChevronDown className="QueueSortOptions__chevron QueueHeader__chevron" />
-            </span>
-          </li>
-          <li
-            className="QueueItem__cell QueueItem__cell-header"
-            style={{ flex: '1.25' }}
-          >
-            <div className="QueueItem__title">Creator</div>
-            <div className="QueueItem__heading">Name</div>
-          </li>
-          <li
-            className="QueueItem__cell QueueItem__cell-header"
-            style={{ flex: '0.7' }}
-          >
-            <div className="QueueItem__title">Step</div>
-            <span className="QueueSortOptions__select-wrap">
-              <select
-                name="queue-status"
-                className="QueueSortOptions__value QueueSortOptions__button QueueHeader__button QueueSortOptions__select"
-                value={queryParams.currentStep}
-                onChange={event =>
-                  updateData({
-                    page: 1,
-                    queryParams: {
-                      currentStep: event.target.value,
-                      start: 0,
-                      end: itemsPerPage,
-                    },
-                  })}
-              >
-                <option value="">All</option>
-                {steps &&
-                  steps.map(step => (
-                    <option value={step} key={step}>
-                      {getMaskedSteps(org, step)}
-                    </option>
-                  ))}
-              </select>
-              <ChevronDown className="QueueSortOptions__chevron QueueHeader__chevron" />
-            </span>
-          </li>
-          <li
-            className="QueueItem__cell QueueItem__cell-header"
-            style={{ flex: '0.7' }}
-          >
-            <div className="QueueItem__title">Review</div>
-            <span className="QueueSortOptions__select-wrap">
-              <select
-                name="queue-status"
-                className="QueueSortOptions__value QueueSortOptions__button QueueHeader__button QueueSortOptions__select"
-                value={queryParams.adminStep}
-                onChange={event =>
-                  updateData({
-                    page: 1,
-                    queryParams: {
-                      adminStep: event.target.value,
-                      start: 0,
-                      end: itemsPerPage,
-                    },
-                  })}
-              >
-                <option value="">All</option>
-                {adminSteps.map(step => (
-                  <option value={step.name} key={step.name}>
-                    {step.prettyName}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="QueueSortOptions__chevron QueueHeader__chevron" />
-            </span>
-          </li>
-          <li
-            className="QueueItem__cell QueueItem__cell-header"
-            style={{ flex: '0.7' }}
-          >
-            <div className="QueueItem__title">State</div>
-            <span className="QueueSortOptions__select-wrap">
-              <select
-                id="queueState"
-                className="QueueSortOptions__value QueueSortOptions__button QueueHeader__button QueueSortOptions__select"
-                name="queue-state"
-                value={queryParams.state || 15}
-                onChange={event =>
-                  updateData({
-                    page: 1,
-                    queryParams: {
-                      start: 0,
-                      end: itemsPerPage,
-                      state: event.target.value,
-                    },
-                  })}
-              >
-                <option value="">All</option>
-                <option value="active">Active</option>
-                <option value="expired">Expired</option>
-                <option value="declined">Declined</option>
-                <option value="on-hold">On Hold</option>
-                <option value="fraud">Fraud</option>
-                <option value="cancelled">Cancelled</option>
-                <option value="complete">Complete</option>
-              </select>
-              <ChevronDown className="QueueSortOptions__chevron QueueHeader__chevron" />
-            </span>
-          </li>
-          <li className="QueueItem__cell QueueItem__cell-header">
-            <div className="QueueItem__title">Manager</div>
-            <div className="QueueItem__heading">Name</div>
-          </li>
-          <li
-            className="QueueItem__cell QueueItem__cell-header QueueItem__cell--sm QueueItem__cell--align-right"
-            style={{ overflow: 'visible' }}
-          >
-            <button
-              onClick={event =>
+            </QueueSortOptionSelect>
+            <ChevronDown />
+          </QueueSortOptionSelectWrap>
+        </HeaderItemCell>
+        <HeaderItemCell style={{ flex: '0.7' }}>
+          <QueueItemTitle>Review</QueueItemTitle>
+          <QueueSortOptionSelectWrap>
+            <QueueSortOptionSelect
+              name="queue-status"
+              value={queryParams.adminStep}
+              onChange={event =>
+                updateData({
+                  page: 1,
+                  queryParams: {
+                    adminStep: event.target.value,
+                    start: 0,
+                    end: itemsPerPage,
+                  },
+                })
+              }
+            >
+              <option value="">All</option>
+              {adminSteps.map(step => (
+                <option value={step.name} key={step.name}>
+                  {step.prettyName}
+                </option>
+              ))}
+            </QueueSortOptionSelect>
+            <ChevronDown />
+          </QueueSortOptionSelectWrap>
+        </HeaderItemCell>
+        <HeaderItemCell style={{ flex: '0.7' }}>
+          <QueueItemTitle>State</QueueItemTitle>
+          <QueueSortOptionSelectWrap>
+            <QueueSortOptionSelect
+              id="queueState"
+              name="queue-state"
+              value={queryParams.state || 15}
+              onChange={event =>
                 updateData({
                   page: 1,
                   queryParams: {
                     start: 0,
                     end: itemsPerPage,
-                    currentStep: '',
-                    state: '',
-                    adminStep: '',
-                    productName: '',
+                    state: event.target.value,
                   },
-                })}
+                })
+              }
             >
-              <ResetButtonText>Reset</ResetButtonText>
-            </button>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </header>
+              <option value="">All</option>
+              <option value="active">Active</option>
+              <option value="expired">Expired</option>
+              <option value="declined">Declined</option>
+              <option value="on-hold">On Hold</option>
+              <option value="fraud">Fraud</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="complete">Complete</option>
+            </QueueSortOptionSelect>
+            <ChevronDown />
+          </QueueSortOptionSelectWrap>
+        </HeaderItemCell>
+        <HeaderItemCell style={{ flex: '1' }}>
+          <QueueItemTitle>Manager</QueueItemTitle>
+          <QueueItemHeading>Name</QueueItemHeading>
+        </HeaderItemCell>
+        <HeaderItemCell
+          style={{
+            flex: '0.2',
+            textAlign: 'right',
+            fontSize: '1.4rem',
+          }}
+        >
+          <button
+            onClick={event =>
+              updateData({
+                page: 1,
+                queryParams: {
+                  start: 0,
+                  end: itemsPerPage,
+                  currentStep: '',
+                  state: '',
+                  adminStep: '',
+                  productName: '',
+                },
+              })
+            }
+          >
+            <ResetButtonText>Reset</ResetButtonText>
+          </button>
+        </HeaderItemCell>
+      </HeaderWrapper>
+    </QueueListHeader>
+  </QueueHeaderWrapper>
 );
 
 export default QueueHeader;

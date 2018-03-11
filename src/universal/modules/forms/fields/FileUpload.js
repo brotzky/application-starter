@@ -8,9 +8,13 @@ import FormField from '../components/FormField';
 import FieldLabel from '../components/FieldLabel';
 import { dispatchFileToUpload } from 'grow-utils/fileUploadUtils';
 import { Upload, CheckCircleFilled } from '../../ui/icons/';
-import Spinner from '../../ui/Spinner';
+import { Spinner } from 'gac-ui/components/';
+import { DELETE_FROM_LIST } from 'grow-actions/upload-file/constants';
+import { getMemberProductApplicationMetadata } from 'grow-actions/member/member-category-metadata';
 
-const FileUploadContainer = styled.div`width: 100%;`;
+const FileUploadContainer = styled.div`
+  width: 100%;
+`;
 
 const UploadWrapper = styled.div`
   align-items: center;
@@ -54,7 +58,9 @@ const LoaderWrapper = styled.div`
   }
 `;
 
-const StyledDropzoneContainer = styled.div`display: flex;`;
+const StyledDropzoneContainer = styled.div`
+  display: flex;
+`;
 
 const StyledDropzone = styled(Dropzone)`
   position: relative;
@@ -72,8 +78,10 @@ const StyledDropzone = styled(Dropzone)`
   height: 330px;
 
   &:hover {
-    border-color: ${props => props.theme.colors.blue};
-    background: rgba(68, 138, 255, 0.025);
+    border-color: ${props =>
+      props.disabled ? props.theme.colors.grey : props.theme.colors.blue};
+    ${props => props.disabled && `background: rgba(68, 138, 255, 0.025)`};
+    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   }
 `;
 
@@ -107,10 +115,50 @@ const FileUploadSucecssHeader = styled.div`
   text-transform: uppercase;
 `;
 
-const FileUploadSucecssHeaderText = styled.div`margin-left: 10px;`;
+const FileUploadSucecssHeaderText = styled.div`
+  margin-left: 10px;
+`;
 
+// ENUM mapping from white-label
+const veriTextMap = new Map();
+veriTextMap.set('BLUR', 'Blurry Image');
+veriTextMap.set('LOW_FACE_CONFIDENCE', 'Blurry Image');
+veriTextMap.set('NAME_TOO_SHORT', 'Failed Image');
+veriTextMap.set('NOFACE', 'No Face');
+veriTextMap.set('MISSING_PERSON_CONFIDENCE_LEVEL', 'ID Verification Failed');
+veriTextMap.set('ALL_BELOW_THRESHOLD', 'Verification Failed');
+veriTextMap.set('UNKNOWN_REASON', 'Verification Failed');
+veriTextMap.set('NO_ID', 'Not an ID');
+veriTextMap.set('NO_ID_NO_FACE', 'No Face Identified');
+veriTextMap.set('NO_TEXT_PRESENT', 'Illegible Text');
+veriTextMap.set('NO_MATCHING_TEXT', 'Name Unclear');
+veriTextMap.set('LOW_MATCHING_RATIO', 'Name Unclear');
+veriTextMap.set('UNREADABLE', 'Unreadable Image');
+veriTextMap.set('UNVERIFIABLE', 'Verification Failed');
 class FileUpload extends PureComponent {
-  state = { updated: false };
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    const file = this.getLastFileDetails(this.props);
+    if (file) {
+      dispatch({
+        type: DELETE_FROM_LIST,
+        payload: { fieldName: file.fieldName },
+      });
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    const nextFile = this.getLastFileDetails(nextProps);
+    const thisFile = this.getLastFileDetails(this.props);
+    const { workbench, memberId, dispatch } = nextProps;
+    if (
+      thisFile &&
+      nextFile &&
+      thisFile.uploaded === undefined &&
+      nextFile.uploaded !== undefined
+    ) {
+      dispatch(getMemberProductApplicationMetadata(memberId, workbench.id));
+    }
+  }
   handleDrop = (files, rejectedFiles) => {
     const {
       currentFiles = [],
@@ -118,6 +166,7 @@ class FileUpload extends PureComponent {
       documentType,
       input,
       memberId,
+      meta,
     } = this.props;
     // TODO refactor the alert into something more sophistacted
     if (rejectedFiles.length) {
@@ -133,67 +182,43 @@ class FileUpload extends PureComponent {
       memberId,
       dispatch,
     );
-
-    input.onChange(files);
   };
-
+  getLastFileDetails = props => {
+    const { currentFiles = [], formValues, input = {}, meta = {} } = props;
+    const file = currentFiles[input.name] ? currentFiles[input.name] : null;
+    return file;
+  };
   renderUploading() {
-    const { currentFiles = [], formValues, input = {}, meta = {} } = this.props;
-    const currentFormValues = formValues(meta.form);
-    if (!currentFormValues[input.name]) {
-      return null;
-    }
-
-    const fileBlob = currentFormValues[input.name];
-    const fileName = fileBlob[0] && fileBlob[0].name;
-    const files = currentFiles.filter(
-      f =>
-        f.name &&
-        f.name.slice(8, f.name.length) === fileName &&
-        f.fieldName === input.name,
-    );
-    const file = files[files.length - 1];
-
+    const file = this.getLastFileDetails(this.props);
     if (file) {
-      const isUploading = file.progress !== 100;
+      const isUploading = file.uploaded === undefined;
       const failed = file.uploaded === false;
       const isAnalyzing = !failed && file.uploaded !== true;
       const isUploaded = file.uploaded === true;
 
-      if (file && isUploaded && !this.state.updated) {
-        fileBlob[0].verificationMsg = file.verificationMsg;
-
-        this.props.dispatch(change('workbench', file.fieldName, fileBlob));
-        this.setState({ updated: true });
-      }
-
-      if (isUploading) {
-        this.setState({ updated: false });
-      }
+      const uploadMessage = veriTextMap.get(file.verificationMsg);
 
       return (
-        <UploadWrapper
-          imagePreview={fileBlob[0].preview || file.preview}
-          isUploading={isUploading}
-        >
+        <UploadWrapper imagePreview={file.preview} isUploading={isUploading}>
           <UploadOverlay failed={failed} visible={isAnalyzing || failed} />
           <UploadStatusText>
-            {isUploading ? 'Uploading...' : ''}
-            {!isUploading && isAnalyzing ? 'Analyzing...' : ''}
-            {failed ? 'Failed to upload, please try again' : ''}
+            {isUploading && 'Uploading...'}
+            {!isUploading && isAnalyzing && 'Analyzing...'}
+            {failed &&
+              `Failed. ${uploadMessage && uploadMessage}. Please try again.`}
             {isAnalyzing &&
-            !failed && (
+              !failed && (
                 <LoaderWrapper>
                   <Spinner />
                 </LoaderWrapper>
               )}
             {isUploaded &&
-            !failed && (
+              !failed && (
                 <FileUploadSucecssContainer>
                   <FileUploadSucecssHeader>
                     <CheckCircleFilled height="24" width="24" />
                     <FileUploadSucecssHeaderText>
-                    File upload success
+                      File upload success
                     </FileUploadSucecssHeaderText>
                   </FileUploadSucecssHeader>
                 </FileUploadSucecssContainer>
@@ -207,8 +232,9 @@ class FileUpload extends PureComponent {
   }
 
   render() {
-    const { input = {}, label = '', meta = {} } = this.props;
+    const { input = {}, label = '', meta = {}, isUploading } = this.props;
     const { value } = input;
+    const file = this.getLastFileDetails(this.props);
     return (
       <FormField>
         <FileUploadContainer>
@@ -217,6 +243,8 @@ class FileUpload extends PureComponent {
             <StyledDropzone
               onDrop={this.handleDrop}
               activeStyle={{ borderCoor: '#448aff' }}
+              disabled={(file && file.uploaded === undefined) || isUploading}
+              multiple={false}
             >
               <StyledDropzoneBackground>
                 <Upload />
@@ -235,6 +263,7 @@ const mapStateToProps = state => ({
   currentFiles: state.files.list,
   formValues: formName => getFormValues(formName)(state),
   memberId: state.member.member.id,
+  workbench: state.workbench,
+  isUploading: state.files.isUploading,
 });
-
 export default connect(mapStateToProps)(FileUpload);

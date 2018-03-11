@@ -11,7 +11,58 @@ const ButtonContainer = styled.div`
   margin: 30px auto;
   text-align: center;
 `;
-const UnclaimedText = styled.p`margin-top: 20px;`;
+const UnclaimedText = styled.p`
+  margin-top: 20px;
+`;
+
+const AccountSettingsModalContainer = styled.div`
+  max-width: 500px;
+  padding: 1rem 1rem 0;
+`;
+
+const AccountSettingsModalHeader = styled.h3`
+  font-size: ${props => props.theme.font.size3};
+  margin-bottom: 2.4rem;
+`;
+
+const AccountSettingsModalText = styled.p`
+  margin-bottom: 1.6rem;
+`;
+
+const AccountSettingsModalListHeader = styled.header`
+  border: 1px solid #efefef;
+  border-bottom: 0;
+  color: ${props => props.theme.colors.black};
+  padding: 14px;
+  font-weight: 600;
+  background: #f8f8f8;
+`;
+
+const AccountSettingsModalList = styled.ul`
+  color: ${props => props.theme.colors.black};
+  margin-bottom: 2.4rem;
+  padding: 18px 14px;
+  border: 1px solid #eee;
+`;
+
+const AccountSettingsModalListItem = styled.li`
+  list-style: none;
+  display: flex;
+  margin-bottom: 14px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  & > div {
+    min-width: 95px;
+    font-weight: 500;
+  }
+
+  & div:last-child {
+    font-weight: 400;
+  }
+`;
 
 const AccountSettingsModal = props => {
   const { dispatch, isClaimed, workbench } = props;
@@ -21,48 +72,49 @@ const AccountSettingsModal = props => {
       modalFullscreen={false}
       modalAction={() => dispatch(hideModal())}
     >
-      <div className="AccountSettingsModal">
-        <h3 className="AccountSettingsModal__header">Create Account</h3>
-        <p className="AccountSettingsModal__text">
+      <AccountSettingsModalContainer>
+        <AccountSettingsModalHeader>Create Account</AccountSettingsModalHeader>
+        <AccountSettingsModalText>
           By confirming you will be creating a{' '}
           <strong>{workbench.prettyName}</strong> for{' '}
           <strong>{workbench.creator.firstName}</strong>{' '}
           <strong>{workbench.creator.lastName}</strong>
           .
-        </p>
-        <header className="AccountSettingsModalList__header">
+        </AccountSettingsModalText>
+        <AccountSettingsModalListHeader>
           Deposit Account Details
-        </header>
-        <ul className="AccountSettingsModalList">
-          <li className="AccountSettingsModalList__item">
+        </AccountSettingsModalListHeader>
+        <AccountSettingsModalList>
+          <AccountSettingsModalListItem>
             <div>Applicant</div>
             <div>
               {workbench.creator.firstName} {workbench.creator.lastName}
             </div>
-          </li>
-          <li className="AccountSettingsModalList__item">
+          </AccountSettingsModalListItem>
+          <AccountSettingsModalListItem>
             <div>Account</div> <div>{workbench.prettyName}</div>
-          </li>
-          <li className="AccountSettingsModalList__item">
+          </AccountSettingsModalListItem>
+          <AccountSettingsModalListItem>
             <div>Created</div>
             <div>
               {moment(workbench.dateCreated).format('MMM D, YYYY, h:mm a')}
             </div>
-          </li>
-          <li className="AccountSettingsModalList__item">
+          </AccountSettingsModalListItem>
+          <AccountSettingsModalListItem>
             <div>Manager</div>
             <div>
               {workbench.primaryRep.firstName} {workbench.primaryRep.lastName}
             </div>
-          </li>
-        </ul>
+          </AccountSettingsModalListItem>
+        </AccountSettingsModalList>
         <ButtonContainer>
           <Button
             isSubmitting={workbench.isUpdatingApplication}
             onClick={() =>
               dispatch(adminStepsProceed(workbench.id)).then(() =>
                 dispatch(hideModal()),
-              )}
+              )
+            }
             disabled={!isClaimed}
             text="Confirm"
             size="large"
@@ -73,7 +125,7 @@ const AccountSettingsModal = props => {
             </UnclaimedText>
           )}
         </ButtonContainer>
-      </div>
+      </AccountSettingsModalContainer>
     </ModalContent>
   );
 };

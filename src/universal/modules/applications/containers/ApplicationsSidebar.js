@@ -6,7 +6,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { Panel } from '../../ui/components';
 import { InfoCircle } from '../../ui/icons';
-import { Button } from '../../forms/fields/';
+import { FormButton } from '../../forms/fields/';
 import SelectedFilter from '../components/SelectedFilter';
 import { capitalizeString } from 'grow-utils/stringFormatting';
 import { getQueryParameters } from 'grow-utils/filters';
@@ -182,6 +182,7 @@ class ApplicationsSidebar extends Component {
   handleSubmit = () => {
     const { selected, updateData, data: { itemsPerPage } } = this.props;
     let queryParams = getQueryParameters(selected);
+
     updateData({
       page: 1,
       queryParams: {
@@ -313,7 +314,7 @@ class ApplicationsSidebar extends Component {
             ];
           })}
         </List>
-        <Button
+        <FormButton
           isSubmitting={isFetching}
           disabled={isFetching}
           buttonText="Apply Filters"

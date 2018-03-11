@@ -1,35 +1,48 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ApplicationsSmall, AppSmall } from '../../../ui/icons/';
-import { Flag, ViewPermission } from '../../../ui/components';
+import { ApplicationsSmall } from '../../../ui/icons/';
+
+const PrimaryNav = styled.nav`
+  margin-left: 2.5rem;
+`;
+
+const PrimaryNavList = styled.ul`
+  list-style: none;
+`;
+
+const PrimaryNavLink = styled(Link)`
+  padding: 1.5rem 1.2rem;
+  color: #fff;
+  font-weight: 500;
+`;
+
+const PrimaryNavListIcon = styled(ApplicationsSmall)`
+  margin-right: 1.5rem;
+  * {
+    fill: #fff;
+  }
+`;
 
 const PrimaryNavNav = () => (
-  <nav className="PrimaryNavNav">
-    <ul className="PrimaryNavNav__list">
-      <li className="PrimaryNavNav__item">
-        <Link
-          to="/applications"
-          className="PrimaryNavNav__link"
-          activeClassName="PrimaryNavNav__link--active"
-        >
-          <ApplicationsSmall className="PrimaryNavNav__icon" />Applications
-        </Link>
+  <PrimaryNav>
+    <PrimaryNavList>
+      <li>
+        <PrimaryNavLink to="/applications">
+          <PrimaryNavListIcon />Applications
+        </PrimaryNavLink>
       </li>
       {/* <ViewPermission permission="EDIT_TRANSLATIONS">
         <Flag name="translator">
-          <li className="PrimaryNavNav__item">
-            <Link
-              to="/tools/translator/dev"
-              className="PrimaryNavNav__link"
-              activeClassName="PrimaryNavNav__link--active"
-            >
-              <AppSmall className="PrimaryNavNav__icon" />Translations
-            </Link>
-          </li>
+          <LeftNavItem>
+            <LeftNavLink to="/tools/translator/dev">
+              <LeftNavTranslationIcon />Translations
+            </LeftNavLink>
+          </LeftNavItem>
         </Flag>
       </ViewPermission> */}
-    </ul>
-  </nav>
+    </PrimaryNavList>
+  </PrimaryNav>
 );
 
 export default PrimaryNavNav;

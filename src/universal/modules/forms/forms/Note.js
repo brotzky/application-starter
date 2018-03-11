@@ -1,10 +1,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled, { ThemeProvider } from 'styled-components';
 import { reduxForm, Field } from 'redux-form';
-import { FormButton, Select } from '../../forms/fields';
 import { capitalizeString } from 'grow-utils/stringFormatting';
-import { ThemeProvider } from 'styled-components';
+import { FormButton, Select } from '../../forms/fields';
 import { theme } from '../../../themes';
+
+const NoteFormContent = styled.div`
+  margin-bottom: 1.6rem;
+
+  > textarea {
+    min-height: 226px;
+  }
+`;
+
+const NoteFormButtonWrapper = styled.div`
+  padding: 0 2.4rem 1.6rem;
+`;
+
+const TextArea = styled.textarea`
+  border-top: 1px solid #efefef;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  line-height: inherit;
+  padding: 1rem 2rem;
+
+  &:focus,
+  &:active {
+    outline: none;
+    background: ${props => props.theme.colors.greyLight};
+  }
+`;
 
 export const notesTheme = {
   ...theme,
@@ -29,16 +59,8 @@ export const notesTheme = {
 };
 
 let NoteForm = props => {
-  const {
-    handleSubmit,
-    productApplications,
-    submitting,
-    category,
-    permissions,
-  } = props;
-  const fieldProps = {
-    className: 'NoteForm',
-  };
+  const { handleSubmit, productApplications, submitting, category } = props;
+
   const productApplicationsOptions = productApplications
     .filter(application => application.currentStep !== 'serving')
     .map(application => ({
@@ -83,27 +105,24 @@ let NoteForm = props => {
 
   return (
     <ThemeProvider theme={notesTheme}>
-      <form onSubmit={handleSubmit} className={fieldProps.className}>
+      <form onSubmit={handleSubmit}>
         <div style={{ padding: '0.5rem 2.25rem' }}>
           <Field
             name="category"
             component={Select}
             options={categoryOptions}
             label="Category"
-            {...fieldProps}
           />
         </div>
-        <div className={`${fieldProps.className}Content`}>
+        <NoteFormContent>
           <Field
-            {...fieldProps}
             name="content"
-            component="textarea"
+            component={TextArea}
             placeholder="Write your note..."
             autoFocus
-            className={`${fieldProps.className}Textarea`}
           />
-        </div>
-        <div className={`${fieldProps.className}ButtonWrapper`} id="addNoteSubmit">
+        </NoteFormContent>
+        <NoteFormButtonWrapper id="addNoteSubmit">
           <Field
             name="submitButton"
             component={FormButton}
@@ -112,9 +131,8 @@ let NoteForm = props => {
             type="submit"
             disabled={submitting}
             permission={mapCategoryPermissions()}
-            {...fieldProps}
           />
-        </div>
+        </NoteFormButtonWrapper>
       </form>
     </ThemeProvider>
   );

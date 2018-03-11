@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Spinner from '../../ui/spinner/spinner';
+import { Button } from 'gac-ui/components';
 
 export class FormButton extends Component {
   hasPermission() {
@@ -10,7 +10,6 @@ export class FormButton extends Component {
 
   render() {
     const {
-      className,
       isSubmitting,
       disabled,
       icon,
@@ -18,56 +17,29 @@ export class FormButton extends Component {
       buttonText,
       type,
       onClick,
+      appearance,
+      size,
+      width,
+      margin,
     } = this.props;
     const isDisabled = disabled || isSubmitting || !this.hasPermission();
     const Icon = icon;
 
     return (
-      <div
-        className={`
-        FormField
-        ${className ? `${className}Field` : ''}
-      `}
-      >
-        <button
+      <div>
+        <Button
           type={type || 'submit'}
           disabled={isDisabled}
           onClick={typeof onClick === 'function' ? onClick : () => {}}
-          className={`
-            c-button
-            c-button--pri 
-            FormButton  
-            ${className}Button
-            ${this.hasPermission() ? '' : 'PermissionRequired'}
-            ${status === true ? 'FormButton--success' : ''}
-            ${status === false ? 'FormButton--failure' : ''}
-            ${isSubmitting ? 'FormButton--submitting' : ''}
-            ${isSubmitting ? `${className}Button--submitting` : ''}
-            ${disabled ? `${className}Button--disabled` : ''}
-          `}
-        >
-          {(() => {
-            if (isSubmitting) {
-              return (
-                <span>
-                  <Spinner />
-                </span>
-              );
-            } else if (status === true) {
-              // return <span><Check /></span>;
-              return <span>Check</span>;
-            } else if (status === false) {
-              // return <span><Alert /></span>;
-              return <span>Alert</span>;
-            }
-            return (
-              <span>
-                {buttonText}{' '}
-                {icon && <Icon className={`${className}Button__icon`} />}
-              </span>
-            );
-          })()}
-        </button>
+          hasPermission={this.hasPermission()}
+          isSubmitting={isSubmitting}
+          appearance={appearance}
+          text={buttonText}
+          size={size || 'small'}
+          width={width}
+          margin={margin}
+        />
+        {icon && <Icon />}
       </div>
     );
   }
