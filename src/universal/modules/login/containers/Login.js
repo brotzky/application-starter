@@ -13,6 +13,7 @@ import LoginForm from './LoginForm';
 import LoginFormAuth0 from './LoginFormAuth0';
 import { LoginWrapper, LoginFormWrapper } from 'gac-utils/sc';
 import AuthFromWrapper from '../../auth/components/AuthFormWrapper';
+import AuthWrapper from '../../auth/containers/AuthWrapper';
 
 class Login extends Component {
   state = {
@@ -23,13 +24,15 @@ class Login extends Component {
     const { auth, dispatch, location } = this.props;
     const { id, oneTimePassword } = this.getQueryStringVariables();
     dispatch(getEnvProperties());
-    // If the user is already authenticated, redirect them to '/'.
+
     if (auth.isAuthenticated) {
-      return dispatch(push('/'));
+      return dispatch(push('/applications'));
     }
+
     if (oneTimePassword) {
       return dispatch(push(`/?key=${id}&code=${oneTimePassword}`));
     }
+
     if (!docCookies.getItem('SID')) {
       /**
        * We fire off for authToken if there's no SID already set and it'll
@@ -60,7 +63,7 @@ class Login extends Component {
     } = this.props;
     const hostname = window.location.hostname;
     const redirectUrl = hostname.includes('localhost')
-      ? 'http://localhost:3000/redirect'
+      ? `http://localhost:3000/redirect`
       : `https://${hostname}/redirect`;
     if (!isAuth0FormVisible) {
       return dispatch(authOneTimePass(data));
@@ -71,7 +74,6 @@ class Login extends Component {
         authAuth0Login({
           password: data.password,
           username: data.email,
-          // auth0Client: "eyJuYW1lIjoiYXV0aDAuanMiLCJ2ZXJzaW9uIjoiOS4wLjAifQ==",
           client_id: clientId,
           connection,
           response_type: 'token id_token',

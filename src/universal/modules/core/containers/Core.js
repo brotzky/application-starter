@@ -8,11 +8,18 @@ import Notifications from '../../ui/notifications/containers/Notifications';
 // import { ErrorBoundary } from '../../ui/components';
 import { renderRoutes } from 'react-router-config';
 
+import { authCheck } from 'grow-actions/auth/auth-check';
+import { provideHooks } from 'redial';
+
+
 /**
  * <Core />
  * Responsible for adding global components to our application
  * along with loading in all our initial global scripts and events
  */
+@provideHooks({
+  fetch: ({ dispatch, cookies }) => dispatch(authCheck(cookies)),
+})
 class Core extends Component {
   componentDidMount() {
     initiGlobalThrottledEvents();
@@ -52,7 +59,6 @@ Core.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  modal: state.modal,
 });
 
 export default connect(mapStateToProps)(Core);

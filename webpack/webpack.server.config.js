@@ -47,5 +47,19 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        GIT: {
+          VERSION: JSON.stringify(gitRevisionPlugin.version()),
+          COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+        },
+      },
+      __CLIENT__: true,
+      __PRODUCTION__: true,
+      __DEVELOPMENT__: false,
+    }),
+  ],
   externals: nodeExternals(),
 };

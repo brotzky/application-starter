@@ -8,7 +8,11 @@ const startup = () => {
     `║    🎯   ==>  API target https://${process.argv[2]}-${process.argv[3] ||
       'dev'}-gac.poweredbygrow.com`,
   );
-  console.log('║    💻   ==>  Local server running on http://localhost:3000/');
+  console.log(
+    `║    💻   ==>  Local server running on http://localhost:${
+      process.env.PORT
+    }/`,
+  );
   console.log('║    🕐   ==>  Please wait for compilation to finish.');
   console.log('║');
   console.log('║');

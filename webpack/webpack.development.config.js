@@ -62,6 +62,7 @@ const devConfig = () => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
+        PORT: 3000,
       },
       __CLIENT__: true,
       __PRODUCTION__: false,

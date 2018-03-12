@@ -130,7 +130,10 @@ export const errorsCheck = store => next => action => {
            *  That includes when they are redirected from '/' or after logout
            *  Only show it when user trying to access from other endpoint without logging in
            */
-          if (state.router.location.pathname === '/login') {
+          if (
+            state.router.location &&
+            state.router.location.pathname === '/login'
+          ) {
             payload = {};
           } else {
             payload = {

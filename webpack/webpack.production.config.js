@@ -38,9 +38,6 @@ const prodConfig = () => ({
       'process.env': {
         NODE_ENV: '"production"',
       },
-      __CLIENT__: true,
-      __PRODUCTION__: true,
-      __DEVELOPMENT__: false,
     }),
   ],
 });

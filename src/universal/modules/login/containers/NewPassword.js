@@ -59,7 +59,7 @@ class NewPassword extends Component {
     const emailInQuery = queryString.parse(location.search).email;
     const hostname = location.hostname;
     const redirectUrl = hostname.includes('localhost')
-      ? 'http://localhost:3000/redirect'
+      ? `http://localhost:3000/redirect`
       : `https://${hostname}/redirect`;
     const isFormFilled = data.newPassword && data.confirmPassword;
     const passwordsMath = data.newPassword === data.confirmPassword;

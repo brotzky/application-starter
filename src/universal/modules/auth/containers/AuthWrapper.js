@@ -69,7 +69,7 @@ const AuthWrapper = WrappedComponent => {
           if (data && data.accessToken) {
             dispatch(getUser(data.id));
             dispatch(getRoles());
-            return dispatch(push('/'));
+            return dispatch(push('/applications'));
           }
         });
       }
@@ -104,7 +104,7 @@ const AuthWrapper = WrappedComponent => {
     }
 
     handleCheckAuth(isAuthenticated) {
-      const { dispatch, location } = this.props;
+      const { dispatch, pathname } = this.props;
 
       if (!isAuthenticated) {
         dispatch(authCheck()).then(response => {
@@ -116,7 +116,7 @@ const AuthWrapper = WrappedComponent => {
              */
             dispatch(getUser(data.id));
             dispatch(getRoles());
-            return dispatch(push(location.pathname));
+            return dispatch(push(pathname));
           }
           /**
            * If the CheckAuth call fails or does not return the accessToken
@@ -124,6 +124,21 @@ const AuthWrapper = WrappedComponent => {
            */
           return dispatch(push('/login'));
         });
+      } else {
+        if (pathname === '/login' || pathname === '/login/') {
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          console.log('FIRED');
+          return dispatch(push('/applications'));
+        }
       }
     }
 
@@ -151,6 +166,7 @@ const AuthWrapper = WrappedComponent => {
 
   return connect(state => ({
     auth: state.auth,
+    pathname: state.router.location.pathname,
   }))(AuthenticatedComponent);
 };
 

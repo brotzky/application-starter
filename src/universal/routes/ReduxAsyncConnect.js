@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route } from 'react-router-dom';
-import { trigger } from 'redial';
-// import NProgress from 'nprogress';
-import asyncMatchRoutes from '../utils/asyncMatchRoutes';
+import asyncMatchRoutes from '../../server/utils/asyncMatchRoutes';
 
 class ReduxAsyncConnect extends Component {
   static propTypes = {
@@ -15,10 +13,6 @@ class ReduxAsyncConnect extends Component {
   state = {
     previousLocation: null,
   };
-
-  componentWillMount() {
-    // NProgress.configure({ trickleSpeed: 200 });
-  }
 
   async componentWillReceiveProps(nextProps) {
     const { history, location, routes, store, helpers } = this.props;
@@ -35,27 +29,8 @@ class ReduxAsyncConnect extends Component {
         nextProps.location.pathname,
       );
 
-      await trigger('fetch', components, {
-        ...helpers,
-        store,
-        match,
-        params,
-        history,
-        location: nextProps.location,
-      });
-      if (__CLIENT__) {
-        await trigger('defer', components, {
-          ...helpers,
-          store,
-          match,
-          history,
-          location: nextProps.location,
-        });
-      }
-
       // clear previousLocation so the next screen renders
       this.setState({ previousLocation: null });
-      // NProgress.done();
     }
   }
 

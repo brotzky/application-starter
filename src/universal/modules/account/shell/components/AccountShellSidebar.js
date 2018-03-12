@@ -6,7 +6,7 @@ import { FadeIn } from '../../../ui/transitions/';
 import { ProductsIcon, RolesIcon, UsersIcon } from '../../../ui/icons';
 
 const StyledFadeIn = styled(FadeIn)`
-  padding: 1rem 3.5rem;
+  padding: 0rem 3.5rem;
 `;
 
 const sidebarLinks = [

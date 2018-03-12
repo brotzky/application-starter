@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import queryString from 'query-string';
 import { auth0 } from 'grow-actions/auth/auth';
 import { connect } from 'react-redux';
@@ -86,36 +86,50 @@ export const AuthLoaderAnimation = styled.div`
   }
 `;
 
-const AuthLoader = ({ dispatch, location }) => {
-  const isAuthRedirect =
-    location &&
-    location.hash &&
-    (location.pathname === '/redirect' || location.pathname === '/redirect/');
+class AuthLoader extends Component {
+  state = {
+    isAuthRedirect:
+      this.props.location &&
+      this.props.location.hash &&
+      (this.props.location.pathname === '/redirect' ||
+        this.props.location.pathname === '/redirect/'),
+    hasFiredAuth: false,
+  };
 
-  if (isAuthRedirect) {
-    const idToken = queryString.parse(location.hash.slice(1)).id_token;
-    dispatch(auth0({ idToken })).then(response => {
-      window.location.href = '/applications'; //reload page to avoid redirect callback hell
-    });
+  componentDidMount() {
+    const { isAuthenticating, dispatch, location } = this.props;
+    const { isAuthRedirect, hasFiredAuth } = this.state;
+
+    if (isAuthRedirect && !hasFiredAuth && !isAuthenticating) {
+      const idToken = queryString.parse(location.hash.slice(1)).id_token;
+      this.setState({ authFired: true });
+
+      dispatch(auth0({ idToken })).then(response => {
+        window.location.href = '/applications'; //reload page to avoid redirect callback hell
+      });
+    }
   }
 
-  return (
-    <AuthLoaderPadding isAuthRedirect={isAuthRedirect}>
-      <AuthWrapperLoading>
-        <AuthLoaderWrapper>
-          <AuthWrapperLogo
-            src="/static/img/logos/organizations/grow.svg"
-            alt="Grow Logo"
-          />
-        </AuthLoaderWrapper>
-        <AuthLoaderAnimation />
-      </AuthWrapperLoading>
-    </AuthLoaderPadding>
-  );
-};
+  render() {
+    return (
+      <AuthLoaderPadding isAuthRedirect={this.state.isAuthRedirect}>
+        <AuthWrapperLoading>
+          <AuthLoaderWrapper>
+            <AuthWrapperLogo
+              src="/static/img/logos/organizations/grow.svg"
+              alt="Grow Logo"
+            />
+          </AuthLoaderWrapper>
+          <AuthLoaderAnimation />
+        </AuthWrapperLoading>
+      </AuthLoaderPadding>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   location: state.router.location,
+  isAuthenticating: state.auth.isAuthenticating,
 });
 
 export default connect(mapStateToProps)(AuthLoader);

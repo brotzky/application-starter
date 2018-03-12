@@ -139,7 +139,7 @@ class RequestResetPasswordForm extends Component {
               <LoginFormSeparatorText>or</LoginFormSeparatorText>
               <LoginFormSeparatorLine />
             </LoginFormSeparator>
-            <ReturnToLoginButton>
+            <ReturnToLoginButton type="button">
               <TextLink text="Return to login" path="/login" />
             </ReturnToLoginButton>
           </div>

@@ -6,22 +6,20 @@ import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import { routes } from '../routes';
 import { theme } from '../themes/';
-import ReduxAsyncConnect from '../../server/html/ReduxAsyncConnect';
+import ReduxAsyncConnect from '../../universal/routes/ReduxAsyncConnect';
+
 /**
  * <App />
  * the highest level component responsible for Providing the
  * redux store to our entire application and also the routes.
  * This component is not visually rendered.
  */
-
-const providers = {};
-
 const App = ({ store, history }) => {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <ConnectedRouter history={history}>
-          <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
+          <ReduxAsyncConnect routes={routes} store={store}>
             {renderRoutes(routes)}
           </ReduxAsyncConnect>
         </ConnectedRouter>

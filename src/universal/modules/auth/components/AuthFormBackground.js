@@ -20,16 +20,16 @@ const levitate = keyframes`
 const levitateShadow = keyframes`
   0% {
     transform: translateY(200px) scale(1);
-    opacity: 0.8;
+    opacity: 0.5;
   }
   50% {
     transform: translateY(200px) scale(0.8);
-    opacity: 0.6;
+    opacity: 0.3;
   }
 
   100% {
     transform: translateY(200px) scale(1);
-    opacity: 0.8;
+    opacity: 0.5;
   }
 `;
 
@@ -97,13 +97,12 @@ const TabletImage = styled.img`
 
 const TabletShadowImage = styled.img`
   position: absolute;
-  top: -8%;
+  top: -6%;
   left: -96px;
   z-index: 1;
   height: 100%;
   width: 110%;
   transform: translateY(166px);
-  opacity: 0.8;
   filter: blur(26px);
   animation: ${levitateShadow} 55s cubic-bezier(0.445, 0.05, 0.55, 0.95)
     infinite;

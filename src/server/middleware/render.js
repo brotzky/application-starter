@@ -19,39 +19,32 @@ import { trigger } from 'redial';
 import asyncMatchRoutes from '../utils/asyncMatchRoutes';
 import configureStore from '../../universal/redux/store';
 import createMemoryHistory from 'history/createMemoryHistory';
+import routes from '../../universal/routes';
+import ReduxAsyncConnect from '../../universal/routes/ReduxAsyncConnect';
 
 import getScripts from '../utils/getScripts';
 import asyncGetStats from '../utils/asyncGetStats';
 import Html from '../html/Html';
-import routes from '../../universal/routes';
-
-import ReduxAsyncConnect from '../html/ReduxAsyncConnect';
 
 const render = async (req, res) => {
   const url = req.originalUrl || req.url;
+  const cookies = req.cookies;
   const location = parseUrl(url);
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
   const store = configureStore(history);
+  const { dispatch } = store;
 
-  const providers = {
-    // client: apiClient(req),
-    // app: createApp(req),
-    // restApp: createApp(req)
-  };
-
-  store.dispatch(push(url));
+  dispatch(push(url));
   globalStyles();
 
   try {
-    const { components, match, params } = await asyncMatchRoutes(
-      routes,
-      req.originalUrl,
-    );
+    const { components, match, params } = await asyncMatchRoutes(routes, url);
 
     await trigger('fetch', components, {
-      ...providers,
+      cookies,
       store,
       match,
+      dispatch,
       params,
       history,
       location: history.location,
@@ -65,14 +58,13 @@ const render = async (req, res) => {
     const html = renderToString(
       sheet.collectStyles(
         <Loadable.Capture report={moduleName => modules.push(moduleName)}>
-          <Provider store={store} {...providers}>
+          <Provider store={store}>
           <ThemeProvider theme={theme}>
             <ConnectedRouter history={history}>
               <StaticRouter location={req.originalUrl} context={context}>
                 <ReduxAsyncConnect
                   routes={routes}
                   store={store}
-                  helpers={providers}
                 >
                   {renderRoutes(routes)}
                 </ReduxAsyncConnect>
@@ -84,7 +76,6 @@ const render = async (req, res) => {
       )
     );
 
-    console.log({ html });
     const css = sheet.getStyleTags();
     const state = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
 
