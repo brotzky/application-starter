@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 
@@ -10,7 +11,7 @@ module.exports = {
   entry: path.join(root, 'src/server/server.js'),
 
   output: {
-    path: path.join(root, 'dist'),
+    path: path.join(root, 'build'),
     filename: 'server.js',
     publicPath: '/',
   },
@@ -51,10 +52,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        GIT: {
-          VERSION: JSON.stringify(gitRevisionPlugin.version()),
-          COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
-        },
+        NODE_ENV: "'production'",
       },
       __CLIENT__: true,
       __PRODUCTION__: true,

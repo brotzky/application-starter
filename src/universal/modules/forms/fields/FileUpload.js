@@ -90,7 +90,7 @@ const StyledDropzoneBackground = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: url(/static/img/fields/file-upload/upload-photos-ghosts.png);
+  background: url(/images/fields/file-upload/upload-photos-ghosts.png);
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 6px;

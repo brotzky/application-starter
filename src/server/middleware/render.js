@@ -83,7 +83,9 @@ const render = async (req, res) => {
       return res.redirect(301, context.url);
     }
 
-    const stats = await asyncGetStats('../../../dist/react-loadable.json');
+    const stats = await asyncGetStats(
+      '../../../static/dist/react-loadable.json',
+    );
     const bundles = getBundles(stats, modules);
     const scripts = getScripts(stats);
 

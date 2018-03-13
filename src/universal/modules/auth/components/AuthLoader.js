@@ -116,7 +116,7 @@ class AuthLoader extends Component {
         <AuthWrapperLoading>
           <AuthLoaderWrapper>
             <AuthWrapperLogo
-              src="/static/img/logos/organizations/grow.svg"
+              src="/images/logos/organizations/grow.svg"
               alt="Grow Logo"
             />
           </AuthLoaderWrapper>

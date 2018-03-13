@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import PrimaryNav from '../../primary-nav/containers/PrimaryNav';
 import SecondaryNav from '../../secondary-nav/containers/SecondaryNav';
-import Dynamic from '../../dynamic/components/Dynamic';
 import { getMember } from 'grow-actions/member/member';
 import { SYNC_MEMBER_FROM_MEMORY_REQUEST } from 'grow-actions/member/constants';
 
@@ -54,7 +53,7 @@ class Shell extends Component {
         {(pathname.includes('members') || pathname.includes('analytics')) && (
           <SecondaryNav params={params} />
         )}
-        <Dynamic>{this.props.children}</Dynamic>
+        {this.props.children}
       </ShellContainer>
     );
   }

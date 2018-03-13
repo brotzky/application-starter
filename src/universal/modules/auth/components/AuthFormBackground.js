@@ -114,6 +114,12 @@ class AuthFormBackground extends Component {
     shadow: false,
   };
 
+  // Need this for SSR initialization
+  componentDidMount() {
+    this.tabletImage.props.onLoad(this.handleImageLoaded('tablet'));
+    this.shadowImage.props.onLoad(this.handleImageLoaded('shadow'));
+  }
+
   handleImageLoaded = piece => {
     this.setState({ [piece]: true });
   };
@@ -125,14 +131,20 @@ class AuthFormBackground extends Component {
       <AuthFormBackgroundImageWrapper>
         <ImageContainer imageLoaded={tablet && shadow}>
           <TabletImage
-            src="/static/img/devices/tablet/tablet-applications-page.png"
+            src="/images/devices/tablet/tablet-applications-page.png"
             alt="Applications page tablet"
             onLoad={() => this.handleImageLoaded('tablet')}
+            ref={img => {
+              this.tabletImage = img;
+            }}
           />
           <TabletShadowImage
-            src="/static/img/devices/tablet/tablet-applications-page-shadow.png"
+            src="/images/devices/tablet/tablet-applications-page-shadow.png"
             alt="Applications page tablet"
             onLoad={() => this.handleImageLoaded('shadow')}
+            ref={img => {
+              this.shadowImage = img;
+            }}
           />
         </ImageContainer>
       </AuthFormBackgroundImageWrapper>

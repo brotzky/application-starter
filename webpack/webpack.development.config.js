@@ -5,7 +5,9 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const src = path.resolve(root, 'src');
-const dist = path.resolve(root, 'dist');
+const assetsPath = path.resolve(root, 'static/dist');
+var host = process.env.HOST || 'localhost';
+var port = process.env.PORT || 3000;
 
 const babelQuery = {
   env: {
@@ -39,9 +41,9 @@ const devConfig = () => ({
   },
 
   output: {
-    path: dist,
+    path: assetsPath,
     filename: '[name].[hash].js',
-    publicPath: '/dist/',
+    publicPath: 'http://' + host + ':' + port + '/dist/',
   },
 
   module: {

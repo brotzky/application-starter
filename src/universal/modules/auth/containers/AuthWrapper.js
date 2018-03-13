@@ -126,17 +126,6 @@ const AuthWrapper = WrappedComponent => {
         });
       } else {
         if (pathname === '/login' || pathname === '/login/') {
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
-          console.log('FIRED');
           return dispatch(push('/applications'));
         }
       }

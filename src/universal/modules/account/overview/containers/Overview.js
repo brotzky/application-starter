@@ -48,7 +48,7 @@ class Overview extends Component {
             action={
               organization && (
                 <OrganizationLogo
-                  src={`/static/img/logos/organizations/${organization}.svg`}
+                  src={`/images/logos/organizations/${organization}.svg`}
                 />
               )
             }

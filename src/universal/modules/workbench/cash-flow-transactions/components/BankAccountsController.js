@@ -109,9 +109,9 @@ const SortButton = styled.button`
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
     border-right: ${props =>
-    props.active
-      ? `1px solid ${props.theme.colors.blue}`
-      : `1px solid ${props.theme.colors.grey}`};
+      props.active
+        ? `1px solid ${props.theme.colors.blue}`
+        : `1px solid ${props.theme.colors.grey}`};
   }
 
   &:hover {
@@ -173,7 +173,7 @@ class BankAccountsController extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getItemsForEachPage(this.state.initialTransactions);
   }
 

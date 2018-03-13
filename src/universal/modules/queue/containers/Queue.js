@@ -10,7 +10,6 @@ import Pagination from '../../ui/pagination/containers/Pagination';
 import QueueHeader from '../components/QueueHeader';
 import QueueList from '../components/QueueList';
 import QueueControls from '../components/QueueControls';
-import { FadeIn } from '../../ui/transitions/';
 import { QUEUE_IS_NOT_STALE } from '../actions/actions-update-queue-state';
 
 class Queue extends Component {
@@ -140,11 +139,11 @@ class Queue extends Component {
     };
 
     return (
-      <FadeIn component="div">
+      <div>
         <QueueControls {...queueControlsProps} />
         <QueueHeader {...queueHeaderProps} />
         <QueueList {...queueListProps} />
-      </FadeIn>
+      </div>
     );
   }
 }

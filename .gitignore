@@ -1,6 +1,7 @@
 .idea/
 build/
 dist/
+static/dist
 cache/
 .cache-loader/
 tools/webpack/server.config.js

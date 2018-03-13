@@ -42,7 +42,7 @@ const HeaderHeading = styled.h4`
 `;
 
 class ChecklistResolution extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { checklistItem, dispatch, params } = this.props;
     return dispatch(
       getChecklistItem(

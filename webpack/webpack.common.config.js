@@ -32,12 +32,6 @@ module.exports = () => ({
     ],
   },
 
-  output: {
-    path: dist,
-    filename: '[name].[hash].js',
-    publicPath: '/dist/',
-  },
-
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['*', '.js', '.json'],
@@ -61,7 +55,7 @@ module.exports = () => ({
     new webpack.IgnorePlugin(/\/iconv-loader$/),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new ReactLoadableWebpack.ReactLoadablePlugin({
-      filename: './dist/react-loadable.json',
+      filename: './static/dist/react-loadable.json',
     }),
     new webpack.DefinePlugin({
       'process.env': {

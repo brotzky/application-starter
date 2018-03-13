@@ -72,13 +72,7 @@ const StyledPencil = styled(Pencil)`
 `;
 
 class MemberNoteComposer extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleFabClick = this.handleFabClick.bind(this);
-  }
-
-  componentWillMount() {
+  componentDidMount() {
     this.setCategoryValue();
   }
 
@@ -119,7 +113,7 @@ class MemberNoteComposer extends Component {
     return dispatch(initialize('note', { category: 'member' }));
   }
 
-  handleSubmit(data) {
+  handleSubmit = data => {
     if (!data.content) {
       return null;
     }
@@ -146,14 +140,14 @@ class MemberNoteComposer extends Component {
         }),
       );
     });
-  }
+  };
 
-  handleFabClick() {
+  handleFabClick = () => {
     const { dispatch, member } = this.props;
     return dispatch(
       updateMemberState(TOGGLE_NOTE_COMPOSER, !member.showNoteComposer),
     );
-  }
+  };
 
   render() {
     const { member, params, hasPermission } = this.props;

@@ -1,13 +1,17 @@
 {
   "license": "ISC",
   "scripts": {
-    "start": "yarn dev",
-    "dev": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development PORT=3000 node ./src/server/entry.js",
-    "prod": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production PORT=3000 node ./src/server/entry.js",
-    "build:client": "NODE_ENV=development webpack --config ./webpack/webpack.production.config.js",
-    "build:server": "NODE_ENV=development webpack --config ./webpack/webpack.server.config.js",
+    "start":
+      "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production PORT=3000 node ./bin/server.js",
+    "dev":
+      "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development PORT=3000 node ./bin/server.js",
+    "prod": "yarn start",
+    "build:client":
+      "NODE_ENV=development webpack --config ./webpack/webpack.production.config.js",
+    "build:server":
+      "NODE_ENV=development webpack --config ./webpack/webpack.server.config.js",
     "build": "yarn clear | yarn build:client && yarn build:server",
-    "clear": "rm -Rf dist/*"
+    "clear": "rm -Rf static/dist/*"
   },
   "dependencies": {
     "compression": "^1.7.2",

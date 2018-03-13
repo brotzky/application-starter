@@ -56,16 +56,12 @@ class Login extends Component {
   };
 
   handleSubmit = data => {
-    const {
-      isAuth0FormVisible,
-      dispatch,
-      envProperties: { connection, clientId },
-    } = this.props;
+    const { dispatch, envProperties: { connection, clientId } } = this.props;
     const hostname = window.location.hostname;
     const redirectUrl = hostname.includes('localhost')
       ? `http://localhost:3000/redirect`
       : `https://${hostname}/redirect`;
-    if (!isAuth0FormVisible) {
+    if (!this.state.isAuth0FormVisible) {
       return dispatch(authOneTimePass(data));
     }
     const isFormFilled = data.password && data.email;
@@ -92,8 +88,6 @@ class Login extends Component {
   };
 
   emailLinkHandler = () => {
-    const { change } = this.props;
-    change('isAuth0FormVisible', !this.state.isAuth0FormVisible);
     this.setState({ isAuth0FormVisible: !this.state.isAuth0FormVisible });
   };
 
@@ -105,9 +99,9 @@ class Login extends Component {
   };
 
   renderLoginForm() {
-    const { auth, loginEmail, isAuth0FormVisible } = this.props;
+    const { auth, loginEmail } = this.props;
 
-    if (!isAuth0FormVisible) {
+    if (!this.state.isAuth0FormVisible) {
       return (
         <LoginFormWrapper>
           <LoginForm
@@ -161,15 +155,11 @@ const selectorLoginWrapper = formValueSelector('loginWrapper');
 
 Login = reduxForm({
   form: 'loginWrapper',
-  initialValues: {
-    isAuth0FormVisible: true,
-  },
 })(Login);
 
 const mapStateToProps = state => ({
   auth: state.auth,
   isAuth0Form: !!state.form.loginAuth0,
-  isAuth0FormVisible: selectorLoginWrapper(state, 'isAuth0FormVisible'),
   responsedForm: state.auth.responsedForm,
   loginEmail: selector(state, 'email'),
   envProperties: state.permissions.envProperties,

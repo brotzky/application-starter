@@ -166,7 +166,7 @@ class LoginForm extends Component {
                 <fieldset>
                   <Button
                     type="submit"
-                    buttonText="Continue"
+                    text="Continue"
                     isSubmitting={submitting}
                     size="xlarge"
                     width="100%"

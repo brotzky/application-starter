@@ -23,7 +23,6 @@ import {
 } from '../actions/actions-update-queue-state';
 import { Button, Ellipsis, ProfilePicture, Pill } from '../../ui/components';
 import { showModal } from '../../ui/modal/actions/actions-modal';
-import { FadeIn } from '../../ui/transitions';
 import JointIcons from '../../ui/joint-icons/';
 import {
   handleClaimClick,
@@ -139,126 +138,124 @@ class QueueItem extends Component {
 
     return (
       <QueueItemList>
-        <FadeIn>
-          <QueueItemWrapper>
-            <QueueItemCell title={productName} style={{ flex: '1.3' }}>
-              <QueueItemLink to={workbenchLink}>
-                <QueueActionsItemLinkMain style={{ display: 'flex' }}>
-                  <JointIcons application={item} />
-                  <Ellipsis>{productName}</Ellipsis>
-                </QueueActionsItemLinkMain>
-                <QueueActionsItemLinkSub>
-                  {moment(item.dateCreated).format('MMM D YYYY, h:mm a')}
-                </QueueActionsItemLinkSub>
-              </QueueItemLink>
-            </QueueItemCell>
-            <QueueItemCell
-              title={`${item.creator.firstName} ${item.creator.lastName}`}
-              style={{ flex: '1.25' }}
-            >
-              <QueueItemLink to={memberLink}>
-                <QueueActionsItemLinkMain
-                  style={{ display: 'flex', alignItems: 'flex-start' }}
-                >
-                  <ExistingUserNotification isExistingUser={isExistingUser} />
-                  <div>
-                    {item.creator.firstName} {item.creator.lastName}
-                    <QueueActionsItemLinkSub>
-                      {item.creator.email}
-                    </QueueActionsItemLinkSub>
-                  </div>
-                </QueueActionsItemLinkMain>
-              </QueueItemLink>
-            </QueueItemCell>
-            <QueueItemCell title={currentStep} style={{ flex: '0.7' }}>
-              <QueueItemLink to={workbenchLink}>{currentStep}</QueueItemLink>
-            </QueueItemCell>
-            <QueueItemCell title={item.state} style={{ flex: '0.7' }}>
-              <QueueItemLink to={workbenchLink}>
-                {item.adminSteps ? (
-                  item.adminSteps.currentStep.prettyName
-                ) : (
-                  <span style={{ opacity: '0.6' }}>–</span>
-                )}
-              </QueueItemLink>
-            </QueueItemCell>
-            <QueueItemCell title={item.state} style={{ flex: '0.7' }}>
-              <StatePill state={this.pillColor(item.state)} to={workbenchLink}>
-                {capitalizeString(item.state, '-', ' ')}
-              </StatePill>
-            </QueueItemCell>
-            <QueueItemCell title={item.primaryRep.email} style={{ flex: '1' }}>
-              {item.primaryRep.email ? (
-                <UserContainer
-                  onClick={
-                    item.primaryRep.email === user.email
-                      ? () => handleUnclaimClick(dispatch, Application)
-                      : () => {}
-                  }
-                  isRep={item.primaryRep.email === user.email}
-                >
-                  <ProfilePictureContainer>
-                    <ProfilePicture size={34} user={item.primaryRep} />
-                  </ProfilePictureContainer>
-                  <UserTextContainer>
-                    <QueueActionsItemLinkMain>
-                      {item.primaryRep.firstName} {item.primaryRep.lastName}
-                    </QueueActionsItemLinkMain>
-                    <QueueActionsItemLinkSub>
-                      {item.primaryRep.email}
-                    </QueueActionsItemLinkSub>
-                  </UserTextContainer>
-                </UserContainer>
-              ) : (
-                <Button
-                  onClick={() =>
-                    handleClaimClick(dispatch, Application, user.email)
-                  }
-                  text="Claim"
-                  permission="CLAIM_UNCLAIM_APPLICATION"
-                  isSubmitting={queue.isUpdating}
-                />
-              )}
-            </QueueItemCell>
-            <QueueItemCell style={{ flex: '0.2', textAlign: 'right' }}>
-              <QueueActionsItemMenuButton
-                onClick={event => this.handleActionMenuClick(event, item.id)}
+        <QueueItemWrapper>
+          <QueueItemCell title={productName} style={{ flex: '1.3' }}>
+            <QueueItemLink to={workbenchLink}>
+              <QueueActionsItemLinkMain style={{ display: 'flex' }}>
+                <JointIcons application={item} />
+                <Ellipsis>{productName}</Ellipsis>
+              </QueueActionsItemLinkMain>
+              <QueueActionsItemLinkSub>
+                {moment(item.dateCreated).format('MMM D YYYY, h:mm a')}
+              </QueueActionsItemLinkSub>
+            </QueueItemLink>
+          </QueueItemCell>
+          <QueueItemCell
+            title={`${item.creator.firstName} ${item.creator.lastName}`}
+            style={{ flex: '1.25' }}
+          >
+            <QueueItemLink to={memberLink}>
+              <QueueActionsItemLinkMain
+                style={{ display: 'flex', alignItems: 'flex-start' }}
               >
-                <QueueItemMenuDotsIcon vertical={true} />
-              </QueueActionsItemMenuButton>
-              {showQueueMenu === item.id && (
-                <QueueActions>
-                  {false &&
-                    productLink && (
-                      <QueueActionsItemLink to={productLink}>
-                        View Product
-                      </QueueActionsItemLink>
-                    )}
-                  <QueueActionsItemLink to={memberLink}>
-                    View Member Profile
-                  </QueueActionsItemLink>
-                  <QueueActionsItemLink to={workbenchLink}>
-                    Application
-                  </QueueActionsItemLink>
-                  {item.primaryRep.email === user.email && (
-                    <QueueActionsItemButton
-                      onClick={() => handleUnclaimClick(dispatch, Application)}
-                    >
-                      Unclaim Application
-                    </QueueActionsItemButton>
-                  )}
-                  {this.hasPermission('ASSIGN_APPLICATION') && (
-                    <QueueActionsItemButton
-                      onClick={() => this.handleAssignClick(Application)}
-                    >
-                      Assign Application
-                    </QueueActionsItemButton>
-                  )}
-                </QueueActions>
+                <ExistingUserNotification isExistingUser={isExistingUser} />
+                <div>
+                  {item.creator.firstName} {item.creator.lastName}
+                  <QueueActionsItemLinkSub>
+                    {item.creator.email}
+                  </QueueActionsItemLinkSub>
+                </div>
+              </QueueActionsItemLinkMain>
+            </QueueItemLink>
+          </QueueItemCell>
+          <QueueItemCell title={currentStep} style={{ flex: '0.7' }}>
+            <QueueItemLink to={workbenchLink}>{currentStep}</QueueItemLink>
+          </QueueItemCell>
+          <QueueItemCell title={item.state} style={{ flex: '0.7' }}>
+            <QueueItemLink to={workbenchLink}>
+              {item.adminSteps ? (
+                item.adminSteps.currentStep.prettyName
+              ) : (
+                <span style={{ opacity: '0.6' }}>–</span>
               )}
-            </QueueItemCell>
-          </QueueItemWrapper>
-        </FadeIn>
+            </QueueItemLink>
+          </QueueItemCell>
+          <QueueItemCell title={item.state} style={{ flex: '0.7' }}>
+            <StatePill state={this.pillColor(item.state)} to={workbenchLink}>
+              {capitalizeString(item.state, '-', ' ')}
+            </StatePill>
+          </QueueItemCell>
+          <QueueItemCell title={item.primaryRep.email} style={{ flex: '1' }}>
+            {item.primaryRep.email ? (
+              <UserContainer
+                onClick={
+                  item.primaryRep.email === user.email
+                    ? () => handleUnclaimClick(dispatch, Application)
+                    : () => {}
+                }
+                isRep={item.primaryRep.email === user.email}
+              >
+                <ProfilePictureContainer>
+                  <ProfilePicture size={34} user={item.primaryRep} />
+                </ProfilePictureContainer>
+                <UserTextContainer>
+                  <QueueActionsItemLinkMain>
+                    {item.primaryRep.firstName} {item.primaryRep.lastName}
+                  </QueueActionsItemLinkMain>
+                  <QueueActionsItemLinkSub>
+                    {item.primaryRep.email}
+                  </QueueActionsItemLinkSub>
+                </UserTextContainer>
+              </UserContainer>
+            ) : (
+              <Button
+                onClick={() =>
+                  handleClaimClick(dispatch, Application, user.email)
+                }
+                text="Claim"
+                permission="CLAIM_UNCLAIM_APPLICATION"
+                isSubmitting={queue.isUpdating}
+              />
+            )}
+          </QueueItemCell>
+          <QueueItemCell style={{ flex: '0.2', textAlign: 'right' }}>
+            <QueueActionsItemMenuButton
+              onClick={event => this.handleActionMenuClick(event, item.id)}
+            >
+              <QueueItemMenuDotsIcon vertical={true} />
+            </QueueActionsItemMenuButton>
+            {showQueueMenu === item.id && (
+              <QueueActions>
+                {false &&
+                  productLink && (
+                    <QueueActionsItemLink to={productLink}>
+                      View Product
+                    </QueueActionsItemLink>
+                  )}
+                <QueueActionsItemLink to={memberLink}>
+                  View Member Profile
+                </QueueActionsItemLink>
+                <QueueActionsItemLink to={workbenchLink}>
+                  Application
+                </QueueActionsItemLink>
+                {item.primaryRep.email === user.email && (
+                  <QueueActionsItemButton
+                    onClick={() => handleUnclaimClick(dispatch, Application)}
+                  >
+                    Unclaim Application
+                  </QueueActionsItemButton>
+                )}
+                {this.hasPermission('ASSIGN_APPLICATION') && (
+                  <QueueActionsItemButton
+                    onClick={() => this.handleAssignClick(Application)}
+                  >
+                    Assign Application
+                  </QueueActionsItemButton>
+                )}
+              </QueueActions>
+            )}
+          </QueueItemCell>
+        </QueueItemWrapper>
       </QueueItemList>
     );
   }

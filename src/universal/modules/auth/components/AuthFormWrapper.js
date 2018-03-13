@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import AuthFormBackground from './AuthFormBackground';
-import { FadeIn } from '../../ui/transitions';
 import { media } from 'gac-utils/sc';
 
 const AuthFormContainer = styled.div`
@@ -36,9 +35,7 @@ const AuthFormWrapper = ({ children }) => (
   <AuthFormContainer>
     <AuthFormBackground />
     <NewPasswordWrapper>
-      <FadeIn>
-        <ContentWrapper>{children}</ContentWrapper>
-      </FadeIn>
+      <ContentWrapper>{children}</ContentWrapper>
     </NewPasswordWrapper>
   </AuthFormContainer>
 );

@@ -77,7 +77,7 @@ class QueueAssignApplicationModal extends Component {
     users: PropTypes.object.isRequired,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch, users: { isFetching, users } } = this.props;
     if (!users.length && !isFetching) {
       return dispatch(getUsers());
