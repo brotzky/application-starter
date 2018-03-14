@@ -59,7 +59,7 @@ class Login extends Component {
     const { dispatch, envProperties: { connection, clientId } } = this.props;
     const hostname = window.location.hostname;
     const redirectUrl = hostname.includes('localhost')
-      ? `http://localhost:3000/redirect`
+      ? `http://localhost:8080/redirect`
       : `https://${hostname}/redirect`;
     if (!this.state.isAuth0FormVisible) {
       return dispatch(authOneTimePass(data));

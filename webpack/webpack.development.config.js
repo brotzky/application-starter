@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 const src = path.resolve(root, 'src');
 const assetsPath = path.resolve(root, 'static/dist');
 var host = process.env.HOST || 'localhost';
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 
 const babelQuery = {
   env: {
@@ -64,7 +64,7 @@ const devConfig = () => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"',
-        PORT: 3000,
+        PORT: 8080,
       },
       __CLIENT__: true,
       __PRODUCTION__: false,

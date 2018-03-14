@@ -8,7 +8,7 @@ const isDev = process.env.NODE_ENV === 'development';
  */
 
 const env = {
-  org: process.argv[2] || 'grow',
+  org: process.argv[2] || 'demo',
   env: process.argv[3] || 'dev',
 };
 
@@ -18,6 +18,15 @@ if (!process.argv[2] && isDev) {
   );
 }
 
-const target = `https://${env.org}-${env.env}-gac.poweredbygrow.com`;
+const forwardHost = `${env.org}-${env.env}-gac.poweredbygrow.com`;
+const appspot = `https://admin-api-dot-grow-${env.org}-${env.env}.appspot.com`;
+const headers = {
+  'X-Forwarded-Host': forwardHost,
+};
 
-export default proxy({ target, changeOrigin: true, secure: false });
+export default proxy({
+  target: appspot,
+  headers,
+  changeOrigin: true,
+  secure: false,
+});

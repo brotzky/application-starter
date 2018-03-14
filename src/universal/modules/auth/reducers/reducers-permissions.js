@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   permissions: null,
-  envProperties: null,
+  envProperties: {},
 };
 
 export default function permissionsReducer(state = initialState, action) {

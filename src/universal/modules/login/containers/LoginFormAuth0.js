@@ -147,6 +147,7 @@ class LoginFormAuth0 extends Component {
                 name="submitButton"
                 component={FormButton}
                 buttonText="Sign in"
+                type="submit"
                 isSubmitting={submitting}
                 size="xlarge"
                 width="100%"
