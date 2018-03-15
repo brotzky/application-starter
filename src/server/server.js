@@ -6,6 +6,7 @@ import compression from 'compression';
 import favicon from 'serve-favicon';
 import Loadable from 'react-loadable';
 import helmet from 'helmet';
+import url from 'url';
 
 import render from './middleware/render';
 import proxy from './middleware/proxy';
@@ -17,18 +18,17 @@ import startup from './utils/startup';
 const root = path.join(__dirname, '../../');
 
 const app = express();
-const httpsPort = app.get('https-port');
 
 // Security related
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(security);
+app.use(security());
 
 // Proxying API calls
-app.use('/v1', proxy);
+app.use('/v1', proxy());
 
 // Force Https
-app.use(https({ httpsPort }));
+app.use(https());
 app.set('trust proxy', true);
 
 // Setting up webpack for development env

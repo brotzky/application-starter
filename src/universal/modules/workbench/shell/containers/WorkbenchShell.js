@@ -145,7 +145,6 @@ class WorkbenchShell extends Component {
 }
 
 WorkbenchShell.propTypes = {
-  params: paramsPropType.isRequired,
   dispatch: dispatchPropType.isRequired,
   workbench: workbenchPropType.isRequired,
   user: userPropType.isRequired,
