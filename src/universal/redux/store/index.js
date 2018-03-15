@@ -21,7 +21,7 @@ export default function configureStore(history, initialState) {
       apiMiddleware,
       thunk,
       router,
-      // logger,
+      logger,
       syncMembers,
       errorsCheck,
     ];

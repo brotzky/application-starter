@@ -18,55 +18,59 @@ function Loading(props) {
 const AsyncLogin = Loadable({
   loader: () => import('../modules/login/containers/Login'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 const AsyncResetPassword = Loadable({
   loader: () => import('../modules/login/containers/ResetPassword'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 const AsyncAuthloader = Loadable({
   loader: () => import('../modules/auth/components/AuthLoader'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 const AsyncAcceptInvite = Loadable({
   loader: () => import('../modules/login/containers/NewPassword'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 const AsyncMemberProfile = Loadable({
   loader: () => import('../modules/member/containers/Member'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
+// Loading the member profile page right away
+AsyncMemberProfile.preload();
 
 const AsyncWorkbench = Loadable({
   loader: () => import('../modules/workbench/shell/containers/WorkbenchShell'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
+// Loading the workbench profile page right away
+AsyncWorkbench.preload();
 
 const AsyncAccount = Loadable({
   loader: () => import('../modules/account/shell/components/AccountShell'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 const AsyncApplications = Loadable({
   loader: () => import('../modules/queue/containers/Queue'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 const AsyncNotFound = Loadable({
   loader: () => import('../modules/404/components/404'),
   loading: () => Loading,
-  timeout: 500,
+  delay: 400,
 });
 
 export const routes = [

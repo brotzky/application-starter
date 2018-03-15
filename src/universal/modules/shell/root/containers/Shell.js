@@ -50,9 +50,7 @@ class Shell extends Component {
     return (
       <ShellContainer>
         <PrimaryNav params={params} />
-        {(pathname.includes('members') || pathname.includes('analytics')) && (
-          <SecondaryNav params={params} />
-        )}
+        {pathname.includes('members') && <SecondaryNav params={params} />}
         {this.props.children}
       </ShellContainer>
     );
