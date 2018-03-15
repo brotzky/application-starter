@@ -12,6 +12,7 @@ export { default as ImageGroup } from './Image/ImageGroup';
 export { default as Tooltip } from './Tooltip/Tooltip';
 export { default as InlineTooltip } from './Tooltip/InlineTooltip';
 export { default as TextBox } from './Text/TextBox';
+export { default as Title } from './Title/Title';
 export { default as Action } from './Action/Action';
 export { default as Table } from './Table/Table';
 export { default as Panel } from './Panel/Panel';

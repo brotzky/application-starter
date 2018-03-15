@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import AuthWrapper from '../../auth/containers/AuthWrapper';
 import { destroy } from 'redux-form';
 import { getProductApplications } from 'grow-actions/product-applications/product-applications';
 import { getProducts } from 'grow-actions/products/products';
+import AuthWrapper from '../../auth/containers/AuthWrapper';
 import Pagination from '../../ui/pagination/containers/Pagination';
+import { Title } from '../../ui/components';
 import QueueHeader from '../components/QueueHeader';
 import QueueList from '../components/QueueList';
 import QueueControls from '../components/QueueControls';
@@ -140,6 +141,7 @@ class Queue extends Component {
 
     return (
       <div>
+        <Title title="Applications" />
         <QueueControls {...queueControlsProps} />
         <QueueHeader {...queueHeaderProps} />
         <QueueList {...queueListProps} />

@@ -6,6 +6,7 @@ import { authAuth0Login } from 'grow-actions/auth/auth-auth0-login';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
 import styled from 'styled-components';
+import { Title } from '../../ui/components';
 import { resetPassword } from 'grow-actions/auth/auth0-reset-password';
 import { getEnvProperties } from 'grow-actions/auth/auth';
 import AuthFormWrapper from '../../auth/components/AuthFormWrapper';
@@ -118,6 +119,7 @@ class NewPassword extends Component {
     return (
       <AuthFormWrapper>
         <div>
+          <Title title="Welcome to Grow Admin Console" />
           <NewPasswordHeader>Hi, {nameInQuery}!</NewPasswordHeader>
           <NewPasswordText>
             Welcome to Grow Admin Console. To get started, please create a new

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { getUsers } from 'grow-actions/user/user';
-import { Card, EmptyState, Button } from '../../../ui/components';
+import { Card, EmptyState, Button, Title } from '../../../ui/components';
 import AccountShellSection from '../../shell/components/AccountShellSection';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
 import AccountShellWrapper from '../../shell/containers/AccountShellWrapper';
@@ -56,6 +56,7 @@ class Users extends Component {
 
     return (
       <Card>
+        <Title title="Users" />
         <AccountShellSection padding>
           <AccountShellHeader
             text="Users"

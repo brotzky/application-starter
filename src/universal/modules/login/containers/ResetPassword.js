@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { push } from 'react-router-redux';
 import { Transition } from '../../ui/transitions/';
 import { CheckCircleFilled } from '../../ui/icons/';
+import { Title } from '../../ui/components';
 import {
   resetPasswordRequest,
   resetPassword,
@@ -107,6 +108,7 @@ class ResetPassword extends Component {
 
     return (
       <AuthFromWrapper>
+        <Title title="Forgot your password?" />
         <LoginWrapper>
           {isResetPasswordForm ? (
             <ResetPasswordForm onSubmit={this.handleResetSubmit} />

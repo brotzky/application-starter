@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import fuse from 'fuse.js';
 import { rolesPropType, isFetchingRolePropType } from 'gac-utils/proptypes';
-import { Button, Card } from '../../../ui/components';
+import { Button, Card, Title } from '../../../ui/components';
 import AccountShellWrapper from '../../shell/containers/AccountShellWrapper';
 import AccountShellSection from '../../shell/components/AccountShellSection';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
@@ -44,6 +44,7 @@ class Roles extends Component {
 
     return (
       <Card>
+        <Title title="Roles" />
         <AccountShellSection padding>
           <AccountShellHeader
             text="Roles"

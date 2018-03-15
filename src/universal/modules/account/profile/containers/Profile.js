@@ -7,7 +7,7 @@ import {
   dispatchPropType,
   paramsPropType,
 } from 'gac-utils/proptypes';
-import { Card } from '../../../ui/components';
+import { Card, Title } from '../../../ui/components';
 import ProfileFormPlaceholder from '../components/ProfileFormPlaceholder';
 import AccountShellWrapper from '../../shell/containers/AccountShellWrapper';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
@@ -123,6 +123,7 @@ class Profile extends Component {
 
     return (
       <AccountShellSection>
+        <Title title="Your profile" />
         <AccountShellHeader
           linkBack={{ link: '/account/users', text: 'Users' }}
           text={profileName}

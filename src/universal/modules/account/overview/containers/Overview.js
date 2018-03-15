@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { getProducts } from 'grow-actions/products/products';
-import { Card } from '../../../ui/components';
+import { Card, Title } from '../../../ui/components';
 import AccountShellWrapper from '../../shell/containers/AccountShellWrapper';
 import AccountShellSection from '../../shell/components/AccountShellSection';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
@@ -42,6 +42,7 @@ class Overview extends Component {
 
     return (
       <Card>
+        <Title title="Products" />
         <AccountShellSection padding>
           <AccountShellHeader
             text="Products"

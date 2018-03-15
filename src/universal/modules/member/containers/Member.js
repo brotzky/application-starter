@@ -8,7 +8,7 @@ import AuthWrapper from '../../auth/containers/AuthWrapper';
 import MemberProductApplications from './MemberProductApplications';
 import MemberNotes from './MemberNotes';
 import MemberNoteComposer from './MemberNoteComposer';
-import { Button } from '../../ui/components';
+import { Button, Title } from '../../ui/components';
 import {
   notificationPush,
   notificationEdit,
@@ -71,6 +71,11 @@ class Member extends Component {
 
     return (
       <MemberContainer>
+        <Title
+          title={`${member.member.firstName} ${
+            member.member.lastName
+          }'s profile`}
+        />
         {appConfigIsLoaded &&
           member.member.firstName &&
           !member.member.locked && (

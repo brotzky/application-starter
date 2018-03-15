@@ -13,7 +13,7 @@ import ApplicationsHeader from '../components/ApplicationsHeader';
 import ApplicationsList from '../components/ApplicationsList';
 import ApplicationsSidebar from './ApplicationsSidebar';
 import { FadeIn } from '../../ui/transitions/';
-import { Card } from '../../ui/components';
+import { Card, Title } from '../../ui/components';
 import Table from '../../ui/components/Table/Table';
 import { getQueryParameters } from 'grow-utils/filters';
 import { Spinner } from 'gac-ui/components/';
@@ -162,6 +162,7 @@ class Applications extends Component {
 
     return (
       <FadeIn component={ApplicationsContainer}>
+        <Title title="Applications" />
         <ApplicationsSidebar {...queueControlsProps} />
         <ApplicationsCard>
           {data.isFetching ? (

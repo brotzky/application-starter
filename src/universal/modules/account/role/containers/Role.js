@@ -8,7 +8,7 @@ import {
   rolePropType,
   permissionsPropType,
 } from 'gac-utils/proptypes';
-import { Card } from '../../../ui/components';
+import { Card, Title } from '../../../ui/components';
 import buildPermissionsConfig from '../../utils/buildPermissionsConfig';
 import RoleFormPlaceholder from '../components/RoleFormPlaceholder';
 import AccountShellHeader from '../../shell/components/AccountShellHeader';
@@ -82,6 +82,7 @@ class Role extends Component {
 
     return (
       <AccountShellSection>
+        <Title title="Role" />
         <AccountShellHeader
           linkBack={{ link: '/account/roles', text: 'Roles' }}
           text={roleName}

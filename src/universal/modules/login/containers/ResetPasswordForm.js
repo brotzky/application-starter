@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
+import { NavLink } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import { AUTH_RESET_LOGIN_MESSAGE } from 'grow-actions/auth/constants';
 import {
@@ -35,7 +36,8 @@ const LoginFormSeparatorLine = styled.div`
   top: 50%;
 `;
 
-const ReturnToLoginButton = styled.button`
+const ReturnToLoginButton = styled(NavLink)`
+  display: block;
   width: 100%;
   cursor: pointer;
   text-align: center;
@@ -47,6 +49,7 @@ const ReturnToLoginButton = styled.button`
   line-height: 4.375rem;
   font-size: 1.5rem;
   font-weight: 600;
+  text-decoration: none;
 `;
 
 export const LoginFormTheme = {
@@ -140,8 +143,8 @@ class ResetPasswordForm extends Component {
               <LoginFormSeparatorText>or</LoginFormSeparatorText>
               <LoginFormSeparatorLine />
             </LoginFormSeparator>
-            <ReturnToLoginButton type="button">
-              <TextLink text="Return to login" path="/login" />
+            <ReturnToLoginButton to="/login">
+              Return to login
             </ReturnToLoginButton>
           </div>
         </ThemeProvider>

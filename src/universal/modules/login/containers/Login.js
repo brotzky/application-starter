@@ -12,6 +12,7 @@ import { capitalizeString } from 'grow-utils/stringFormatting';
 import LoginForm from './LoginForm';
 import LoginFormAuth0 from './LoginFormAuth0';
 import { LoginWrapper, LoginFormWrapper } from 'gac-utils/sc';
+import { Title } from '../../ui/components';
 import AuthFromWrapper from '../../auth/components/AuthFormWrapper';
 import AuthWrapper from '../../auth/containers/AuthWrapper';
 
@@ -134,8 +135,13 @@ class Login extends Component {
   });
 
   render() {
+    const title = this.state.isAuth0FormVisible
+      ? 'Sign into your account'
+      : 'Sign with email';
+
     return (
       <AuthFromWrapper>
+        <Title title={title} />
         <LoginWrapper>
           {this.renderLoginForm()}
           {this.props.responsedForm && (
