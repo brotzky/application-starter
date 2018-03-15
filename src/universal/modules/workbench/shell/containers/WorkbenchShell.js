@@ -7,6 +7,7 @@ import { RESET_WORKBENCH } from 'grow-actions/workbench/constants';
 import { getChecklist } from 'grow-actions/checklist/checklist';
 import { getMemberProductApplicationMetadata } from 'grow-actions/member/member-category-metadata';
 import { workbenchShell, container } from 'gac-utils/sc';
+import { Title } from '../../../ui/components';
 import { GET_WORKBENCH_CONFIG_SUCCESS } from '../../../../configs/constants';
 import AuthWrapper from '../../../auth/containers/AuthWrapper';
 import WorkbenchShellSidebar from './WorkbenchShellSidebar';
@@ -128,6 +129,7 @@ class WorkbenchShell extends Component {
      */
     return (
       <WorkbenchShellContainer component="div">
+        <Title title="Workbench" />
         <WorkbenchShellSidebar params={params} />
         <WorkbenchShellDynamic
           workbench={workbench}

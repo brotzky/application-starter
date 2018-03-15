@@ -21,7 +21,7 @@ export const QueueItemList = styled.li`
   position: relative;
   background: white;
   &:nth-child(even) {
-    background: ${props => props.theme.colors.greyWhite};
+    background: ${props => props.theme.colors.greyLight};
   }
 `;
 
@@ -68,7 +68,7 @@ export const QueueItem = styled.div`
   background: white;
 
   &:nth-child(even) {
-    background: ${props => props.theme.colors.greyWhite};
+    background: #f9f9f9;
   }
 `;
 

@@ -49,10 +49,7 @@ const ReturnToLoginButton = styled(NavLink)`
   line-height: 4.375rem;
   font-size: 1.5rem;
   font-weight: 600;
-
-  svg {
-    margin-right: 14px;
-  }
+  text-decoration: none;
 `;
 
 export const LoginFormTheme = {

@@ -29,7 +29,7 @@ const Body = styled.div`
   margin: 0 6rem;
   height: 200px;
   border: 1px solid #eee;
-  background: ${props => props.theme.colors.greyWhite};
+  background: ${props => props.theme.colors.greyLight};
 `;
 
 const MemberNotesPlaceholder = () => (
