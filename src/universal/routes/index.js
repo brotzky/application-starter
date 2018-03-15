@@ -7,9 +7,9 @@ function Loading(props) {
   if (props.error) {
     return <div>Error!</div>;
   } else if (props.timedOut) {
-    return <div>Taking a long time...</div>;
+    return null;
   } else if (props.pastDelay) {
-    return <div>Loading...</div>;
+    return null;
   } else {
     return null;
   }
@@ -18,63 +18,54 @@ function Loading(props) {
 const AsyncLogin = Loadable({
   loader: () => import('../modules/login/containers/Login'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncResetPassword = Loadable({
   loader: () => import('../modules/login/containers/ResetPassword'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncAuthloader = Loadable({
   loader: () => import('../modules/auth/components/AuthLoader'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncAcceptInvite = Loadable({
   loader: () => import('../modules/login/containers/NewPassword'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncMemberProfile = Loadable({
   loader: () => import('../modules/member/containers/Member'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncWorkbench = Loadable({
   loader: () => import('../modules/workbench/shell/containers/WorkbenchShell'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncAccount = Loadable({
   loader: () => import('../modules/account/shell/components/AccountShell'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncApplications = Loadable({
   loader: () => import('../modules/queue/containers/Queue'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
 const AsyncNotFound = Loadable({
   loader: () => import('../modules/404/components/404'),
   loading: () => Loading,
-  delay: 400,
   timeout: 500,
 });
 
