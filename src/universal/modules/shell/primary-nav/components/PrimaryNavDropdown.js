@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import browserHistory from 'react-router/lib/browserHistory';
-import Link from 'react-router/lib/Link';
+import { push } from 'react-router-redux';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { authLogout } from 'grow-actions/auth/auth-logout';
 import { capitalizeString } from 'grow-utils/stringFormatting';
@@ -68,7 +68,7 @@ const DropdownList = styled.ul`
   pointer-events:: ${props => (props.isActive ? 'initial' : 'none')};
 `;
 
-const DropdownListItem = styled(Link)`
+const DropdownListItem = styled(NavLink)`
   display: block;
   padding: 0.875rem 2.4rem;
   font-size: 1.4rem;
@@ -96,6 +96,35 @@ const DropdownListItem = styled(Link)`
     }
   }
 `;
+
+const DropdownListItemRegular = styled.li`
+  display: block;
+  padding: 0.875rem 2.4rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.03);
+
+    svg {
+      * {
+        fill: ${props => props.theme.colors.greyDark};
+      }
+    }
+  }
+
+  svg {
+    margin: 0 28px 1px 0;
+    height: 22px;
+    width: 22px;
+
+    * {
+      fill: #888888;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+  }
+}`;
 
 const DropdownTop = styled.li`
   display: flex;
@@ -203,11 +232,11 @@ class PrimaryNavDropdown extends Component {
                 </li>
               ))}
               <DropdownTopDivider />
-              <li onClick={() => this.handleSignoutClick()}>
-                <DropdownListItem>
-                  <LogoutIcon /> Log out
-                </DropdownListItem>
-              </li>
+              <DropdownListItemRegular
+                onClick={() => this.handleSignoutClick()}
+              >
+                <LogoutIcon /> Log out
+              </DropdownListItemRegular>
             </DropdownList>
           )}
         </Transition>

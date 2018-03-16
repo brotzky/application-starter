@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Fuse from 'fuse.js';
 import _set from 'lodash/set';
 import _unset from 'lodash/unset';
-import browserHistory from 'react-router/lib/browserHistory';
+import { push } from 'react-router-redux';
 
 import {
   FirebaseAPI,
@@ -168,7 +168,7 @@ class Translator extends Component {
         activeCategory: null,
         selectedLanguageKey: null,
       },
-      () => browserHistory.push(`/tools/translator/${env}`),
+      () => this.props.dispatch(push(`/tools/translator/${env}`)),
     );
 
   pushToEnv = async env => {
@@ -203,8 +203,8 @@ class Translator extends Component {
     await this.setState(
       { selectedLanguageDefs, selectedLanguageKey: lang },
       () =>
-        browserHistory.push(
-          `/tools/translator/${this.props.params.env}/${lang}`,
+        this.props.dispatch(
+          push(`/tools/translator/${this.props.params.env}/${lang}`),
         ),
     );
   };
@@ -240,7 +240,9 @@ class Translator extends Component {
         onSidebarCategoryClick={this.onSidebarCategoryClick}
         onBackClick={() =>
           this.setState({ selectedLanguageKey: null }, () =>
-            browserHistory.push(`/tools/translator/${this.props.params.env}`),
+            this.props.dispatch(
+              push(`/tools/translator/${this.props.params.env}`),
+            ),
           )
         }
         onCategoryAdd={this.onCategoryAdd}
