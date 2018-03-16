@@ -73,6 +73,12 @@ const AsyncNotFound = Loadable({
   delay: 400,
 });
 
+const AsyncTranslator = Loadable({
+  loader: () => import('../modules/tools/translator/containers/Translator'),
+  loading: () => Loading,
+  delay: 400,
+});
+
 export const routes = [
   {
     component: Core,
@@ -106,6 +112,11 @@ export const routes = [
         exact: true,
         path: '/account/:accountTab/:accountSecondaryTab?',
         component: AsyncAccount,
+      },
+      {
+        exact: true,
+        path: '/tools/translator/:env/:lang?',
+        component: AsyncTranslator,
       },
       { component: AsyncNotFound },
     ],

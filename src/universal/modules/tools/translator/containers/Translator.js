@@ -51,9 +51,9 @@ class Translator extends Component {
       languages: [],
       languageDefinitions: [],
       selectedLanguageDefs: {},
-      selectedLanguageKey: props.params.lang,
+      selectedLanguageKey: props.match.params.lang,
       activeCategory: null,
-      activeTab: props.params.env,
+      activeTab: props.match.params.env,
     };
 
     this.languageDropdownSearch = new Fuse(this.state.languageDefinitions, {
@@ -204,7 +204,7 @@ class Translator extends Component {
       { selectedLanguageDefs, selectedLanguageKey: lang },
       () =>
         this.props.dispatch(
-          push(`/tools/translator/${this.props.params.env}/${lang}`),
+          push(`/tools/translator/${this.props.match.params.env}/${lang}`),
         ),
     );
   };
@@ -241,7 +241,7 @@ class Translator extends Component {
         onBackClick={() =>
           this.setState({ selectedLanguageKey: null }, () =>
             this.props.dispatch(
-              push(`/tools/translator/${this.props.params.env}`),
+              push(`/tools/translator/${this.props.match.params.env}`),
             ),
           )
         }

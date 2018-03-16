@@ -9,6 +9,7 @@ import {
   LoginForm as FormContainer,
 } from 'gac-ui/components';
 import { FormButton, Text } from '../../forms/fields/';
+import { Ellipsis } from '../../ui/components';
 import { theme } from '../../../themes/';
 import { FadeIn } from '../../ui/transitions/';
 
@@ -143,9 +144,12 @@ class LoginForm extends Component {
             <FadeIn>
               <EmailSentContainer>
                 <p>
-                  A one time link has been sent to <strong>{loginEmail}</strong>
+                  A one time link has been sent to{' '}
+                  <Ellipsis>
+                    <strong title={loginEmail}>{loginEmail}</strong>
+                  </Ellipsis>
                 </p>
-                <p onClick={this.handleRest}>
+                <p style={{ marginTop: '1rem' }} onClick={this.handleRest}>
                   Use a <u>different email</u>
                 </p>
               </EmailSentContainer>
