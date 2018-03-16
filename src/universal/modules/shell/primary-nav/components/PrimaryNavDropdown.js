@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-import { Link } from 'react-router-dom';
+import browserHistory from 'react-router/lib/browserHistory';
+import Link from 'react-router/lib/Link';
 import styled from 'styled-components';
 import { authLogout } from 'grow-actions/auth/auth-logout';
 import { capitalizeString } from 'grow-utils/stringFormatting';
+import isGrowEmployee from 'gac-utils/isGrowEmployee';
 import { Transition } from '../../../ui/transitions';
 import { ProfilePicture } from '../../../ui/components';
 import {
@@ -38,7 +39,8 @@ const dropdownLinks = [
     icon: RolesIcon,
   },
   {
-    path: `/tools/translator/dev/`,
+    path: email =>
+      `/tools/translator/${isGrowEmployee(email) ? 'dev' : 'uat'}/`,
     text: 'Translator',
     icon: TranslationsIcon,
   },
@@ -93,36 +95,7 @@ const DropdownListItem = styled(Link)`
       transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     }
   }
-}`;
-
-const DropdownListItemRegular = styled.li`
-  display: block;
-  padding: 0.875rem 2.4rem;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: background 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.03);
-
-    svg {
-      * {
-        fill: ${props => props.theme.colors.greyDark};
-      }
-    }
-  }
-
-  svg {
-    margin: 0 28px 1px 0;
-    height: 22px;
-    width: 22px;
-
-    * {
-      fill: #888888;
-      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-  }
-}`;
+`;
 
 const DropdownTop = styled.li`
   display: flex;
@@ -165,11 +138,10 @@ const DropdownTopDivider = styled.div`
 class PrimaryNavDropdown extends Component {
   state = { showDropdownMenu: false };
 
-  handleSignoutClick = async () => {
-    const { dispatch } = this.props;
-
-    await dispatch(authLogout());
-    await dispatch(push('/login'));
+  handleSignoutClick = () => {
+    return this.props
+      .dispatch(authLogout())
+      .then(() => browserHistory.push('/login'));
   };
 
   handleActionMenuClick = event => {
@@ -221,7 +193,9 @@ class PrimaryNavDropdown extends Component {
                     to={
                       item.path === '/account/profile/'
                         ? `${item.path}${user.id}`
-                        : item.path
+                        : typeof item.path === 'function'
+                          ? item.path(user.email)
+                          : item.path
                     }
                   >
                     {item.icon()} {item.text}
@@ -229,11 +203,11 @@ class PrimaryNavDropdown extends Component {
                 </li>
               ))}
               <DropdownTopDivider />
-              <DropdownListItemRegular
-                onClick={() => this.handleSignoutClick()}
-              >
-                <LogoutIcon /> Log out
-              </DropdownListItemRegular>
+              <li onClick={() => this.handleSignoutClick()}>
+                <DropdownListItem>
+                  <LogoutIcon /> Log out
+                </DropdownListItem>
+              </li>
             </DropdownList>
           )}
         </Transition>

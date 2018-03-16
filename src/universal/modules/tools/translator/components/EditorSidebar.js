@@ -4,6 +4,7 @@ import SidebarHeader from './SidebarHeader';
 import SidebarCategory from './SidebarCategory';
 import SidebarButton from './SidebarButton';
 import CreateCategory from './CreateCategory';
+import { GrowEmployee } from '../../../ui/components';
 import ViewPermission from '../../../ui/components/Permissions/ViewPermission';
 
 const categories = (keys, onSidebarCategoryClick) =>
@@ -23,8 +24,10 @@ export default ({
     <SidebarHeader>
       <SidebarButton onClick={onBackClick}>Back</SidebarButton>
     </SidebarHeader>
-    <ViewPermission permission="EDIT_TRANSLATIONS">
+    <GrowEmployee>
       <CreateCategory onCategoryAdd={onCategoryAdd} />
+    </GrowEmployee>
+    <ViewPermission permission="EDIT_TRANSLATIONS">
       {categories(Object.keys(defs), onSidebarCategoryClick)}
     </ViewPermission>
   </Sidebar>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { EditorState, ContentState } from 'draft-js';
+import { GrowEmployee } from '../../../ui/components';
 
 import TranslationCompDecorator, {
   customStyles,
@@ -60,8 +61,9 @@ class Definition extends Component {
   onEnter = () => this.setState({ showActions: true });
   onLeave = () => this.setState({ showActions: false });
   onSave = value => {
+    const { category, parent, title } = this.props;
     this.props.onSave({
-      path: `${this.props.category}.${this.props.title}`,
+      path: parent ? `${category}.${parent}.${title}` : `${category}.${title}`,
       value,
     });
     this.setState({
@@ -95,7 +97,7 @@ class Definition extends Component {
           />
         )}
         {showActions && (
-          <ViewPermission permission="EDIT_TRANSLATIONS">
+          <GrowEmployee>
             <ActionButtonToolbar>
               <ActionButton
                 onClick={() =>
@@ -109,7 +111,7 @@ class Definition extends Component {
                 Delete
               </ActionButton>
             </ActionButtonToolbar>
-          </ViewPermission>
+          </GrowEmployee>
         )}
       </Wrapper>
     );

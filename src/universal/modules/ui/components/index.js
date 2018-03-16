@@ -18,6 +18,7 @@ export { default as Table } from './Table/Table';
 export { default as Panel } from './Panel/Panel';
 export { default as Pill } from './Pill/Pill';
 export { default as Spinner } from './Spinner/Spinner';
+export { default as GrowEmployee } from './GrowEmployee';
 export {
   CalculatorColumnOne,
   CalculatorColumnTwo,

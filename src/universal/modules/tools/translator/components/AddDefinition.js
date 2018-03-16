@@ -50,7 +50,8 @@ class AddDefinition extends Component {
           onChange={evt =>
             this.setState({
               path: evt.target.value,
-            })}
+            })
+          }
           value={this.state.path}
         />
         <Button
