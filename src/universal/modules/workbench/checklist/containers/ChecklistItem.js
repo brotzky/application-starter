@@ -339,7 +339,7 @@ class ChecklistItem extends Component {
     document.removeEventListener('click', this.handleCloseActionMenu);
   };
 
-  handleCloseActionMenuEsc(event) {
+  handleCloseActionMenuEsc = event => {
     if (event.keyCode === 27) {
       this.setState({ showChecklistItem: !this.state.showChecklistItem });
       this.props.dispatch(
@@ -347,7 +347,7 @@ class ChecklistItem extends Component {
       );
       document.removeEventListener('keydown', this.handleCloseActionMenuEsc);
     }
-  }
+  };
 
   handleInfoClick = checklistItem => {
     const { dispatch, params, showChecklistDetails } = this.props;
@@ -450,7 +450,7 @@ class ChecklistItem extends Component {
     return (
       <ChecklistItemContainer
         key={checklistItem.id}
-        ref={li => {
+        innerRef={li => {
           this.checklistItemRef = li;
         }}
       >
