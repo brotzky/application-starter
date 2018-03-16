@@ -57,7 +57,7 @@ const SelectStyled = styled.div`
 `;
 
 const SelectValue = styled.div`
-  display: flex;
+  display: block;
   align-items: center;
   position: absolute;
   height: ${props => props.theme.inputs.height};
@@ -124,7 +124,7 @@ const Select = props => {
     return option.value === value;
   });
 
-  const selectValue = (selectedObj && selectedObj.value) || '';
+  const selectValue = (selectedObj && selectedObj.name) || '';
 
   return (
     <FormField flex={flex}>

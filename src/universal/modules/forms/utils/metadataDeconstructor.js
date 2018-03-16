@@ -302,6 +302,9 @@ export default function metadataDeconstructor(metadata = {}, activeMemberId) {
 
   if (data.maritalStatus) root.maritalStatus = data.maritalStatus;
 
+  if (data.membershipShareAmount)
+    root.membershipShareAmount = data.membershipShareAmount;
+
   if (data.monthlyHousingCost) {
     root.monthlyHousingCost = data.monthlyHousingCost;
   }

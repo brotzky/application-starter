@@ -513,6 +513,15 @@ const marital_status = {
   type: 'select',
 };
 
+const membership_share = {
+  label: 'Membership Share',
+  mask: masks.currency(true),
+  name: 'membershipShareAmount',
+  parse: parse.currency,
+  format: format.currency,
+  type: 'tel',
+};
+
 const monthly_housing_cost = {
   label: 'Monthly Housing Cost',
   mask: masks.currency(true),
@@ -925,6 +934,7 @@ export default {
   mailing_province,
   mailing_street,
   mailing_unit,
+  membership_share,
   monthly_housing_cost,
   occupation,
   paystub,
