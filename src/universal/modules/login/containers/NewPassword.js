@@ -56,9 +56,10 @@ class NewPassword extends Component {
       location,
       envProperties: { connection, clientId },
     } = this.props;
+
     const keyInQuery = queryString.parse(location.search).key;
     const emailInQuery = queryString.parse(location.search).email;
-    const hostname = location.hostname;
+    const hostname = window.location.hostname;
     const redirectUrl = hostname.includes('localhost')
       ? `http://localhost:8080/redirect`
       : `https://${hostname}/redirect`;
@@ -105,7 +106,7 @@ class NewPassword extends Component {
   });
 
   render() {
-    const { formValues, location } = this.props;
+    const { formValues, location, auth } = this.props;
     const nameInQuery = queryString.parse(location.search).name;
     const { newPassword, confirmPassword } = formValues;
 
@@ -126,6 +127,7 @@ class NewPassword extends Component {
             password.
           </NewPasswordText>
           <NewPasswordForm
+            auth={auth}
             onSubmit={this.handleSubmit}
             passwordValidationMessage={passwordValidationMessage}
           />
@@ -147,6 +149,7 @@ NewPassword.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   user: state.user,
   formValues: getFormValues('newPassword')(state),
   responsedForm: state.auth.responsedForm,

@@ -96,7 +96,7 @@ class LoginFormAuth0 extends Component {
      * message under the login form. Once they start typing again
      * we want to reset that message so they don't see it.
      */
-    if (auth && auth.hasSentOneTimePass) {
+    if (auth.hasSentOneTimePass) {
       dispatch({ type: AUTH_RESET_LOGIN_MESSAGE });
     }
   };

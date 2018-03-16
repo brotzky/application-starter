@@ -5,6 +5,7 @@ import {
   AUTH_CHECK_REQUEST,
   AUTH_CHECK_SUCCESS,
   AUTH_CHECK_FAILURE,
+  AUTH_LOGOUT_SUCCESS,
   AUTH_TOKEN_REQUEST,
   AUTH_TOKEN_SUCCESS,
   AUTH_TOKEN_FAILURE,
@@ -118,6 +119,8 @@ export default function authReducer(state = initialState, action) {
       return Object.assign({}, state, {
         hasSentOneTimePass: false,
       });
+    case AUTH_LOGOUT_SUCCESS:
+      return initialState;
     default:
       return state;
   }
