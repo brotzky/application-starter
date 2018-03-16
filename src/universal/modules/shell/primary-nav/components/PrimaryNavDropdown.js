@@ -168,9 +168,9 @@ class PrimaryNavDropdown extends Component {
   state = { showDropdownMenu: false };
 
   handleSignoutClick = () => {
-    return this.props
-      .dispatch(authLogout())
-      .then(() => browserHistory.push('/login'));
+    return this.props.dispatch(authLogout()).then(() => {
+      this.props.dispatch(push('/login'));
+    });
   };
 
   handleActionMenuClick = event => {
@@ -187,7 +187,6 @@ class PrimaryNavDropdown extends Component {
   render() {
     const { organizationName, user } = this.props;
     const { showDropdownMenu } = this.state;
-
     return (
       <PrimaryNavDropdownContainer>
         <ProfilePictureContainer

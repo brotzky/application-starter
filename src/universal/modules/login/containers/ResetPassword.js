@@ -98,7 +98,7 @@ class ResetPassword extends Component {
 
   render() {
     const {
-      auth: { organization },
+      auth,
       pathname,
       workEmail,
       hasSentResetPasswordInstructions,
@@ -111,9 +111,12 @@ class ResetPassword extends Component {
         <Title title="Forgot your password?" />
         <LoginWrapper>
           {isResetPasswordForm ? (
-            <ResetPasswordForm onSubmit={this.handleResetSubmit} />
+            <ResetPasswordForm auth={auth} onSubmit={this.handleResetSubmit} />
           ) : (
-            <RequestResetPasswordForm onSubmit={this.handleResetSubmit} />
+            <RequestResetPasswordForm
+              auth={auth}
+              onSubmit={this.handleResetSubmit}
+            />
           )}
           <Transition transitionName="LoginMessage">
             {hasSentResetPasswordInstructions && (

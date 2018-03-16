@@ -123,6 +123,7 @@ class Login extends Component {
     return (
       <LoginFormWrapper>
         <LoginFormAuth0
+          auth={auth}
           onSubmit={this.handleSubmit}
           emailLinkHandler={this.emailLinkHandler}
         />
