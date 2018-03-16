@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import ViewPermission from '../../../ui/components/Permissions/ViewPermission';
 
 const ConfirmButton = styled.button`
   border-radius: 3px;
@@ -47,18 +46,16 @@ class CreateCategory extends Component {
     const { onCategoryAdd } = this.props;
     const { category } = this.state;
     return (
-      <ViewPermission permission="EDIT_TRANSLATIONS">
-        <EditingCategory>
-          <CategoryName
-            placeholder="Category Name"
-            value={category}
-            onChange={this.onChange}
-          />
-          <ConfirmButton onClick={() => onCategoryAdd(category)}>
-            Confirm
-          </ConfirmButton>
-        </EditingCategory>
-      </ViewPermission>
+      <EditingCategory>
+        <CategoryName
+          placeholder="Category Name"
+          value={category}
+          onChange={this.onChange}
+        />
+        <ConfirmButton onClick={() => onCategoryAdd(category)}>
+          Confirm
+        </ConfirmButton>
+      </EditingCategory>
     );
   }
 }

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import DefinitionCategory from '../components/DefinitionCategory';
 import Definition from '../components/Definition';
 import AddDefinition from '../components/AddDefinition';
-import ViewPermission from '../../../ui/components/Permissions/ViewPermission';
+import { GrowEmployee } from '../../../ui/components';
 
 const Wrapper = styled.div`
   display: flex;
@@ -45,12 +45,12 @@ class Editor extends Component {
     if (!definitions) return null;
     return (
       <Wrapper>
-        <ViewPermission permission="EDIT_TRANSLATIONS">
+        <GrowEmployee>
           <AddDefinition
             category={category}
             onAddDefinition={onAddDefinition}
           />
-        </ViewPermission>
+        </GrowEmployee>
         {this.createDefinitionList(definitions)}
       </Wrapper>
     );

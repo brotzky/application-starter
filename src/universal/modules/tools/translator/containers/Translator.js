@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Fuse from 'fuse.js';
 import _set from 'lodash/set';
 import _unset from 'lodash/unset';
-import { push } from 'react-router-redux'
+import browserHistory from 'react-router/lib/browserHistory';
 
 import {
   FirebaseAPI,
@@ -12,7 +12,6 @@ import {
   filterLanguageDefinitions,
 } from '../lib';
 import AuthWrapper from '../../../auth/containers/AuthWrapper';
-import { FadeInFast } from '../../../ui/transitions/index';
 import { Card, Dropdown } from '../../../ui/components';
 import Tab from '../components/Tab';
 import TabBar from '../components/TabBar';
@@ -22,6 +21,7 @@ import Editor from './Editor';
 import EditorSidebar from '../components/EditorSidebar';
 import OrgLanguageList from '../components/OrgLanguageList';
 import ViewPermission from '../../../ui/components/Permissions/ViewPermission';
+import isGrowEmployee from 'gac-utils/isGrowEmployee';
 
 const Container = styled.div`
   display: flex;
@@ -35,6 +35,13 @@ const ContentCard = Card.extend`
   width: 100%;
   flex-wrap: wrap;
 `;
+
+const TabDefinition = {
+  dev: { value: 'dev', display: 'Development' },
+  qa: { value: 'qa', display: 'QA' },
+  uat: { value: 'uat', display: 'UAT' },
+  prod: { value: 'prod', display: 'Production' },
+};
 
 class Translator extends Component {
   constructor(props) {
@@ -161,7 +168,7 @@ class Translator extends Component {
         activeCategory: null,
         selectedLanguageKey: null,
       },
-      () => this.props.dispatch(push(`/tools/translator/${env}`),
+      () => browserHistory.push(`/tools/translator/${env}`),
     );
 
   pushToEnv = async env => {
@@ -177,20 +184,13 @@ class Translator extends Component {
     const { activeTab } = this.state;
     switch (activeTab) {
       case 'dev':
-        return [
-          { display: 'Production', value: 'prod' },
-          { display: 'Staging', value: 'uat' },
-        ];
+        return [TabDefinition.qa, TabDefinition.uat, TabDefinition.prod];
+      case 'qa':
+        return [TabDefinition.uat, TabDefinition.prod];
       case 'uat':
-        return [{ display: 'Production', value: 'prod' }];
-      case 'prod':
-        return [{ display: 'Staging', value: 'uat' }];
+        return [TabDefinition.prod];
       default:
-        return [
-          { display: 'Production', value: 'prod' },
-          { display: 'Staging', value: 'uat' },
-          { display: 'Development', value: 'dev' },
-        ];
+        return [];
     }
   };
 
@@ -203,9 +203,9 @@ class Translator extends Component {
     await this.setState(
       { selectedLanguageDefs, selectedLanguageKey: lang },
       () =>
-        this.props.dispatch(push(
+        browserHistory.push(
           `/tools/translator/${this.props.params.env}/${lang}`,
-        )),
+        ),
     );
   };
 
@@ -240,7 +240,7 @@ class Translator extends Component {
         onSidebarCategoryClick={this.onSidebarCategoryClick}
         onBackClick={() =>
           this.setState({ selectedLanguageKey: null }, () =>
-            this.props.dispatch(push(`/tools/translator/${this.props.params.env}`),
+            browserHistory.push(`/tools/translator/${this.props.params.env}`),
           )
         }
         onCategoryAdd={this.onCategoryAdd}
@@ -260,44 +260,46 @@ class Translator extends Component {
     );
   }
 
+  getTabsForPermissions = email => {
+    if (isGrowEmployee(email)) {
+      return [
+        TabDefinition.dev,
+        TabDefinition.qa,
+        TabDefinition.uat,
+        TabDefinition.prod,
+      ];
+    }
+    return [TabDefinition.uat, TabDefinition.prod];
+  };
+
   renderTabBar() {
-    const activeTab = this.state.activeTab;
+    const { activeTab, selectedLanguageKey } = this.state;
+    const { userEmail } = this.props;
+    const options = this.pushToOptionsForEnv();
+    const tabs = this.getTabsForPermissions(userEmail);
     return (
       <TabBar>
-        {[
-          { id: 'dev', title: 'Development' },
-          { id: 'uat', title: 'UAT / Staging' },
-          { id: 'prod', title: 'Production' },
-        ].map(
-          tab =>
-            tab.id === 'dev' ? (
-              <Tab
-                key={tab.id}
-                active={activeTab === tab.id}
-                onClick={() => this.changeEnv(tab.id)}
-              >
-                {tab.title}
-              </Tab>
-            ) : (
-              <Tab
-                key={tab.id}
-                active={activeTab === tab.id}
-                onClick={() => this.changeEnv(tab.id)}
-              >
-                {tab.title}
-              </Tab>
-            ),
-        )}
-        {this.state.selectedLanguageKey && (
-          <Tab noStyle>
-            <Dropdown
-              onChange={this.pushToEnv}
-              placeholder="Push to"
-              items={this.pushToOptionsForEnv()}
-              itemToString={i => (i == null ? '' : i.display)}
-            />
+        {tabs.map(tab => (
+          <Tab
+            key={tab.value}
+            active={activeTab === tab.value}
+            onClick={() => this.changeEnv(tab.value)}
+          >
+            {tab.display}
           </Tab>
-        )}
+        ))}
+        {selectedLanguageKey &&
+          options.length > 0 &&
+          isGrowEmployee(userEmail) && (
+            <Tab noStyle>
+              <Dropdown
+                onChange={this.pushToEnv}
+                placeholder="Push to"
+                items={options}
+                itemToString={i => (i == null ? '' : i.display)}
+              />
+            </Tab>
+          )}
       </TabBar>
     );
   }
@@ -305,15 +307,15 @@ class Translator extends Component {
   render() {
     const { languages } = this.state;
     return languages.length > 0 ? (
-      <Container>
-        <ViewPermission permission="EDIT_TRANSLATIONS">
+      <ViewPermission permission="EDIT_TRANSLATIONS">
+        <Container>
           <ContentCard>
             {this.renderTabBar()}
             {this.renderSidebar()}
             {this.renderChild()}
           </ContentCard>
-        </ViewPermission>
-      </Container>
+        </Container>
+      </ViewPermission>
     ) : (
       <div>loading..</div>
     );
@@ -321,6 +323,7 @@ class Translator extends Component {
 }
 
 const mapStateToProps = state => ({
+  userEmail: state.user.email,
   org: state.auth.organization.toLowerCase(),
   permissions: state.users.permissions,
 });
