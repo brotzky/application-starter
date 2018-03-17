@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import docCookies from 'grow-utils/cookies';
 import initiGlobalThrottledEvents from 'grow-utils/throttleEvent';
+import { authCheck } from 'grow-actions/auth/auth-check';
+import { provideHooks } from 'redial';
 import Modal from '../../ui/modal/containers/Modal';
 import Notifications from '../../ui/notifications/containers/Notifications';
 // import { ErrorBoundary } from '../../ui/components';
 import { renderRoutes } from 'react-router-config';
 
-import { authCheck } from 'grow-actions/auth/auth-check';
-import { provideHooks } from 'redial';
 
 
 /**
