@@ -41,7 +41,7 @@ function buildEnvOnRequest(req) {
   };
 }
 
-function buildDynamicTarget(req) {
+export function buildDynamicTarget(req) {
   const { url, subdomainOrg, subdomainEnv } = buildEnvOnRequest(req);
 
   if (req.get('host') === 'loans-gac.meridiancu.ca') {
@@ -51,7 +51,7 @@ function buildDynamicTarget(req) {
   return `https://admin-api-dot-grow-${subdomainOrg}-${subdomainEnv}.appspot.com`;
 }
 
-function buildDynamicHeaders(proxyReq, req, res) {
+export function buildDynamicHeaders(proxyReq, req, res) {
   const { url, subdomainOrg, subdomainEnv } = buildEnvOnRequest(req);
   let forwardHost;
 
