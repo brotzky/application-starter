@@ -29,6 +29,6 @@ test:
 build:
   stage: build
   script:
-    - yarn run build:generate
+    - yarn run build
   tags:
     - node
