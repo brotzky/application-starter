@@ -169,7 +169,7 @@ class PrimaryNavDropdown extends Component {
     showDropdownMenu: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     document.addEventListener('click', this.handleClick);
   }
 

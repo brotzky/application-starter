@@ -31,7 +31,7 @@ class QueueItem extends Component {
     showQueueMenu: false,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     document.addEventListener('click', this.handleActionMenuClick);
   }
 
