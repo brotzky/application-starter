@@ -13,7 +13,6 @@ import {
   QUEUE_GO_TO_PAGE,
   QUEUE_UPDATE_QUERY_PARAMS,
   QUEUE_UPDATE_ITEMS_PER_PAGE,
-  TOGGLE_ACTION_MENU,
   QUEUE_IS_STALE,
   QUEUE_IS_NOT_STALE,
 } from '../actions/actions-update-queue-state';
@@ -41,7 +40,6 @@ const initialState = {
     adminSteps: '',
   },
   resources: [],
-  showQueueMenu: '',
 };
 
 const buildAdminSteps = products => {
@@ -117,10 +115,6 @@ export function queueReducer(state = initialState, action) {
     case UPDATE_PRODUCT_APPLICATIONS_FAILURE:
       return Object.assign({}, state, {
         isUpdating: false,
-      });
-    case TOGGLE_ACTION_MENU:
-      return Object.assign({}, state, {
-        showQueueMenu: action.payload,
       });
     case QUEUE_IS_STALE:
       return Object.assign({}, state, {

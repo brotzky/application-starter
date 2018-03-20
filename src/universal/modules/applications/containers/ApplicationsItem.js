@@ -274,16 +274,11 @@ class ApplicationsItem extends Component {
   }
 }
 
-ApplicationsItem.defaultProps = {
-  showQueueMenu: undefined,
-};
-
 ApplicationsItem.propTypes = {
   dispatch: PropTypes.func.isRequired,
   item: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   ).isRequired,
-  showQueueMenu: PropTypes.string,
   org: PropTypes.string.isRequired,
   user: PropTypes.objectOf(
     PropTypes.oneOfType([

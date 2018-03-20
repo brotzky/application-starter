@@ -22,7 +22,6 @@ const ApplicationsList = props => {
     dispatch,
     isFetching,
     isLoaded,
-    showQueueMenu,
     queryParams,
     org,
   } = props;
@@ -56,7 +55,6 @@ const ApplicationsList = props => {
           dispatch={dispatch}
           item={item}
           key={item.id}
-          showQueueMenu={showQueueMenu}
           user={props.user}
         />
       ))}

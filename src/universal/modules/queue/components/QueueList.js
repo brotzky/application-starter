@@ -26,7 +26,6 @@ const QueueList = props => {
     dispatch,
     isFetching,
     isLoaded,
-    showQueueMenu,
     permissions,
     queryParams,
     org,
@@ -65,7 +64,6 @@ const QueueList = props => {
               dispatch={dispatch}
               item={item}
               key={item.id}
-              showQueueMenu={showQueueMenu}
               permissions={permissions}
               user={props.user}
             />
