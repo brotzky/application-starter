@@ -17,10 +17,7 @@ import {
 } from 'gac-utils/sc';
 import { productApplication } from 'grow-utils/productApplicationUtils';
 import { capitalizeString } from 'grow-utils/stringFormatting';
-import {
-  TOGGLE_ACTION_MENU,
-  updateQueueState,
-} from '../actions/actions-update-queue-state';
+import { updateQueueState } from '../actions/actions-update-queue-state';
 import { Button, Ellipsis, ProfilePicture, Pill } from '../../ui/components';
 import { showModal } from '../../ui/modal/actions/actions-modal';
 import JointIcons from '../../ui/joint-icons/';
@@ -29,74 +26,28 @@ import {
   handleUnclaimClick,
 } from '../../../utils/claim-unclaim';
 
-const StatePill = Pill.withComponent(Link);
-
-const UserContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    ${props =>
-      props.isRep &&
-      `
-      cursor: pointer;
-      text-decoration: line-through
-    `};
-  }
-`;
-
-const ProfilePictureContainer = styled.div`
-  padding-right: 10px;
-`;
-
-const UserTextContainer = styled.div`
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-const ExistingUserNotification = styled.span`
-  background: ${props =>
-    props.isExistingUser ? props.theme.colors.blue : 'rgb(201, 209, 214)'};
-  padding: 2px;
-  color: white;
-  font-weight: 700;
-  border-radius: 50%;
-  margin: 6px 6px 0 0;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 8px;
-  min-width: 8px;
-`;
-
-const QueueItemWrapper = styled.ul`
-  min-height: 58px;
-  display: flex;
-  align-items: center;
-  list-style-type: none;
-`;
-const QueueActionsItemMenuButton = styled.button`
-  border: none;
-`;
-
 class QueueItem extends Component {
-  handleActionMenuClick = (event, id) => {
-    event.nativeEvent.stopImmediatePropagation();
-    const { dispatch, showQueueMenu } = this.props;
-    if (id) {
-      document.addEventListener('click', this.handleCloseActionMenu);
-      if (id === showQueueMenu) {
-        return dispatch(updateQueueState(TOGGLE_ACTION_MENU));
-      }
-      return dispatch(updateQueueState(TOGGLE_ACTION_MENU, id));
-    }
+  state = {
+    showQueueMenu: false,
   };
 
-  handleCloseActionMenu = () => {
-    this.props.dispatch(updateQueueState(TOGGLE_ACTION_MENU));
-    document.removeEventListener('click', this.handleCloseActionMenu);
+  componentWillMount() {
+    document.addEventListener('click', this.handleActionMenuClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleActionMenuClick);
+  }
+
+  handleActionMenuClick = e => {
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.setState({ showQueueMenu: false });
+  };
+
+  toggleMenu = () => {
+    this.setState({ showQueueMenu: !this.state.showQueueMenu });
   };
 
   handleAssignClick = application => {
@@ -127,7 +78,8 @@ class QueueItem extends Component {
   };
 
   render() {
-    const { item, showQueueMenu, user, queue, org, dispatch } = this.props;
+    const { item, user, queue, org, dispatch } = this.props;
+    const { showQueueMenu } = this.state;
     const Application = productApplication(org, item);
     const workbenchLink = Application.getWorkbenchLink();
     const memberLink = Application.getMemberLink();
@@ -218,13 +170,14 @@ class QueueItem extends Component {
               />
             )}
           </QueueItemCell>
-          <QueueItemCell style={{ flex: '0.2', textAlign: 'right' }}>
-            <QueueActionsItemMenuButton
-              onClick={event => this.handleActionMenuClick(event, item.id)}
-            >
+          <QueueItemCell
+            style={{ flex: '0.2', textAlign: 'right' }}
+            innerRef={node => (this.node = node)}
+          >
+            <QueueActionsItemMenuButton onClick={this.toggleMenu}>
               <QueueItemMenuDotsIcon vertical={true} />
             </QueueActionsItemMenuButton>
-            {showQueueMenu === item.id && (
+            {showQueueMenu && (
               <QueueActions>
                 {false &&
                   productLink && (
@@ -261,16 +214,11 @@ class QueueItem extends Component {
   }
 }
 
-QueueItem.defaultProps = {
-  showQueueMenu: undefined,
-};
-
 QueueItem.propTypes = {
   dispatch: PropTypes.func.isRequired,
   item: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array]),
   ).isRequired,
-  showQueueMenu: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   permissions: PropTypes.objectOf(PropTypes.bool).isRequired,
   org: PropTypes.string.isRequired,
   user: PropTypes.objectOf(
@@ -289,3 +237,55 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(QueueItem);
+
+const StatePill = Pill.withComponent(Link);
+
+const UserContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    ${props =>
+      props.isRep &&
+      `
+      cursor: pointer;
+      text-decoration: line-through
+    `};
+  }
+`;
+
+const ProfilePictureContainer = styled.div`
+  padding-right: 10px;
+`;
+
+const UserTextContainer = styled.div`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const ExistingUserNotification = styled.span`
+  background: ${props =>
+    props.isExistingUser ? props.theme.colors.blue : 'rgb(201, 209, 214)'};
+  padding: 2px;
+  color: white;
+  font-weight: 700;
+  border-radius: 50%;
+  margin: 6px 6px 0 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8px;
+  min-width: 8px;
+`;
+
+const QueueItemWrapper = styled.ul`
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+`;
+const QueueActionsItemMenuButton = styled.button`
+  border: none;
+`;

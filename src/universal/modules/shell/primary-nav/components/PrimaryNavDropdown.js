@@ -165,7 +165,28 @@ const DropdownTopDivider = styled.div`
 `;
 
 class PrimaryNavDropdown extends Component {
-  state = { showDropdownMenu: false };
+  state = {
+    showDropdownMenu: false,
+  };
+
+  componentWillMount() {
+    document.addEventListener('click', this.handleClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClick);
+  }
+
+  handleClick = e => {
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.setState({ showDropdownMenu: false });
+  };
+
+  toggleMenu = () => {
+    this.setState({ showDropdownMenu: !this.state.showDropdownMenu });
+  };
 
   handleSignoutClick = () => {
     return this.props.dispatch(authLogout()).then(() => {
@@ -173,25 +194,13 @@ class PrimaryNavDropdown extends Component {
     });
   };
 
-  handleActionMenuClick = event => {
-    event.preventDefault();
-    document.addEventListener('click', this.handleCloseActionMenu);
-    this.setState({ showDropdownMenu: !this.state.showDropdownMenu });
-  };
-
-  handleCloseActionMenu = () => {
-    this.setState({ showDropdownMenu: !this.state.showDropdownMenu });
-    document.removeEventListener('click', this.handleCloseActionMenu);
-  };
-
   render() {
     const { organizationName, user } = this.props;
     const { showDropdownMenu } = this.state;
+
     return (
-      <PrimaryNavDropdownContainer>
-        <ProfilePictureContainer
-          onClick={event => this.handleActionMenuClick(event)}
-        >
+      <PrimaryNavDropdownContainer innerRef={node => (this.node = node)}>
+        <ProfilePictureContainer onClick={this.toggleMenu}>
           <ProfilePicture isActive={showDropdownMenu} size={32} user={user} />
         </ProfilePictureContainer>
 
@@ -216,7 +225,7 @@ class PrimaryNavDropdown extends Component {
                 </DropdownTopOverflow>
               </DropdownTop>
               {dropdownLinks.map(item => (
-                <li key={item.path}>
+                <li key={item.path} onClick={this.toggleMenu}>
                   <DropdownListItem
                     to={
                       item.path === '/account/profile/'

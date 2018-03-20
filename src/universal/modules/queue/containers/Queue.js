@@ -122,7 +122,6 @@ class Queue extends Component {
       dispatch,
       isFetching: data.isFetching,
       isLoaded: data.isLoaded,
-      showQueueMenu: data.showQueueMenu,
       queryParams: data.queryParams,
       permissions,
       updateData,

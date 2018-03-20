@@ -144,7 +144,6 @@ class Applications extends Component {
       dispatch,
       isFetching: data.isFetching,
       isLoaded: data.isLoaded,
-      showQueueMenu: data.showQueueMenu,
       queryParams: data.queryParams,
       updateData,
       user,
