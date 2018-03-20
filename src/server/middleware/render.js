@@ -26,7 +26,7 @@ import getScripts from '../utils/getScripts';
 import asyncGetStats from '../utils/asyncGetStats';
 import Html from '../html/Html';
 
-const render = async (req, res) => {
+const render = async (req, res, next) => {
   const url = req.originalUrl || req.url;
   const cookies = req.cookies;
   const location = parseUrl(url);
@@ -103,7 +103,7 @@ const render = async (req, res) => {
 
     res.status(200).send(ssr);
   } catch (mountError) {
-    res.status(500);
+    next(mountError);
   }
 };
 

@@ -8,9 +8,10 @@ import Loadable from 'react-loadable';
 import helmet from 'helmet';
 import url from 'url';
 
-import render from './middleware/render';
-import proxy from './middleware/proxy';
 import https from './middleware/https';
+import logger from './middleware/logger';
+import proxy from './middleware/proxy';
+import render from './middleware/render';
 import security from './middleware/security';
 import { webpackDev, webpackHot } from './middleware/webpack';
 import startup from './utils/startup';
@@ -46,6 +47,8 @@ app.use(express.static(path.join(root, 'static')));
 
 // SSR our React app
 app.use(render);
+
+app.use(logger);
 
 Loadable.preloadAll().then(() => {
   app.listen(process.env.PORT, startup);
