@@ -28,13 +28,16 @@ const MODAL_COMPONENTS = {
 const Modal = ({ modalType, modalProps }) => {
   const SpecificModal = MODAL_COMPONENTS[modalType];
 
-  if (typeof window !== 'undefined') {
-    if (modalType) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.removeAttribute('style');
-    }
-  }
+  // This needs to be refactored to handle SSR
+  // todo(Dennis)
+  //
+  // if (typeof window !== 'undefined') {
+  //   if (modalType) {
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     document.body.removeAttribute('style');
+  //   }
+  // }
 
   return (
     <Transition transitionName="Modal">
