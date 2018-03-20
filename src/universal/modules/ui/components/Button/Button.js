@@ -40,7 +40,7 @@ const BaseButton = styled.button`
   padding: ${props => {
     switch (props.size) {
       case 'small':
-        return '0.5rem 1.5rem';
+        return '0.4rem 1.5rem';
       case 'large':
         return '0.2rem 2rem';
       case 'xlarge':
