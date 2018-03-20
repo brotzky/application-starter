@@ -37,11 +37,11 @@ class Users extends Component {
     // Only update filteredUsers if there is inputed search text
     if (searchText) {
       const fuseInstance = new fuse(this.props.users.users, {
-        distance: 50,
+        distance: 20,
         keys: ['firstName', 'lastName', 'email', 'role'],
         minMatchCharLength: 1,
         shouldSort: true,
-        threshold: 0.4,
+        threshold: 0.3,
       });
 
       this.setState({ filteredUsers: fuseInstance.search(searchText) });

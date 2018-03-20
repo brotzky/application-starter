@@ -28,11 +28,13 @@ const MODAL_COMPONENTS = {
 const Modal = ({ modalType, modalProps }) => {
   const SpecificModal = MODAL_COMPONENTS[modalType];
 
-  // if (modalType) {
-  //   document.body.style.overflow = 'hidden';
-  // } else {
-  //   document.body.removeAttribute('style');
-  // }
+  if (typeof window !== 'undefined') {
+    if (modalType) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.removeAttribute('style');
+    }
+  }
 
   return (
     <Transition transitionName="Modal">

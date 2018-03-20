@@ -66,10 +66,12 @@ class UsersList extends Component {
     this.setState({ sortedList: usersClone });
   };
 
-  generateRenderedUsers = currentPage => {
+  generateRenderedUsers = () => {
+    const { currentPage, dispatch, users } = this.props;
     const { sortedList } = this.state;
     const start = currentPage === 1 ? 0 : currentPage * 10 - 10;
     const end = currentPage * 10;
+    const pagesSumm = Math.ceil(users.length / 10);
 
     // If there are no users show empty state
     if (sortedList.length < 1) {
@@ -80,38 +82,35 @@ class UsersList extends Component {
       );
     }
     return (
-      <UserItemContainer>
-        {sortedList
-          .slice(start, end)
-          .map(user => <UsersItem user={user} key={user.id} />)}
-      </UserItemContainer>
+      <div>
+        <UsersPagination
+          currentPage={currentPage}
+          change={change}
+          dispatch={dispatch}
+          pagesSumm={pagesSumm}
+        />
+        <UserItemContainer>
+          {sortedList
+            .slice(start, end)
+            .map(user => <UsersItem user={user} key={user.id} />)}
+        </UserItemContainer>
+        <UsersPagination
+          currentPage={currentPage}
+          change={change}
+          dispatch={dispatch}
+          pagesSumm={pagesSumm}
+        />
+      </div>
     );
   };
 
   render() {
-    const { users, isFetching, dispatch, currentPage } = this.props;
-    const pagesSumm = Math.ceil(users.length / 10);
-
     return (
       <UsersListContainer>
-        {isFetching ? (
+        {this.props.isFetching ? (
           <UsersListPlaceholder />
         ) : (
-          <div>
-            <UsersPagination
-              currentPage={currentPage}
-              change={change}
-              dispatch={dispatch}
-              pagesSumm={pagesSumm}
-            />
-            {this.generateRenderedUsers(currentPage)}
-            <UsersPagination
-              currentPage={currentPage}
-              change={change}
-              dispatch={dispatch}
-              pagesSumm={pagesSumm}
-            />
-          </div>
+          this.generateRenderedUsers()
         )}
       </UsersListContainer>
     );

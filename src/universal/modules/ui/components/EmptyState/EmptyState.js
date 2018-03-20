@@ -39,7 +39,11 @@ class EmptyState extends React.PureComponent {
     return (
       <EmptyStateContainer>
         <div>
-          {requiresPermission ? <CircleCross /> : <Icon />}
+          {requiresPermission ? (
+            <CircleCross />
+          ) : (
+            <Icon height={48} width={48} />
+          )}
           <EmptyStateShadow />
         </div>
         <EmptyStateHeader>{text || 'Permission Required'}</EmptyStateHeader>

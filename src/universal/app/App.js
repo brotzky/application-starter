@@ -361,7 +361,7 @@ export const globalStyles = () => injectGlobal`
 
       .ModalDialog {
         opacity: 0;
-        transform: translateY(8%);
+        transform: translateY(6%);
       }
     }
 
@@ -374,7 +374,7 @@ export const globalStyles = () => injectGlobal`
       .ModalDialog {
         opacity: 1;
         transform:none;
-        transition: all 300ms cubic-bezier(0.39, 0.575, 0.565, 1);
+        transition: all 280ms cubic-bezier(0.39, 0.575, 0.565, 1);
       }
     }
 
@@ -386,8 +386,8 @@ export const globalStyles = () => injectGlobal`
 
       .ModalDialog {
         opacity: 0;
-        transform: translateY(-8%);
-        transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform: translateY(6%);
+        transition: all 200ms cubic-bezier(0.39, 0.575, 0.565, 1);
       }
     }
   }

@@ -45,7 +45,7 @@ export const Transition = ({ children, transitionName }) => (
     transitionAppear={true}
     transitionAppearTimeout={400}
     transitionEnterTimeout={300}
-    transitionLeaveTimeout={300}
+    transitionLeaveTimeout={250}
   >
     {children}
   </ReactCSSTransitionGroup>
