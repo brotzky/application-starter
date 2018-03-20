@@ -19,21 +19,192 @@ import { showModal, hideModal } from '../../../ui/modal/actions/actions-modal';
 import { InlineTooltip } from '../../../ui/components';
 
 // ENUM mapping from white-label
-const veriTextMap = new Map();
-veriTextMap.set('BLUR', 'Blurry Image');
-veriTextMap.set('LOW_FACE_CONFIDENCE', 'Blurry Image');
-veriTextMap.set('NAME_TOO_SHORT', 'Failed Image');
-veriTextMap.set('NOFACE', 'No Face');
-veriTextMap.set('MISSING_PERSON_CONFIDENCE_LEVEL', 'ID Verification Failed');
-veriTextMap.set('ALL_BELOW_THRESHOLD', 'Verification Failed');
-veriTextMap.set('UNKNOWN_REASON', 'Verification Failed');
-veriTextMap.set('NO_ID', 'Not an ID');
-veriTextMap.set('NO_ID_NO_FACE', 'No Face Identified');
-veriTextMap.set('NO_TEXT_PRESENT', 'Illegible Text');
-veriTextMap.set('NO_MATCHING_TEXT', 'Name Unclear');
-veriTextMap.set('LOW_MATCHING_RATIO', 'Name Unclear');
-veriTextMap.set('UNREADABLE', 'Unreadable Image');
-veriTextMap.set('UNVERIFIABLE', 'Verification Failed');
+export const veriTextMap = new Map([
+  ['BLUR', 'Blurry Image'],
+  ['LOW_FACE_CONFIDENCE', 'Blurry Image'],
+  ['NAME_TOO_SHORT', 'Failed Image'],
+  ['NOFACE', 'No Face'],
+  ['MISSING_PERSON_CONFIDENCE_LEVEL', 'No Person Identified'],
+  ['ALL_BELOW_THRESHOLD', 'Verification Failed'],
+  ['UNKNOWN_REASON', 'Verification Failed'],
+  ['NO_ID', 'Not an ID'],
+  ['NO_ID_NO_FACE', 'No Face Identified'],
+  ['NO_TEXT_PRESENT', 'Illegible Text'],
+  ['NO_MATCHING_TEXT', 'Name Unclear'],
+  ['LOW_MATCHING_RATIO', 'Name Unclear'],
+  ['UNREADABLE', 'Unreadable Image'],
+  ['UNVERIFIABLE', 'Verification Failed'],
+]);
+
+class ApplicantProfileImageViewer extends Component {
+  handlePdfModalClick = image => {
+    const { dispatch } = this.props;
+
+    dispatch(
+      showModal('PDF_DOCUMENT_VIEWER', {
+        image,
+        closePdfViewer: () => dispatch(hideModal()),
+      }),
+    );
+  };
+
+  handleDelete = image => {
+    const { dispatch, field, fieldValue, memberId, workbench } = this.props;
+    dispatch(deleteFile(image.preview)).then(response => {
+      if (!response.error) {
+        dispatch(getMemberProductApplicationMetadata(memberId, workbench.id)); //reinit redux-form
+        dispatch({
+          //remove image from upload/delete queue
+          type: DELETE_FROM_LIST,
+          payload: { fieldName: field.name },
+        });
+        dispatch(
+          //update redux form value
+          change(
+            'workbench',
+            field.name,
+            response.payload.data.uploads.length
+              ? fieldValue.filter(file => {
+                  return file.name !== image.name;
+                })
+              : null,
+          ),
+        );
+      }
+    });
+  };
+
+  render() {
+    const {
+      dispatch,
+      field,
+      handleToggleClick,
+      fieldValue,
+      sameAdmin,
+      files,
+    } = this.props;
+    return (
+      <ApplicantProfileImageViewerContainer>
+        {fieldValue
+          ? [
+              <div key={`${field.name}-field-values`}>
+                {fieldValue.map(image => (
+                  <ImageRow key={image.preview}>
+                    <div style={{ flex: 2 }}>
+                      {image.type.includes('pdf') ? (
+                        <PdfLinkContainer>
+                          <PdfDocumentIcon />
+                          <FileDeleteIcon
+                            onClick={e => {
+                              e.preventDefault();
+                              dispatch(
+                                showModal('PROMPT_MODAL', {
+                                  header: 'Delete File',
+                                  component: (
+                                    <ApplicantDeleteFile
+                                      image={image}
+                                      onConfirm={this.handleDelete}
+                                    />
+                                  ),
+                                }),
+                              );
+                            }}
+                          >
+                            <Remove height="10" width="10" />
+                          </FileDeleteIcon>
+                          <PdfLinkText>View {field.label} PDF</PdfLinkText>
+                        </PdfLinkContainer>
+                      ) : (
+                        <ImageContainer>
+                          <Image src={image.preview} />
+                          <FileDeleteIcon
+                            onClick={e => {
+                              e.preventDefault();
+
+                              dispatch(
+                                showModal('PROMPT_MODAL', {
+                                  header: 'Delete File',
+                                  component: (
+                                    <ApplicantDeleteFile
+                                      image={image}
+                                      onConfirm={this.handleDelete}
+                                    />
+                                  ),
+                                }),
+                              );
+                            }}
+                          >
+                            <Remove height="10" width="10" />
+                          </FileDeleteIcon>
+                        </ImageContainer>
+                      )}
+                    </div>
+
+                    <ImageDetails>
+                      <ImageDetailsName>{image.name}</ImageDetailsName>
+                      <ImageDetailsDate>
+                        {moment(image.dateLastModified).format('MMM, Do YYYY')}
+                      </ImageDetailsDate>
+                      {image.verificationMsg === 'ACCEPTED' ? (
+                        <span>
+                          <StyledCheckCircle height={16} width={16} />Accepted
+                        </span>
+                      ) : (
+                        <span>
+                          <StyledExclamationCircle height={16} width={16} />
+                          {veriTextMap.get(image.verificationMsg)}
+                        </span>
+                      )}
+                      <ViewFullSizeButton>
+                        <Button
+                          onClick={() => window.open(image.preview, '_blank')}
+                          text="View Full Size"
+                        />
+                      </ViewFullSizeButton>
+                    </ImageDetails>
+                  </ImageRow>
+                ))}
+              </div>,
+              <ApplicantProfileTextEdit
+                key={`${field.name}-field-edit`}
+                onClick={() => handleToggleClick(field.name)}
+                disabled={!sameAdmin || files.isUploading}
+                active={!sameAdmin}
+              >
+                <Upload height={18} /> Upload
+                <InlineTooltip>
+                  Please claim this application to make uploads.
+                </InlineTooltip>
+              </ApplicantProfileTextEdit>,
+            ]
+          : [
+              <ImageEmptyState key={`${field.name}-field-placeholders`}>
+                <EmptyStateImageIcon />No {field.label} uploaded
+              </ImageEmptyState>,
+              <ApplicantProfileTextEdit
+                key={`${field.name}-field-edit`}
+                onClick={() => handleToggleClick(field.name)}
+                disabled={!sameAdmin || files.isUploading}
+                active={!sameAdmin}
+              >
+                <Upload height={18} /> Upload
+                <InlineTooltip>
+                  Please claim this application to make uploads.
+                </InlineTooltip>
+              </ApplicantProfileTextEdit>,
+            ]}
+      </ApplicantProfileImageViewerContainer>
+    );
+  }
+}
+const mapStateToProps = state => {
+  return {
+    memberId: state.member.member.id,
+    workbench: state.workbench,
+    files: state.files,
+  };
+};
+export default connect(mapStateToProps)(ApplicantProfileImageViewer);
 
 const ApplicantProfileImageViewerContainer = styled.div`
   position: relative;
@@ -303,172 +474,3 @@ const PdfLinkContainer = styled.div`
 const PdfLinkText = styled.p`
   margin: 0 0 0 1rem;
 `;
-class ApplicantProfileImageViewer extends Component {
-  handlePdfModalClick = image => {
-    const { dispatch } = this.props;
-
-    dispatch(
-      showModal('PDF_DOCUMENT_VIEWER', {
-        image,
-        closePdfViewer: () => dispatch(hideModal()),
-      }),
-    );
-  };
-
-  handleDelete = image => {
-    const { dispatch, field, fieldValue, memberId, workbench } = this.props;
-    dispatch(deleteFile(image.preview)).then(response => {
-      if (!response.error) {
-        dispatch(getMemberProductApplicationMetadata(memberId, workbench.id)); //reinit redux-form
-        dispatch({
-          //remove image from upload/delete queue
-          type: DELETE_FROM_LIST,
-          payload: { fieldName: field.name },
-        });
-        dispatch(
-          //update redux form value
-          change(
-            'workbench',
-            field.name,
-            response.payload.data.uploads.length
-              ? fieldValue.filter(file => {
-                  return file.name !== image.name;
-                })
-              : null,
-          ),
-        );
-      }
-    });
-  };
-
-  render() {
-    const {
-      dispatch,
-      field,
-      handleToggleClick,
-      fieldValue,
-      sameAdmin,
-      files,
-    } = this.props;
-    return (
-      <ApplicantProfileImageViewerContainer>
-        {fieldValue
-          ? [
-              <div key={`${field.name}-field-values`}>
-                {fieldValue.map(image => (
-                  <ImageRow key={image.preview}>
-                    <div style={{ flex: 2 }}>
-                      {image.type.includes('pdf') ? (
-                        <PdfLinkContainer>
-                          <PdfDocumentIcon />
-                          <FileDeleteIcon
-                            onClick={e => {
-                              e.preventDefault();
-                              dispatch(
-                                showModal('PROMPT_MODAL', {
-                                  header: 'Delete File',
-                                  component: (
-                                    <ApplicantDeleteFile
-                                      image={image}
-                                      onConfirm={this.handleDelete}
-                                    />
-                                  ),
-                                }),
-                              );
-                            }}
-                          >
-                            <Remove height="10" width="10" />
-                          </FileDeleteIcon>
-                          <PdfLinkText>View {field.label} PDF</PdfLinkText>
-                        </PdfLinkContainer>
-                      ) : (
-                        <ImageContainer>
-                          <Image src={image.preview} />
-                          <FileDeleteIcon
-                            onClick={e => {
-                              e.preventDefault();
-
-                              dispatch(
-                                showModal('PROMPT_MODAL', {
-                                  header: 'Delete File',
-                                  component: (
-                                    <ApplicantDeleteFile
-                                      image={image}
-                                      onConfirm={this.handleDelete}
-                                    />
-                                  ),
-                                }),
-                              );
-                            }}
-                          >
-                            <Remove height="10" width="10" />
-                          </FileDeleteIcon>
-                        </ImageContainer>
-                      )}
-                    </div>
-
-                    <ImageDetails>
-                      <ImageDetailsName>{image.name}</ImageDetailsName>
-                      <ImageDetailsDate>
-                        {moment(image.dateLastModified).format('MMM, Do YYYY')}
-                      </ImageDetailsDate>
-                      {image.verificationMsg === 'ACCEPTED' ? (
-                        <span>
-                          <StyledCheckCircle height={16} width={16} />Accepted
-                        </span>
-                      ) : (
-                        <span>
-                          <StyledExclamationCircle height={16} width={16} />
-                          {veriTextMap.get(image.verificationMsg)}
-                        </span>
-                      )}
-                      <ViewFullSizeButton>
-                        <Button
-                          onClick={() => window.open(image.preview, '_blank')}
-                          text="View Full Size"
-                        />
-                      </ViewFullSizeButton>
-                    </ImageDetails>
-                  </ImageRow>
-                ))}
-              </div>,
-              <ApplicantProfileTextEdit
-                key={`${field.name}-field-edit`}
-                onClick={() => handleToggleClick(field.name)}
-                disabled={!sameAdmin || files.isUploading}
-                active={!sameAdmin}
-              >
-                <Upload height={18} /> Upload
-                <InlineTooltip>
-                  Please claim this application to make uploads.
-                </InlineTooltip>
-              </ApplicantProfileTextEdit>,
-            ]
-          : [
-              <ImageEmptyState key={`${field.name}-field-placeholders`}>
-                <EmptyStateImageIcon />No {field.label} uploaded
-              </ImageEmptyState>,
-              <ApplicantProfileTextEdit
-                key={`${field.name}-field-edit`}
-                onClick={() => handleToggleClick(field.name)}
-                disabled={!sameAdmin || files.isUploading}
-                active={!sameAdmin}
-              >
-                <Upload height={18} /> Upload
-                <InlineTooltip>
-                  Please claim this application to make uploads.
-                </InlineTooltip>
-              </ApplicantProfileTextEdit>,
-            ]}
-      </ApplicantProfileImageViewerContainer>
-    );
-  }
-}
-const mapStateToProps = state => {
-  return {
-    memberId: state.member.member.id,
-    workbench: state.workbench,
-    files: state.files,
-  };
-};
-export default connect(mapStateToProps)(ApplicantProfileImageViewer);

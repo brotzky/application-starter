@@ -11,6 +11,144 @@ import { Upload, CheckCircleFilled } from '../../ui/icons/';
 import { Spinner } from 'gac-ui/components/';
 import { DELETE_FROM_LIST } from 'grow-actions/upload-file/constants';
 import { getMemberProductApplicationMetadata } from 'grow-actions/member/member-category-metadata';
+import { veriTextMap } from '../../workbench/applicant-profile/components/ApplicantProfileFile';
+
+class FileUpload extends PureComponent {
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    const file = this.getLastFileDetails(this.props);
+    if (file) {
+      dispatch({
+        type: DELETE_FROM_LIST,
+        payload: { fieldName: file.fieldName },
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const nextFile = this.getLastFileDetails(nextProps);
+    const thisFile = this.getLastFileDetails(this.props);
+    const { workbench, memberId, dispatch } = nextProps;
+    if (
+      thisFile &&
+      nextFile &&
+      thisFile.uploaded === undefined &&
+      nextFile.uploaded !== undefined
+    ) {
+      dispatch(getMemberProductApplicationMetadata(memberId, workbench.id));
+    }
+  }
+
+  handleDrop = (files, rejectedFiles) => {
+    const {
+      currentFiles = [],
+      dispatch,
+      documentType,
+      input,
+      memberId,
+      meta,
+    } = this.props;
+    // TODO refactor the alert into something more sophistacted
+    if (rejectedFiles.length) {
+      alert(
+        'This file type is not supported. Please upload any of the following supported file types: JPG, JPEG, PNG, GIF, PDF.',
+      );
+    }
+    dispatchFileToUpload(
+      currentFiles,
+      files,
+      input.name,
+      documentType,
+      memberId,
+      dispatch,
+    );
+  };
+
+  getLastFileDetails = props => {
+    const { currentFiles = [], formValues, input = {}, meta = {} } = props;
+    const file = currentFiles[input.name] ? currentFiles[input.name] : null;
+    return file;
+  };
+
+  renderUploading() {
+    const file = this.getLastFileDetails(this.props);
+    if (file) {
+      const isUploading = file.uploaded === undefined;
+      const failed = file.uploaded === false;
+      const isAnalyzing = !failed && file.uploaded !== true;
+      const isUploaded = file.uploaded === true;
+
+      const uploadMessage = veriTextMap.get(file.verificationMsg);
+
+      return (
+        <UploadWrapper imagePreview={file.preview} isUploading={isUploading}>
+          <UploadOverlay failed={failed} visible={isAnalyzing || failed} />
+          <UploadStatusText>
+            {isUploading && 'Uploading...'}
+            {!isUploading && isAnalyzing && 'Analyzing...'}
+            {failed &&
+              `Failed. ${uploadMessage && uploadMessage}. Please try again.`}
+            {isAnalyzing &&
+              !failed && (
+                <LoaderWrapper>
+                  <Spinner />
+                </LoaderWrapper>
+              )}
+            {isUploaded &&
+              !failed && (
+                <FileUploadSucecssContainer>
+                  <FileUploadSucecssHeader>
+                    <CheckCircleFilled height="24" width="24" />
+                    <FileUploadSucecssHeaderText>
+                      File upload success
+                    </FileUploadSucecssHeaderText>
+                  </FileUploadSucecssHeader>
+                </FileUploadSucecssContainer>
+              )}
+          </UploadStatusText>
+        </UploadWrapper>
+      );
+    }
+
+    return null;
+  }
+
+  render() {
+    const { input = {}, label = '', meta = {}, isUploading } = this.props;
+    const { value } = input;
+    const file = this.getLastFileDetails(this.props);
+    return (
+      <FormField>
+        <FileUploadContainer>
+          <FieldLabel label={label} meta={meta} value={value} />
+          <StyledDropzoneContainer>
+            <StyledDropzone
+              onDrop={this.handleDrop}
+              activeStyle={{ borderCoor: '#448aff' }}
+              disabled={(file && file.uploaded === undefined) || isUploading}
+              multiple={false}
+            >
+              <StyledDropzoneBackground>
+                <Upload />
+                Drop files here to upload or choose file
+              </StyledDropzoneBackground>
+              {this.renderUploading()}
+            </StyledDropzone>
+          </StyledDropzoneContainer>
+        </FileUploadContainer>
+      </FormField>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  currentFiles: state.files.list,
+  formValues: formName => getFormValues(formName)(state),
+  memberId: state.member.member.id,
+  workbench: state.workbench,
+  isUploading: state.files.isUploading,
+});
+export default connect(mapStateToProps)(FileUpload);
 
 const FileUploadContainer = styled.div`
   width: 100%;
@@ -108,6 +246,7 @@ const FileUploadSucecssContainer = styled.div`
   text-align: left;
   opacity: 0.96;
 `;
+
 const FileUploadSucecssHeader = styled.div`
   display: flex;
   align-items: center;
@@ -118,152 +257,3 @@ const FileUploadSucecssHeader = styled.div`
 const FileUploadSucecssHeaderText = styled.div`
   margin-left: 10px;
 `;
-
-// ENUM mapping from white-label
-const veriTextMap = new Map();
-veriTextMap.set('BLUR', 'Blurry Image');
-veriTextMap.set('LOW_FACE_CONFIDENCE', 'Blurry Image');
-veriTextMap.set('NAME_TOO_SHORT', 'Failed Image');
-veriTextMap.set('NOFACE', 'No Face');
-veriTextMap.set('MISSING_PERSON_CONFIDENCE_LEVEL', 'ID Verification Failed');
-veriTextMap.set('ALL_BELOW_THRESHOLD', 'Verification Failed');
-veriTextMap.set('UNKNOWN_REASON', 'Verification Failed');
-veriTextMap.set('NO_ID', 'Not an ID');
-veriTextMap.set('NO_ID_NO_FACE', 'No Face Identified');
-veriTextMap.set('NO_TEXT_PRESENT', 'Illegible Text');
-veriTextMap.set('NO_MATCHING_TEXT', 'Name Unclear');
-veriTextMap.set('LOW_MATCHING_RATIO', 'Name Unclear');
-veriTextMap.set('UNREADABLE', 'Unreadable Image');
-veriTextMap.set('UNVERIFIABLE', 'Verification Failed');
-class FileUpload extends PureComponent {
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    const file = this.getLastFileDetails(this.props);
-    if (file) {
-      dispatch({
-        type: DELETE_FROM_LIST,
-        payload: { fieldName: file.fieldName },
-      });
-    }
-  }
-  componentWillReceiveProps(nextProps) {
-    const nextFile = this.getLastFileDetails(nextProps);
-    const thisFile = this.getLastFileDetails(this.props);
-    const { workbench, memberId, dispatch } = nextProps;
-    if (
-      thisFile &&
-      nextFile &&
-      thisFile.uploaded === undefined &&
-      nextFile.uploaded !== undefined
-    ) {
-      dispatch(getMemberProductApplicationMetadata(memberId, workbench.id));
-    }
-  }
-  handleDrop = (files, rejectedFiles) => {
-    const {
-      currentFiles = [],
-      dispatch,
-      documentType,
-      input,
-      memberId,
-      meta,
-    } = this.props;
-    // TODO refactor the alert into something more sophistacted
-    if (rejectedFiles.length) {
-      alert(
-        'This file type is not supported. Please upload any of the following supported file types: JPG, JPEG, PNG, GIF, PDF.',
-      );
-    }
-    dispatchFileToUpload(
-      currentFiles,
-      files,
-      input.name,
-      documentType,
-      memberId,
-      dispatch,
-    );
-  };
-  getLastFileDetails = props => {
-    const { currentFiles = [], formValues, input = {}, meta = {} } = props;
-    const file = currentFiles[input.name] ? currentFiles[input.name] : null;
-    return file;
-  };
-  renderUploading() {
-    const file = this.getLastFileDetails(this.props);
-    if (file) {
-      const isUploading = file.uploaded === undefined;
-      const failed = file.uploaded === false;
-      const isAnalyzing = !failed && file.uploaded !== true;
-      const isUploaded = file.uploaded === true;
-
-      const uploadMessage = veriTextMap.get(file.verificationMsg);
-
-      return (
-        <UploadWrapper imagePreview={file.preview} isUploading={isUploading}>
-          <UploadOverlay failed={failed} visible={isAnalyzing || failed} />
-          <UploadStatusText>
-            {isUploading && 'Uploading...'}
-            {!isUploading && isAnalyzing && 'Analyzing...'}
-            {failed &&
-              `Failed. ${uploadMessage && uploadMessage}. Please try again.`}
-            {isAnalyzing &&
-              !failed && (
-                <LoaderWrapper>
-                  <Spinner />
-                </LoaderWrapper>
-              )}
-            {isUploaded &&
-              !failed && (
-                <FileUploadSucecssContainer>
-                  <FileUploadSucecssHeader>
-                    <CheckCircleFilled height="24" width="24" />
-                    <FileUploadSucecssHeaderText>
-                      File upload success
-                    </FileUploadSucecssHeaderText>
-                  </FileUploadSucecssHeader>
-                </FileUploadSucecssContainer>
-              )}
-          </UploadStatusText>
-        </UploadWrapper>
-      );
-    }
-
-    return null;
-  }
-
-  render() {
-    const { input = {}, label = '', meta = {}, isUploading } = this.props;
-    const { value } = input;
-    const file = this.getLastFileDetails(this.props);
-    return (
-      <FormField>
-        <FileUploadContainer>
-          <FieldLabel label={label} meta={meta} value={value} />
-          <StyledDropzoneContainer>
-            <StyledDropzone
-              onDrop={this.handleDrop}
-              activeStyle={{ borderCoor: '#448aff' }}
-              disabled={(file && file.uploaded === undefined) || isUploading}
-              multiple={false}
-            >
-              <StyledDropzoneBackground>
-                <Upload />
-                Drop files here to upload or choose file
-              </StyledDropzoneBackground>
-              {this.renderUploading()}
-            </StyledDropzone>
-          </StyledDropzoneContainer>
-        </FileUploadContainer>
-      </FormField>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  currentFiles: state.files.list,
-  formValues: formName => getFormValues(formName)(state),
-  memberId: state.member.member.id,
-  workbench: state.workbench,
-  isUploading: state.files.isUploading,
-});
-export default connect(mapStateToProps)(FileUpload);
