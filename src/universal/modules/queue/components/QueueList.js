@@ -58,7 +58,7 @@ const QueueList = props => {
       {isFetching ? (
         <QueuePlaceholder />
       ) : (
-        <QueueListWrapper>
+        <QueueListWrapper id ='QueueListWrapper'>
           {applications.map(item => (
             <QueueItem
               dispatch={dispatch}

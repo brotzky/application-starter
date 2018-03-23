@@ -93,7 +93,11 @@ class QueueItem extends Component {
         <QueueItemWrapper>
           <QueueItemCell title={productName} style={{ flex: '1.3' }}>
             <QueueItemLink to={workbenchLink}>
-              <QueueActionsItemLinkMain style={{ display: 'flex' }}>
+              <QueueActionsItemLinkMain
+                style={{ display: 'flex' }}
+                data-test-field='product'
+                data-test-email={item.creator.email}
+              >
                 <JointIcons application={item} />
                 <Ellipsis>{productName}</Ellipsis>
               </QueueActionsItemLinkMain>
@@ -109,6 +113,8 @@ class QueueItem extends Component {
             <QueueItemLink to={memberLink}>
               <QueueActionsItemLinkMain
                 style={{ display: 'flex', alignItems: 'flex-start' }}
+                data-test-field='user'
+                data-test-email={item.creator.email}
               >
                 <ExistingUserNotification isExistingUser={isExistingUser} />
                 <div>
