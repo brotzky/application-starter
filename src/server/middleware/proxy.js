@@ -18,6 +18,16 @@ if (!process.argv[2] && isDev) {
 }
 
 const target = 'localhost:8080';
+const BOC = [
+  '1stchoice',
+  'aldergrove',
+  'gffg',
+  'mountainview',
+  'lakeland',
+  'sunshinecoast',
+  'synergy',
+  'yncu',
+];
 
 function buildEnvOnRequest(req) {
   const host = req.get('host');
@@ -46,6 +56,11 @@ export function buildDynamicTarget(req) {
 
   if (req.get('host') === 'loans-gac.meridiancu.ca') {
     return 'https://admin-api-dot-grow-meridian-prod.appspot.com';
+  }
+
+  // A workaround for BOC API
+  if (BOC.some(bocGroup => subdomainOrg === bocGroup)) {
+    return `https://admin-api-dot-grow-boc-${subdomainEnv}.appspot.com`;
   }
 
   return `https://admin-api-dot-grow-${subdomainOrg}-${subdomainEnv}.appspot.com`;
