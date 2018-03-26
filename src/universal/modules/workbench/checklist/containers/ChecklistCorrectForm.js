@@ -9,40 +9,22 @@ import {
   HIDE_CHECKLIST_ITEM_DETAILS,
 } from '../actions/actions-update-checklist-state';
 import { updateQueueState } from '../../../queue/actions/actions-update-queue-state';
-import { Button } from '../../../ui/components';
+import { Button, ProfilePicture } from '../../../ui/components';
 
 const validate = values => {
   const errors = {};
-
-  if (values.overrideComment && values.overrideComment.length < 1) {
+  if (values.overrideComment && !values.overrideComment.trim().length) {
     errors.overrideComment = true;
   }
 
   return errors;
 };
 
-const ErrorMessage = styled.p`
-  margin-bottom: 1.2rem;
-  color: ${props => props.theme.colors.red};
-  font-weight: 600;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  min-height: 120px;
-  padding: 1.6rem;
-  border: 1px solid #dee4e7;
-  margin-bottom: 1.6rem;
-  color: ${props => props.theme.colors.black};
-  line-height: 1.4;
-  outline: none;
-
-  &:focus {
-    border: 1px solid ${props => props.theme.colors.blue};
-  }
-`;
-
 class ChecklistCorrectForm extends Component {
+  state = {
+    collapse: true,
+  };
+
   /**
    * Using componentWillUpdate in this case because when the last
    * checklist item is overriden we have to update the product
@@ -53,7 +35,9 @@ class ChecklistCorrectForm extends Component {
     const { dispatch, checklist, params } = nextProps;
 
     const verified = checklist.checklists.filter(
-      check => check.verified === 'VERIFIED',
+      check =>
+        check.verificationResult === 'PASS' ||
+        check.verificationResult === 'OVERRIDE_PASS',
     );
 
     if (checklist.checklists.length === verified.length) {
@@ -76,7 +60,6 @@ class ChecklistCorrectForm extends Component {
       verificationChecklistDetailId:
         checklistItemDetails[0].verificationChecklistDetailId,
     });
-
     return dispatch(
       updateChecklist(
         params.workbenchId,
@@ -88,30 +71,86 @@ class ChecklistCorrectForm extends Component {
     });
   }
 
+  /**
+   *  Compose the overrideComment component for redux-form.
+   */
+  renderTextArea = ({ input: { value, onChange }, collapse }) => (
+    <TextArea
+      value={value}
+      onChange={onChange}
+      onBlur={onChange}
+      innerRef={node => (this.inputNode = node)}
+      placeholder={`Add a ${
+        this.props.isVerified ? 'review' : 'resolution'
+      } comment...`}
+      required={true}
+      collapse={collapse}
+      onFocus={e => {
+        this.inputNode.focus();
+        this.setState({ collapse: !collapse });
+      }}
+    />
+  );
+
   render() {
-    const { handleSubmit, isVerified, submitting, submitFailed } = this.props;
+    const {
+      handleSubmit,
+      hasPermission,
+      submitting,
+      submitFailed,
+      user,
+      dispatch,
+      checklistItem,
+    } = this.props;
 
     return (
       <form onSubmit={handleSubmit(data => this.handleSubmit(data))}>
-        <Field
-          component={TextArea}
-          name="overrideComment"
-          required={true}
-          autoFocus
-          placeholder="Enter your reason(s) here..."
-        />
-        {submitFailed && (
-          <ErrorMessage>Please enter a meaningful message.</ErrorMessage>
-        )}
-        <Field
-          name="submitButton"
-          type="submit"
-          id="solve"
-          component={Button}
-          text={isVerified ? 'Unresolve' : 'Resolve'}
-          isSubmitting={submitting}
-          size="large"
-        />
+        <FormRow>
+          <ProfilePictureWrapper>
+            <ProfilePicture size={38} user={user} />
+          </ProfilePictureWrapper>
+          {hasPermission ? (
+            <div style={{ padding: '0 1.75rem', flex: '8' }}>
+              <Field
+                name="overrideComment"
+                component={this.renderTextArea}
+                collapse={this.state.collapse}
+              />
+              {!this.state.collapse && (
+                <div ref={node => (this.node = node)}>
+                  <SubmitButton
+                    type="submit"
+                    id="solve"
+                    text="Save"
+                    disabled={submitting}
+                    isSubmitting={submitting}
+                    size="small"
+                  />
+                  <Button
+                    type="button"
+                    appearance="transparent"
+                    text="Cancel"
+                    onClick={() => {
+                      this.setState({ collapse: true });
+                    }}
+                    disabled={submitting}
+                    size="small"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <p>
+              You do not have permission to resolve the{' '}
+              <strong>{checklistItem.prettyName}</strong> checklist item. Please
+              ask an adminstrator to update your permissions to proceed.
+            </p>
+          )}
+
+          {submitFailed && (
+            <ErrorMessage>Please enter a meaningful message.</ErrorMessage>
+          )}
+        </FormRow>
       </form>
     );
   }
@@ -128,6 +167,48 @@ ChecklistCorrectForm = reduxForm({
 
 const mapStateToProps = state => ({
   checklist: state.checklist,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(ChecklistCorrectForm);
+
+const SubmitButton = styled(Button)`
+  > button {
+    min-width: 5rem;
+    padding: 6px 13px;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  margin-bottom: 1.2rem;
+  color: ${props => props.theme.colors.red};
+  font-weight: 600;
+`;
+
+const FormRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+`;
+
+const ProfilePictureWrapper = styled.div`
+  padding-top: 5px;
+  width: 68px;
+  min-width: 68px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  height: ${props => (props.collapse ? '45' : '155')}px;
+  border-radius: 3px;
+  padding: ${props => Number(props.theme.space) / 2}rem 1.75rem;
+  border: 1px solid #dee4e7;
+  margin-bottom: 1.6rem;
+  color: ${props => props.theme.colors.black};
+  line-height: 1.5;
+  outline: none;
+  resize: none;
+`;

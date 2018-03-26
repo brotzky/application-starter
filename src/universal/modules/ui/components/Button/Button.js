@@ -240,6 +240,7 @@ const Button = props => {
     type,
     width,
     margin,
+    className,
   } = props;
 
   /**
@@ -289,7 +290,7 @@ const Button = props => {
   // Go through the different button options object and return the correct styled component
   const GeneratedButton = Buttons[appearance];
   return (
-    <ButtonContainer width={width} margin={margin}>
+    <ButtonContainer width={width} margin={margin} className={className}>
       <GeneratedButton
         type={type || 'submit'}
         disabled={isDisabled}

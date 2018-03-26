@@ -43,14 +43,18 @@ ChecklistList.defaultProps = {
 };
 
 ChecklistList.propTypes = {
-  checklistDetails: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
-  ),
+  checklistDetails: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.objectOf(PropTypes.array),
+  ]),
   checklist: PropTypes.arrayOf(PropTypes.object),
-  isFetchingDetails: PropTypes.PropTypes.bool.isRequired,
+  isFetchingDetails: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
+    .isRequired,
   params: PropTypes.objectOf(PropTypes.string).isRequired,
   isUserClaimer: PropTypes.bool.isRequired,
-  showChecklistDetails: PropTypes.arrayOf(PropTypes.object).isRequired,
+  showChecklistDetails: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  ).isRequired,
 };
 
 export default ChecklistList;

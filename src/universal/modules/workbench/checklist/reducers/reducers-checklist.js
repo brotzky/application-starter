@@ -110,7 +110,10 @@ export function checklistReducer(state = initialState, action) {
 
       return Object.assign({}, state, {
         checklistDetails: Object.assign({}, state.checklistDetails, {
-          [updatedChecklistDetails.name]: action.payload.data.checklists,
+          [updatedChecklistDetails.name]: [
+            ...action.payload.data.checklists,
+            ...state.checklistDetails[updatedChecklistDetails.name],
+          ],
         }),
         checklists: state.checklists.map(checklist => {
           if (checklist.id === updatedChecklistDetails.id) {

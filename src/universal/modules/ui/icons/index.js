@@ -686,12 +686,37 @@ export const CheckCircleFilled = ({
     id={id}
     viewBox="0 0 24 24"
   >
-    <g>
+    <g transform="translate(0, 0)">
       {' '}
+      <rect width="14" height="14" fill="none" x="5" y="5" />
       <path
         fill="#448aff"
         d="M12,0C5.4,0,0,5.4,0,12s5.4,12,12,12s12-5.4,12-12S18.6,0,12,0z M18.7,8.7l-8,8C10.5,16.9,10.3,17,10,17 s-0.5-0.1-0.7-0.3l-4-4c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l3.3,3.3l7.3-7.3c0.4-0.4,1-0.4,1.4,0S19.1,8.3,18.7,8.7z"
       />{' '}
+    </g>
+  </svg>
+);
+
+export const CircleFilled = ({ width = 24, height = 24, className = '' }) => (
+  <svg
+    x="0px"
+    y="0px"
+    width={width}
+    height={height}
+    className={className}
+    viewBox="0 0 24 24"
+  >
+    <g>
+      <circle
+        fill="none"
+        strokeWidth="2"
+        strokeLinecap="square"
+        strokeMiterlimit="10"
+        cx="12"
+        cy="12"
+        r="11"
+        strokeLinejoin="miter"
+      />
     </g>
   </svg>
 );

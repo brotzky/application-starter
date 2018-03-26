@@ -6,32 +6,72 @@ const ChecklistModalPlaceholderContent = styled.div`
   animation: ${props => props.theme.animations.flicker} 1.25s linear infinite;
 `;
 
+const ChecklistModalPlaceholderRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ChecklistModalPlaceholderCircle = styled.div`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background: #efefef;
+  margin-right: 30px;
+`;
+
 const ChecklistModalPlaceholderHeader = styled.div`
-  height: 20px;
-  width: 355px;
+  height: 30px;
+  width: 140px;
   background: #efefef;
-  margin: 0 auto 2rem;
+  margin-bottom: ${props => (props.spacing ? '20px' : '0')};
 `;
 
-const ChecklistModalPlaceholderTextarea = styled.div`
-  height: 120px;
-  width: 355px;
+const ChecklistModalPlaceholderText = styled.div`
+  height: ${props => props.height};
+  width: ${props => props.width};
   background: #efefef;
-  margin: 0 auto 1.8rem;
+  &:not(:last-child) {
+    margin-right: 30px;
+  }
 `;
 
-const ChecklistModalPlaceholderButton = styled.div`
-  height: 35px;
-  width: 120px;
-  background: #efefef;
-  margin: 0 auto;
+const ChecklistModalPlaceholderSection = styled.div`
+  padding-left: 10px;
+  margin-bottom: 30px;
 `;
+
+const ChecklistDetailsPlaceholder = () => (
+  <ChecklistModalPlaceholderRow style={{ marginBottom: '15px' }}>
+    <ChecklistModalPlaceholderCircle />
+    <ChecklistModalPlaceholderText height="20px" width="350px" />
+    <ChecklistModalPlaceholderText height="20px" width="60px" />
+  </ChecklistModalPlaceholderRow>
+);
 
 const ChecklistModalPlaceholder = () => (
   <ChecklistModalPlaceholderContent>
-    <ChecklistModalPlaceholderHeader />
-    <ChecklistModalPlaceholderTextarea />
-    <ChecklistModalPlaceholderButton />
+    <ChecklistModalPlaceholderSection>
+      <ChecklistModalPlaceholderRow>
+        <ChecklistModalPlaceholderCircle />
+        <ChecklistModalPlaceholderHeader />
+      </ChecklistModalPlaceholderRow>
+    </ChecklistModalPlaceholderSection>
+
+    <ChecklistModalPlaceholderSection>
+      <ChecklistModalPlaceholderHeader spacing="true" />
+      <ChecklistModalPlaceholderRow>
+        <ChecklistModalPlaceholderCircle />
+        <ChecklistModalPlaceholderText height="45px" width="450px" />
+      </ChecklistModalPlaceholderRow>
+    </ChecklistModalPlaceholderSection>
+
+    <ChecklistModalPlaceholderSection>
+      <ChecklistModalPlaceholderHeader spacing="true" />
+      <ChecklistDetailsPlaceholder />
+      <ChecklistDetailsPlaceholder />
+      <ChecklistDetailsPlaceholder />
+    </ChecklistModalPlaceholderSection>
   </ChecklistModalPlaceholderContent>
 );
 

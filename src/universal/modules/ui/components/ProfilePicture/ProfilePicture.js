@@ -12,6 +12,7 @@ const ProfileImage = styled.img`
   border-radius: ${props => props.borderRadius}%;
   opacity: ${props => (props.alreadyHasImage ? 1 : props.imageLoaded ? 1 : 0)};
   transition: opacity 180ms ease;
+  border: ${props => props.border};
 `;
 
 const ProfileImageWrapper = styled.div`
@@ -78,9 +79,10 @@ class ProfilePicture extends Component {
     const {
       borderRadius,
       size,
-      user: { firstName, email, profilePicture },
+      user: { firstName, profilePicture },
       isActive,
       allowUpdate,
+      border,
     } = this.props;
     const { alreadyHasImage, imageLoaded } = this.state;
 
@@ -101,11 +103,12 @@ class ProfilePicture extends Component {
         borderRadius={borderRadius}
         size={size}
       >
-        {email && (
+        {firstName && (
           <ProfileImageWrapper>
             {profilePicture ? (
               <ProfileImage
                 size={size}
+                border={border}
                 borderRadius={borderRadius}
                 src={profilePictureSrc}
                 onLoad={this.handleImageLoaded}
@@ -127,10 +130,12 @@ ProfilePicture.defaultProps = {
   isActive: false,
   size: 32,
   borderRadius: 50,
+  border: '0',
 };
 
 ProfilePicture.propTypes = {
   borderRadius: PropTypes.number,
+  border: PropTypes.string,
   user: userPropType.isRequired,
   dispatch: dispatchPropType.isRequired,
   size: PropTypes.number.isRequired,

@@ -44,7 +44,7 @@ export const theme = {
     blueMid,
     black,
     greyVeryDark: '#31373d',
-    blueStone,
+    blueStone: '#43526D',
     errorPink,
     errorRed,
     grey: '#E3E3E3',
@@ -52,6 +52,7 @@ export const theme = {
     greyDark: '#424242',
     greyMidDark: '#585858',
     greyMid: '#777777',
+    greyMidLight: '#a8a8a8',
     greyLight: '#F8F8F8',
   },
   animations: {

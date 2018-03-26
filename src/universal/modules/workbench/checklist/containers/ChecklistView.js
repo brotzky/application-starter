@@ -4,7 +4,6 @@ import Collapse from 'react-collapse';
 import styled from 'styled-components';
 import { activeChecklistsSelector } from 'gac-utils/selectors';
 import { FadeIn } from '../../../ui/transitions';
-// import ChecklistHeader from '../components/ChecklistHeader';
 import ChecklistList from './ChecklistList';
 import ChecklistFilter from './ChecklistFilter';
 import { mapRouteToConst } from '../../../../utils/checklist-constants';
