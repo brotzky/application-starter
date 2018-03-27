@@ -6,11 +6,13 @@ import { ProfilePicture } from '../../../ui/components';
 import { Spinner } from 'gac-ui/components/';
 
 const resultColorMap = {
+  RUNNING: 'blueStone',
   //verified
   PASS: 'green',
   OVERRIDE_PASS: 'green',
   //not verified
   FAIL: 'red',
+  ERROR: 'red',
   NOT_RUN: 'greyMidLight',
   NO_PREREQUISITES: 'greyMidLight',
   OVERRIDE_REVIEW: 'greyMidLight',
@@ -30,7 +32,8 @@ const ChecklistItemDetail = ({
 }) => {
   const passed =
     verificationResult === 'PASS' || verificationResult === 'OVERRIDE_PASS';
-  const failed = verificationResult === 'FAILED';
+  const failed =
+    verificationResult === 'FAIL' || verificationResult === 'ERROR';
 
   return (
     <ItemRow>
@@ -68,7 +71,7 @@ const ChecklistItemDetail = ({
           </DetailsReason>
           {overrideComment ? (
             <DetailsReason>{overrideComment}</DetailsReason>
-          ) : resultReasons.length ? (
+          ) : resultReasons[0] && resultReasons[0].length ? (
             resultReasons.map((reason, i) => (
               <DetailsReason key={i}>
                 {`${i === 0 ? '' : ', '}`}

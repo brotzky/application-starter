@@ -106,18 +106,23 @@ export function checklistReducer(state = initialState, action) {
         isUpdatingDetails: true,
       });
     case UPDATE_CHECKLIST_ITEM_SUCCESS:
-      const updatedChecklistDetails = action.payload.data.checklists[0];
+      const updatedChecklistDetails = action.payload.data.checklistDetails[0];
 
       return Object.assign({}, state, {
         checklistDetails: Object.assign({}, state.checklistDetails, {
           [updatedChecklistDetails.name]: [
-            ...action.payload.data.checklists,
+            updatedChecklistDetails,
             ...state.checklistDetails[updatedChecklistDetails.name],
           ],
         }),
         checklists: state.checklists.map(checklist => {
-          if (checklist.id === updatedChecklistDetails.id) {
-            return updatedChecklistDetails;
+          if (
+            checklist.id === updatedChecklistDetails.verificationChecklistId
+          ) {
+            return Object.assign({}, checklist, {
+              resultReasons: updatedChecklistDetails.reasons,
+              verificationResult: updatedChecklistDetails.verificationResult,
+            });
           }
 
           return checklist;
