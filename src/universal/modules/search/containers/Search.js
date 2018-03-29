@@ -17,7 +17,7 @@ const SearchWrapper = styled.div`
 const Search = ({ dispatch, search }) => (
   <SearchWrapper>
     <SearchTerms dispatch={dispatch} />
-    <SearchResults search={search} />
+    <SearchResults search={search} dispatch={dispatch} />
   </SearchWrapper>
 );
 

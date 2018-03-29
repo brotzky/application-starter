@@ -48,12 +48,6 @@ const TopBarSearchResults = styled(SearchResults)`
 `;
 
 class TopbarSearch extends Component {
-  constructor(props) {
-    super(props);
-    this.clearSearchResults = this.clearSearchResults.bind(this);
-    this.clearSearchResultsEscKey = this.clearSearchResultsEscKey.bind(this);
-  }
-
   componentDidMount() {
     window.addEventListener('keydown', this.clearSearchResultsEscKey, true);
   }
@@ -62,13 +56,13 @@ class TopbarSearch extends Component {
     window.removeEventListener('keydown', this.clearSearchResultsEscKey, true);
   }
 
-  clearSearchResults() {
+  clearSearchResults = () => {
     const { dispatch } = this.props;
     dispatch(updateSearchState(QUERY_RESET));
     dispatch(reset('search'));
-  }
+  };
 
-  clearSearchResultsEscKey(event) {
+  clearSearchResultsEscKey = event => {
     let isEscape = false;
 
     if ('key' in event) {
@@ -80,7 +74,7 @@ class TopbarSearch extends Component {
     if (isEscape) {
       this.clearSearchResults();
     }
-  }
+  };
 
   render() {
     const {
@@ -97,6 +91,7 @@ class TopbarSearch extends Component {
         <TopBarSearchResults
           clearSearchResults={this.clearSearchResults}
           data={data}
+          dispatch={dispatch}
           handlePagination={handlePagination}
           hasMoreResults={hasMoreResults}
           updateData={updateData}
