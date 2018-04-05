@@ -30,9 +30,9 @@ const UsersDeleteList = styled.ul`
 `;
 class UserDeleteModal extends Component {
   handleDeleteClick = () => {
-    const { dispatch, profile, user } = this.props;
+    const { dispatch, user, currentUser } = this.props;
 
-    dispatch(deleteUser(profile.id)).then(res => {
+    dispatch(deleteUser(currentUser.id)).then(res => {
       if (!res.payload.errors.length) {
         dispatch(hideModal());
 
@@ -40,7 +40,7 @@ class UserDeleteModal extends Component {
          * We want to redirect to the login page if a user deletes themselves
          * otherwise just take them back to the users page.
          */
-        if (user.id === profile.id) {
+        if (user.id === currentUser.id) {
           dispatch(authLogout()).then(() => dispatch(push('/login')));
         } else {
           dispatch(push('/account/users'));

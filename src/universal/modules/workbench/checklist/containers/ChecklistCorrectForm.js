@@ -101,6 +101,7 @@ class ChecklistCorrectForm extends Component {
       user,
       dispatch,
       checklistItem,
+      isPrimaryRep,
     } = this.props;
 
     return (
@@ -122,7 +123,7 @@ class ChecklistCorrectForm extends Component {
                     type="submit"
                     id="solve"
                     text="Save"
-                    disabled={submitting}
+                    disabled={!isPrimaryRep || submitting}
                     isSubmitting={submitting}
                     size="small"
                   />
@@ -168,6 +169,7 @@ ChecklistCorrectForm = reduxForm({
 const mapStateToProps = state => ({
   checklist: state.checklist,
   user: state.user,
+  isPrimaryRep: state.workbench.primaryRep.email === state.user.email,
 });
 
 export default connect(mapStateToProps)(ChecklistCorrectForm);

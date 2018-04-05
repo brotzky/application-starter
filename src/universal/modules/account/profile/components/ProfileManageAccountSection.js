@@ -52,6 +52,7 @@ class ProfileManageAccountSection extends Component {
     const {
       dispatch,
       profile: { accountLocked, firstName, id, isFetching },
+      profile,
       isUsersProfile,
     } = this.props;
 
@@ -76,7 +77,7 @@ class ProfileManageAccountSection extends Component {
             </ProfileText>
           </div>
         )}
-        <UsersDeactivate dispatch={dispatch} />
+        <UsersDeactivate dispatch={dispatch} currentUser={profile} />
       </div>
     );
   }

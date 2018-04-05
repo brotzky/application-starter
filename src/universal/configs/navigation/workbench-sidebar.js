@@ -28,6 +28,11 @@ const sidebarLinks = {
     path: 'applicant-profile/address-and-housing/',
     badge: 'APPLICANT_PROFILE_ADDRESS_AND_HOUSING',
   },
+  legalStuff: {
+    text: 'Application and Legal Info',
+    path: 'applicant-profile/application-and-legal-info/',
+    badge: 'APPLICANT_PROFILE_APPLICATION_AND_LEGAL_INFO',
+  },
   creditBureau: {
     text: 'Credit Bureau',
     path: 'credit-bureau/',
