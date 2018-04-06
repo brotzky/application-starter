@@ -126,7 +126,10 @@ class ChecklistCorrectForm extends Component {
                     disabled={!isPrimaryRep || submitting}
                     isSubmitting={submitting}
                     size="small"
+                    permission="MANAGES_APPLICATION"
+                    customPermission="You must claim this application to override."
                   />
+
                   <Button
                     type="button"
                     appearance="transparent"

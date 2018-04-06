@@ -241,6 +241,7 @@ const Button = props => {
     width,
     margin,
     className,
+    customPermission,
   } = props;
 
   /**
@@ -304,7 +305,10 @@ const Button = props => {
         {buttonText}
       </GeneratedButton>
       {!hasPermission && (
-        <ButtonPermissionTooltip permission={requiredPermission || {}} />
+        <ButtonPermissionTooltip
+          permission={requiredPermission || {}}
+          customPermission={customPermission}
+        />
       )}
     </ButtonContainer>
   );

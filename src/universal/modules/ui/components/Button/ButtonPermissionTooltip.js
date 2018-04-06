@@ -70,7 +70,7 @@ const TooltipTitle = styled.h6`
   margin-bottom: 3px;
 `;
 
-const ButtonPermissionTooltip = ({ permission }) => {
+const ButtonPermissionTooltip = ({ permission, customPermission }) => {
   if (!permission) return null;
 
   return (
@@ -79,7 +79,7 @@ const ButtonPermissionTooltip = ({ permission }) => {
       onClick={() => dispatch(push('/account/roles'))}
     >
       <TooltipTitle>Requires permission</TooltipTitle>
-      <div>{permission.prettyName}</div>
+      <div>{permission.prettyName || customPermission}</div>
     </TooltipContainer>
   );
 };
