@@ -30,6 +30,9 @@ const AccountSettingsCheckCheck = styled.div`
 const StyledCheckCircleFilled = styled(CheckCircleFilled)`
   width: 26px;
   height: 26px;
+  rect {
+    fill: white;
+  }
   * {
     fill: ${props => props.theme.colors.blue};
   }
@@ -212,7 +215,7 @@ const mapStateToProps = (state, ownProps) => {
         adminStep.name === step &&
         adminStep.data &&
         adminStep.data.proceedAudit &&
-        adminStep.data.proceedAudit.firstName,
+        adminStep.data.proceedAudit.date,
     );
 
   const currentStepData =

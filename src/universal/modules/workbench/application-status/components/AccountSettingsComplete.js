@@ -32,16 +32,21 @@ const AccountSettingsCompleteSub = styled.div`
 `;
 
 export const AccountSettingsComplete = ({ data, header }) => {
-  const { proceedAudit } = data;
+  const { proceedAudit: { firstName, lastName, date, automated } } = data;
 
   return (
     <AccountSettingsCompleteContainer>
       <AccountSettingsCompleteWrapper>
         <AccountSettingsCompleteTop>{header}</AccountSettingsCompleteTop>
-        <AccountSettingsCompleteSub>
-          Completed by {proceedAudit.firstName} {proceedAudit.lastName}{' '}
-          {moment(proceedAudit.date).fromNow()}
-        </AccountSettingsCompleteSub>
+        {automated === 'false' ? (
+          <AccountSettingsCompleteSub>
+            Completed by {firstName} {lastName} {moment(date).fromNow()}
+          </AccountSettingsCompleteSub>
+        ) : (
+          <AccountSettingsCompleteSub>
+            Completed automatically {moment(date).fromNow()}
+          </AccountSettingsCompleteSub>
+        )}
       </AccountSettingsCompleteWrapper>
     </AccountSettingsCompleteContainer>
   );
