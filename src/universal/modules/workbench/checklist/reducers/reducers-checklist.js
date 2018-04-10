@@ -106,23 +106,39 @@ export function checklistReducer(state = initialState, action) {
         isUpdatingDetails: true,
       });
     case UPDATE_CHECKLIST_ITEM_SUCCESS:
-      const updatedChecklistDetails = action.payload.data.checklistDetails[0];
+      if (action.payload.data.checklistDetails[0]) {
+        const updatedChecklistDetails = action.payload.data.checklistDetails[0];
+        return Object.assign({}, state, {
+          checklistDetails: Object.assign({}, state.checklistDetails, {
+            [updatedChecklistDetails.name]: [
+              updatedChecklistDetails,
+              ...state.checklistDetails[updatedChecklistDetails.name],
+            ],
+          }),
+          checklists: state.checklists.map(checklist => {
+            if (
+              checklist.id === updatedChecklistDetails.verificationChecklistId
+            ) {
+              return Object.assign({}, checklist, {
+                resultReasons: updatedChecklistDetails.reasons,
+                verificationResult: updatedChecklistDetails.verificationResult,
+              });
+            }
 
+            return checklist;
+          }),
+          errors: action.payload.errors,
+          isUpdatingDetails: false,
+        });
+      }
+      const updatedChecklistDetails = action.payload.data.checklists[0];
       return Object.assign({}, state, {
         checklistDetails: Object.assign({}, state.checklistDetails, {
-          [updatedChecklistDetails.name]: [
-            updatedChecklistDetails,
-            ...state.checklistDetails[updatedChecklistDetails.name],
-          ],
+          [updatedChecklistDetails.name]: action.payload.data.checklists,
         }),
         checklists: state.checklists.map(checklist => {
-          if (
-            checklist.id === updatedChecklistDetails.verificationChecklistId
-          ) {
-            return Object.assign({}, checklist, {
-              resultReasons: updatedChecklistDetails.reasons,
-              verificationResult: updatedChecklistDetails.verificationResult,
-            });
+          if (checklist.id === updatedChecklistDetails.id) {
+            return updatedChecklistDetails;
           }
 
           return checklist;
@@ -130,6 +146,7 @@ export function checklistReducer(state = initialState, action) {
         errors: action.payload.errors,
         isUpdatingDetails: false,
       });
+
     case UPDATE_CHECKLIST_ITEM_FAILURE:
       return Object.assign({}, state, {
         errors: action.payload.errors,

@@ -87,7 +87,6 @@ class ChecklistCorrectForm extends Component {
       collapse={collapse}
       onFocus={e => {
         this.inputNode.focus();
-        this.setState({ collapse: !collapse });
       }}
     />
   );
@@ -104,8 +103,12 @@ class ChecklistCorrectForm extends Component {
       isPrimaryRep,
     } = this.props;
 
+    const isPrimaryRepPermission = isPrimaryRep ? null : 'MANAGES_APPLICATION';
     return (
-      <form onSubmit={handleSubmit(data => this.handleSubmit(data))}>
+      <form
+        onSubmit={handleSubmit(data => this.handleSubmit(data))}
+        style={{ width: '500px' }}
+      >
         <FormRow>
           <ProfilePictureWrapper>
             <ProfilePicture size={38} user={user} />
@@ -115,33 +118,20 @@ class ChecklistCorrectForm extends Component {
               <Field
                 name="overrideComment"
                 component={this.renderTextArea}
-                collapse={this.state.collapse}
+                collapse={null}
               />
-              {!this.state.collapse && (
-                <div ref={node => (this.node = node)}>
-                  <SubmitButton
-                    type="submit"
-                    id="solve"
-                    text="Save"
-                    disabled={!isPrimaryRep || submitting}
-                    isSubmitting={submitting}
-                    size="small"
-                    permission="MANAGES_APPLICATION"
-                    customPermission="You must claim this application to override."
-                  />
-
-                  <Button
-                    type="button"
-                    appearance="transparent"
-                    text="Cancel"
-                    onClick={() => {
-                      this.setState({ collapse: true });
-                    }}
-                    disabled={submitting}
-                    size="small"
-                  />
-                </div>
-              )}
+              <div ref={node => (this.node = node)}>
+                <SubmitButton
+                  type="submit"
+                  id="solve"
+                  text="Save"
+                  disabled={!isPrimaryRep || submitting}
+                  isSubmitting={submitting}
+                  size="small"
+                  permission={isPrimaryRepPermission}
+                  customPermission="You must claim this application to override."
+                />
+              </div>
             </div>
           ) : (
             <p>

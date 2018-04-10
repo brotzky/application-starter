@@ -65,7 +65,7 @@ const ChecklistResolutionModal = ({
             )}
           </div>
 
-          {detailsExist && (
+          {/*detailsExist && (
             <FadeIn component="div">
               <ContentHeading>Status</ContentHeading>
               <ChecklistItemDetails
@@ -74,7 +74,7 @@ const ChecklistResolutionModal = ({
                 isVerified={isVerified}
               />
             </FadeIn>
-          )}
+          )*/}
         </ChecklistResolutionWrapper>
       )}
     </ModalContent>

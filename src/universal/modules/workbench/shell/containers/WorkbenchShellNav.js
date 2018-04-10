@@ -131,7 +131,10 @@ class WorkbenchShellNav extends Component {
       if (mapRouteToConst[prettyPath])
         return (
           mapRouteToConst[prettyPath].includes(checklist.name) &&
-          checklist.verified !== 'VERIFIED' &&
+          !(
+            checklist.verificationResult === 'PASS' ||
+            checklist.verificationResult === 'OVERRIDE_PASS'
+          ) && //checklist.verified !== 'VERIFIED' &&
           checklist.userIds.includes(params.memberId)
         );
     });
