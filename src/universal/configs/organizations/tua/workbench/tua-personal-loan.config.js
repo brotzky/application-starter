@@ -22,7 +22,10 @@ export default {
       },
       {
         header: 'Legal & CASL',
-        fields: [fields.agree_to_terms_use, fields.can_contact_for_marketing],
+        fields: [
+          fields.agree_to_terms_service,
+          fields.can_contact_for_marketing,
+        ],
       },
       {
         header: 'Personal loan details',

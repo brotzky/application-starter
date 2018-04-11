@@ -99,7 +99,7 @@ const agree_to_terms_use = {
 
 const agree_to_terms_service = {
   label: 'Agreed to Terms of Service',
-  name: 'agreeToTermsOfService',
+  name: 'agreedToTermsOfService',
   options: radioYesNo,
   type: 'radio',
 };

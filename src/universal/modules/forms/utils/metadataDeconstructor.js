@@ -131,7 +131,7 @@ export default function metadataDeconstructor(metadata = {}, activeMemberId) {
   }
 
   if (data.agreedToTermsOfService !== undefined) {
-    root.agreeToTermsOfService = normalizeYesNo(data.agreedToTermsOfService);
+    root.agreedToTermsOfService = normalizeYesNo(data.agreedToTermsOfService);
   }
 
   if (data.amount) root.loanAmount = data.amount;

@@ -57,11 +57,11 @@ export default function metadataConstructor(data = {}, currentStep, org) {
     );
   }
 
-  if (data.agreeToTermsOfUse) {
+  if (data.agreedToTermsOfService) {
     root.metadata.AGREE_TO_TERMS_OF_SERVICE =
       root.metadata.AGREE_TO_TERMS_OF_SERVICE || {};
     root.metadata.AGREE_TO_TERMS_OF_SERVICE.agreedToTermsOfService = normalizeYesNo(
-      data.agreeToTermsOfUse,
+      data.agreedToTermsOfService,
     );
   }
 
@@ -216,9 +216,37 @@ export default function metadataConstructor(data = {}, currentStep, org) {
   if (data.isThirdParty) {
     root.metadata.THIRD_PARTY_INSTRUCTING =
       root.metadata.THIRD_PARTY_INSTRUCTING || {};
-    root.metadata.THIRD_PARTY_INSTRUCTING.thirdPartyInstructing = !normalizeYesNo(
+    root.metadata.THIRD_PARTY_INSTRUCTING.thirdPartyInstructing = normalizeYesNo(
       data.isThirdParty,
     );
+  }
+
+  if (data.hasThirdParty) {
+    root.metadata.THIRD_PARTY = root.metadata.THIRD_PARTY || {};
+    root.metadata.THIRD_PARTY.hasThirdParty = normalizeYesNo(
+      data.hasThirdParty,
+    );
+
+    if (normalizeYesNo(data.hasThirdParty)) {
+      root.metadata.THIRD_PARTY.thirdParty =
+        root.metadata.THIRD_PARTY.thirdParty || {};
+      root.metadata.THIRD_PARTY.thirdParty.firstName = data.thirdPartyFirstName;
+      root.metadata.THIRD_PARTY.thirdParty.lastName = data.thirdPartyLastName;
+      root.metadata.THIRD_PARTY.thirdParty.dateOfBirthYYYYMMDD =
+        data.thirdPartyDOB;
+      root.metadata.THIRD_PARTY.thirdParty.employmentStatus =
+        data.thirdPartyEmploymentStatus;
+      root.metadata.THIRD_PARTY.thirdParty.industry = data.thirdPartyIndustry;
+      root.metadata.THIRD_PARTY.thirdParty.occupation =
+        data.thirdPartyOccupation;
+      root.metadata.THIRD_PARTY.thirdParty.unit = data.thirdPartyUnit;
+      root.metadata.THIRD_PARTY.thirdParty.street = data.thirdPartyStreet;
+      root.metadata.THIRD_PARTY.thirdParty.city = data.thirdPartyCity;
+      root.metadata.THIRD_PARTY.thirdParty.province = data.thirdPartyProvince;
+      root.metadata.THIRD_PARTY.thirdParty.postal = data.thirdPartyPostal;
+      root.metadata.THIRD_PARTY.thirdParty.relationship =
+        data.thirdPartyRelationship;
+    }
   }
 
   if (data.isUnitedStatesCitizen) {
@@ -371,19 +399,31 @@ export default function metadataConstructor(data = {}, currentStep, org) {
     root.metadata.PHONE.phone = data.phone;
   }
 
-  if (data.politicallyExposedPositionHeld) {
+  if (
+    data.politicallyExposedPositionHeld &&
+    data.isPoliticallyExposed &&
+    normalizeYesNo(data.isPoliticallyExposed)
+  ) {
     root.metadata.POLITICALLY_EXPOSED = root.metadata.POLITICALLY_EXPOSED || {};
     root.metadata.POLITICALLY_EXPOSED.position =
       data.politicallyExposedPositionHeld;
   }
 
-  if (data.politicallyExposedSelfOrRelative) {
+  if (
+    data.politicallyExposedSelfOrRelative &&
+    data.isPoliticallyExposed &&
+    normalizeYesNo(data.isPoliticallyExposed)
+  ) {
     root.metadata.POLITICALLY_EXPOSED = root.metadata.POLITICALLY_EXPOSED || {};
     root.metadata.POLITICALLY_EXPOSED.selfOrRelative =
       data.politicallyExposedSelfOrRelative;
   }
 
-  if (data.politicallyExposedCountryPositionHeld) {
+  if (
+    data.politicallyExposedCountryPositionHeld &&
+    data.isPoliticallyExposed &&
+    normalizeYesNo(data.isPoliticallyExposed)
+  ) {
     root.metadata.POLITICALLY_EXPOSED = root.metadata.POLITICALLY_EXPOSED || {};
     root.metadata.POLITICALLY_EXPOSED.country =
       data.politicallyExposedCountryPositionHeld;
