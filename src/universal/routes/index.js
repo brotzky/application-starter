@@ -27,17 +27,17 @@ export const routes = [
   {
     component: Core,
     routes: [
-      { exact: true, path: '/', component: <div>Home</div> },
-      { exact: true, path: '/login', component: <div>Login</div> },
+      { exact: true, path: '/', component: () => <div>Home</div> },
+      { exact: true, path: '/login', component: () => <div>Login</div> },
       {
         exact: true,
         path: '/login/reset-password',
-        component: <div>Login</div>,
+        component: () => <div>Login</div>,
       },
       {
         exact: true,
         path: '/login/reset-password/confirm',
-        component: <div>Login</div>,
+        component: () => <div>Login</div>,
       },
       { component: AsyncNotFound },
     ],

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 import { provideHooks } from 'redial';
 // import { authCheck } from 'grow-actions/auth/auth-check';
-import Modal from '@components';
+// import Modal from '@components';
 
 /**
  * <Core />
@@ -17,7 +17,7 @@ class Core extends Component {
     return (
       <div>
         {renderRoutes(this.props.route.routes)}
-        <Modal />
+        {/* <Modal /> */}
       </div>
     );
   }
