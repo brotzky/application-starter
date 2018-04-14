@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 import { provideHooks } from 'redial';
 // import { authCheck } from 'grow-actions/auth/auth-check';
-import Modal from '../../../components/modal/containers/Modal';
+import Modal from '@components';
 
 /**
  * <Core />

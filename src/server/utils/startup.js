@@ -5,9 +5,7 @@ const startup = () => {
   console.log('║');
   console.log(`║    🚀   ==>  App is running in ${process.env.NODE_ENV} mode`);
   console.log(
-    `║    🎯   ==>  API target https://${
-      process.argv[2]
-    } || 'dev'}.appspot.com`,
+    `║    🎯   ==>  API target https://${process.argv[2] || 'dev'}.appspot.com`,
   );
   console.log(
     `║    💻   ==>  Local server running on http://localhost:${

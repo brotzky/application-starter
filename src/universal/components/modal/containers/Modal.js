@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Transition } from '../../transitions/';
-import ExampleModal from '../../path/to/yolo';
+import { Transition } from '@components';
+// import ExampleModal from '../../path/to/yolo';
 
 const MODAL_COMPONENTS = {
-  EXAMPLE: ExampleModal,
+  EXAMPLE: <div>Modal</div>,
 };
 
 const Modal = ({ modalType, modalProps }) => {

@@ -77,7 +77,7 @@ const render = async (req, res, next) => {
     );
 
     const css = sheet.getStyleTags();
-    const state = `window.__INITIAL_STATE__ = ${serialize(store.getState())}`;
+    const state = `window.__is__ = ${serialize(store.getState())}`;
 
     if (context.url) {
       return res.redirect(301, context.url);
