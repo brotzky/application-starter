@@ -3,10 +3,10 @@
   "scripts": {
     "start":
       "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production PORT=8080 node ./bin/server.js",
-    "dev":
+    "dev:web":
       "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development PORT=8080 node ./bin/server.js",
-    "api":
-      "cross-env NODE_PATH=api NODE_ENV=development APIPORT=8080 nodemon ./bin/api.js",
+    "dev:api":
+      "cross-env NODE_PATH=api NODE_ENV=development APIPORT=8081 nodemon ./bin/api.js",
     "prod": "yarn start",
     "build:client":
       "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/webpack.production.config.js",
@@ -15,36 +15,17 @@
     "build": "yarn clear | yarn build:client && yarn build:server",
     "clear": "rm -Rf static/dist/*",
     "deploy:dev":
-      "yarn build && gcloud app deploy --quiet --project grow-admin-console-dev",
+      "yarn build && gcloud app deploy --quiet --project example-gcp-product-dev",
     "deploy:qa":
-      "yarn build && gcloud app deploy --quiet --project grow-admin-console-qa",
+      "yarn build && gcloud app deploy --quiet --project example-gcp-product-qa",
     "deploy:uat":
-      "yarn build && gcloud app deploy --quiet --project grow-admin-console-uat",
+      "yarn build && gcloud app deploy --quiet --project example-gcp-product-uat",
     "deploy:prod":
-      "yarn build && gcloud app deploy --quiet --project grow-admin-console-prod",
+      "yarn build && gcloud app deploy --quiet --project example-gcp-product-prod",
     "test": "jest --no-cache --verbose",
     "test:watch": "DEBUG=nightmare jest"
   },
-  "jest": {
-    "moduleNameMapper": {
-      "^grow-utils": "<rootDir>/grow-app-utils",
-      "^grow-actions": "<rootDir>/grow-app-actions",
-      "^grow-graph": "<rootDir>/grow-app-graph"
-    },
-    "roots": ["src/", "grow-app-utils/"],
-    "modulePaths": ["src"],
-    "unmockedModulePathPatterns": ["/node_modules/"]
-  },
   "dependencies": {
-    "grow-analytics":
-      "git+ssh://git@gitlab.com/poweredbygrow/software/grow-analytics.git#master",
-    "@feathersjs/errors": "^3.3.0",
-    "@feathersjs/express": "^1.2.0",
-    "@feathersjs/feathers": "^3.1.3",
-    "@feathersjs/rest-client": "^1.3.4",
-    "@feathersjs/socketio": "^3.2.0",
-    "@feathersjs/socketio-client": "^1.1.0",
-    "@google-cloud/datastore": "^1.4.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
     "babel-plugin-dynamic-import-node": "^1.2.0",
@@ -63,16 +44,10 @@
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
     "cross-env": "^5.1.3",
-    "downshift": "^1.28.5",
-    "draft-js": "^0.10.5",
-    "draft-js-export-html": "^1.2.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
-    "featherjs": "^0.1.0",
     "flat": "^4.0.0",
     "fuse.js": "^3.2.0",
-    "git-revision-webpack-plugin": "^2.5.1",
-    "gstore-node": "^4.0.0",
     "helmet": "^3.12.0",
     "history": "^4.7.2",
     "http-proxy-middleware": "^0.17.4",
@@ -85,30 +60,22 @@
     "query-string": "^5.1.0",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",
-    "react-collapse": "^4.0.3",
     "react-dom": "^16.2.0",
-    "react-dropzone": "^4.2.8",
     "react-helmet": "^5.2.0",
     "react-html-parser": "^2.0.2",
-    "react-image-crop": "^3.0.10",
     "react-loadable": "^5.3.1",
-    "react-motion": "^0.5.2",
     "react-redux": "^5.0.7",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
-    "react-select": "^1.2.1",
-    "react-text-mask": "^5.1.0",
     "react-transform-hmr": "^1.0.4",
     "redial": "^0.5.0",
     "redux": "^3.7.2",
     "redux-api-middleware": "^2.3.0",
-    "redux-form": "^7.3.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "serialize-javascript": "^1.4.0",
     "serve-favicon": "^2.4.5",
-    "social-insurance-number": "^0.0.2",
     "styled-components": "^3.1.6",
     "text-mask-addons": "^3.7.1",
     "uglifyjs-webpack-plugin": "^1.2.2",
@@ -117,7 +84,6 @@
     "validator": "^9.4.1",
     "webpack": "4.0.1",
     "webpack-cli": "^2.0.10",
-    "webpack-dev-server": "^3.1.0",
     "webpack-hot-middleware": "^2.21.2",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.6.0"
