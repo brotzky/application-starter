@@ -1,4 +1,4 @@
-export default function() {
+export default function startup() {
   console.log('║');
   console.log('║');
   console.log(`║    🚀   ==>  API is running in ${process.env.NODE_ENV} mode`);

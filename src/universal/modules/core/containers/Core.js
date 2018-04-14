@@ -1,64 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import docCookies from 'grow-utils/cookies';
-import initiGlobalThrottledEvents from 'grow-utils/throttleEvent';
-import { authCheck } from 'grow-actions/auth/auth-check';
-import { provideHooks } from 'redial';
-import Modal from '../../ui/modal/containers/Modal';
-import Notifications from '../../ui/notifications/containers/Notifications';
-// import { ErrorBoundary } from '../../ui/components';
 import { renderRoutes } from 'react-router-config';
-
-
+import { provideHooks } from 'redial';
+// import { authCheck } from 'grow-actions/auth/auth-check';
+import Modal from '../../../components/modal/containers/Modal';
 
 /**
  * <Core />
- * Responsible for adding global components to our application
- * along with loading in all our initial global scripts and events
  */
 @provideHooks({
-  fetch: ({ dispatch, cookies }) => dispatch(authCheck(cookies)),
+  // fetch: ({ dispatch, cookies }) => dispatch(authCheck(cookies)),
 })
 class Core extends Component {
-  componentDidMount() {
-    initiGlobalThrottledEvents();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { auth } = nextProps;
-
-    /**
-     * If the SID cookie does not exist, but the accessToken is present inside
-     * of the auth state then set the SID cookie to the accessToken value.
-     */
-    if (auth.accessToken) {
-      return docCookies.setItem('SID', auth.accessToken);
-    }
-    return null;
-  }
-
   render() {
     return (
-      // <ErrorBoundary>
       <div>
         {renderRoutes(this.props.route.routes)}
         <Modal />
-        <Notifications />
       </div>
-      // </ErrorBoundary>
     );
   }
 }
 
-Core.propTypes = {
-  auth: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.array, PropTypes.bool, PropTypes.string]),
-  ).isRequired,
-};
+Core.propTypes = {};
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-});
+const mapStateToProps = state => ({});
 
 export default connect(mapStateToProps)(Core);

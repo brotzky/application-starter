@@ -15,108 +15,29 @@ function Loading(props) {
   }
 }
 
-const AsyncLogin = Loadable({
-  loader: () => import('../modules/login/containers/Login'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncResetPassword = Loadable({
-  loader: () => import('../modules/login/containers/ResetPassword'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncAuthloader = Loadable({
-  loader: () => import('../modules/auth/components/AuthLoader'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncAcceptInvite = Loadable({
-  loader: () => import('../modules/login/containers/NewPassword'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncMemberProfile = Loadable({
-  loader: () => import('../modules/member/containers/Member'),
-  loading: () => Loading,
-  delay: 400,
-});
-// Loading the member profile page right away
-AsyncMemberProfile.preload();
-
-const AsyncWorkbench = Loadable({
-  loader: () => import('../modules/workbench/shell/containers/WorkbenchShell'),
+const AsyncNotFound = Loadable({
+  loader: () => import('../modules/not-found/components/NotFound'),
   loading: () => Loading,
   delay: 400,
 });
 // Loading the workbench profile page right away
-AsyncWorkbench.preload();
-
-const AsyncAccount = Loadable({
-  loader: () => import('../modules/account/shell/components/AccountShell'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncApplications = Loadable({
-  loader: () => import('../modules/queue/containers/Queue'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncNotFound = Loadable({
-  loader: () => import('../modules/404/components/404'),
-  loading: () => Loading,
-  delay: 400,
-});
-
-const AsyncTranslator = Loadable({
-  loader: () => import('../modules/tools/translator/containers/Translator'),
-  loading: () => Loading,
-  delay: 400,
-});
+AsyncNotFound.preload();
 
 export const routes = [
   {
     component: Core,
     routes: [
-      { exact: true, path: '/login', component: AsyncLogin },
+      { exact: true, path: '/', component: <div>Home</div> },
+      { exact: true, path: '/login', component: <div>Login</div> },
       {
         exact: true,
-        path: '/login/password-reset',
-        component: AsyncResetPassword,
-      },
-      { exact: true, path: '/login/reset', component: AsyncResetPassword },
-      { exact: true, path: '/redirect', component: AsyncAuthloader },
-      { exact: true, path: '/accept-invite', component: AsyncAcceptInvite },
-      {
-        exact: true,
-        path:
-          '/members/:memberId/workbench/:workbenchId/:workbenchProduct/:workbenchTab?/:profileSection?',
-        component: AsyncWorkbench,
+        path: '/login/reset-password',
+        component: <div>Login</div>,
       },
       {
         exact: true,
-        path: '/members/:memberId/:profileSection?',
-        component: AsyncMemberProfile,
-      },
-      {
-        exact: true,
-        path: '/applications/:page?',
-        component: AsyncApplications,
-      },
-      {
-        exact: true,
-        path: '/account/:accountTab/:accountSecondaryTab?',
-        component: AsyncAccount,
-      },
-      {
-        exact: true,
-        path: '/tools/translator/:env/:lang?',
-        component: AsyncTranslator,
+        path: '/login/reset-password/confirm',
+        component: <div>Login</div>,
       },
       { component: AsyncNotFound },
     ],

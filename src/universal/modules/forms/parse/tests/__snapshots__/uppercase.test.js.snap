@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`[Form Field Parsing] uppercase uppercase() should return an uppercase version of a string 1`] = `"ABC"`;

@@ -5,10 +5,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "paths": {
-      "grow-actions/*": ["./grow-app-actions/*"],
-      "grow-utils/*": ["./grow-app-utils/*"],
-      "gac-utils/*": ["./src/universal/utils/*"],
-      "gac-ui/*": ["./src/universal/modules/ui/*"]
+      "@example/*": ["./path/to/example/*"]
     }
   }
 }

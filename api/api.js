@@ -12,7 +12,10 @@ import {
   notFound,
   errorHandler,
   startup,
+  tenant,
 } from './middleware';
+import routes from './routes';
+
 // import services from './services';
 // import channels from './channels';
 
@@ -34,11 +37,12 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
   // API
+  .use(tenant)
   .configure(express.rest())
   .configure(socketio({ path: '/ws' }))
   .use(cookies)
-  .use(auth)
-  .use('/get', (req, res, next) => res.send('Hello world'))
+  // .use(auth)
+  .use('/v1', routes)
   // .configure(services)
   // .configure(channels)
   // Tooling

@@ -1,4 +1,4 @@
-export default function() {
+export default function errorHandler() {
   return function(error, req, res, next) {
     // Required to stay consistent with core backend
     const growError = {

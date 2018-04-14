@@ -1,6 +1,0 @@
-[submodule "grow-app-actions"]
-	path = grow-app-actions
-	url = ../grow-app-actions.git
-[submodule "grow-app-utils"]
-	path = grow-app-utils
-	url = ../grow-app-utils.git
