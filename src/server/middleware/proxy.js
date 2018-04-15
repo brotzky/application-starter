@@ -10,7 +10,7 @@ const env = {
   env: process.argv[2] || 'dev',
 };
 
-const target = 'localhost:8080';
+const target = 'localhost:8081';
 
 function buildEnvOnRequest(req) {
   const host = req.get('host');

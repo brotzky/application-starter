@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import UserController from './Users.controller';
-import UsersController from './Users.controller';
 
 const router = new Router();
 
@@ -14,6 +13,6 @@ router.route('/users').post(UserController.createUser);
 router.route('/users/:userId').get(UserController.getUser);
 
 // Get one job by ID
-router.route('/users/:userId').delete(UsersController.deleteUser);
+router.route('/users/:userId').delete(UserController.deleteUser);
 
 export default router;

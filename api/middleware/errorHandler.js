@@ -1,7 +1,7 @@
 export default function errorHandler() {
   return function(error, req, res, next) {
     // Required to stay consistent with core backend
-    const growError = {
+    const appError = {
       data: null,
       errorMessage: null,
       errors: [],
@@ -24,11 +24,11 @@ export default function errorHandler() {
         delete error.stack;
       }
 
-      growError.code = error.code;
-      growError.errors = [error.message];
+      appError.code = error.code;
+      appError.errors = [error.message];
 
       res.set('Content-Type', 'application/json');
-      res.json(growError);
+      res.json(appError);
     };
 
     res.status(error.code);

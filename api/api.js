@@ -1,6 +1,4 @@
-import express from '@feathersjs/express';
-import feathers from '@feathersjs/feathers';
-import socketio from '@feathersjs/socketio';
+import express from 'express';
 import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
@@ -16,10 +14,7 @@ import {
 } from './middleware';
 import routes from './routes';
 
-// import services from './services';
-// import channels from './channels';
-
-const app = express(feathers());
+const app = express();
 app.set('trust proxy', 1);
 
 app
@@ -38,13 +33,8 @@ app
   .use(bodyParser.json())
   // API
   .use(tenant)
-  .configure(express.rest())
-  .configure(socketio({ path: '/ws' }))
   .use(cookies)
-  // .use(auth)
   .use('/v1', routes)
-  // .configure(services)
-  // .configure(channels)
   // Tooling
   .use(notFound())
   .use(logger(app))
