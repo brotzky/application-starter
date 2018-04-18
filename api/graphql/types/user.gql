@@ -1,0 +1,7 @@
+type User {
+  sub: ID!
+  nickname: String!
+  name: String!
+  picture: String!
+  updated_at: String!
+}

@@ -1,0 +1,15 @@
+type Query {
+  users: [User]
+}
+
+# type Mutation {}
+
+type Subscription {
+  addUser: User!
+}
+
+schema {
+  query: Query
+  # mutation: Mutation
+  subscription: Subscription
+}
