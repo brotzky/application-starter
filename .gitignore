@@ -4,6 +4,7 @@ dist/
 static/dist
 cache/
 .cache-loader/
+rethinkdb_data/
 tools/webpack/server.config.js
 
 # Logs

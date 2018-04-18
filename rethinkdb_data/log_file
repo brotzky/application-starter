@@ -1,0 +1,39 @@
+2018-04-15T11:58:42.633259000 0.083803s notice: Recursively removing directory /Users/dennisbrotzky/Documents/dev/product-starter/rethinkdb_data/tmp
+2018-04-15T11:58:42.635789000 0.086337s notice: Initializing directory /Users/dennisbrotzky/Documents/dev/product-starter/rethinkdb_data
+2018-04-15T11:58:42.635873000 0.086415s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/Users/dennisbrotzky/Documents/dev/product-starter/rethinkdb_data' did not already exist or is empty.)
+2018-04-15T11:58:42.635898000 0.086440s notice: Running rethinkdb 2.3.6 (CLANG 8.1.0 (clang-802.0.42))...
+2018-04-15T11:58:42.644456000 0.095000s notice: Running on Darwin 16.7.0 x86_64
+2018-04-15T11:58:42.644497000 0.095039s notice: Loading data from directory /Users/dennisbrotzky/Documents/dev/product-starter/rethinkdb_data
+2018-04-15T11:58:42.797515000 0.248058s info: Automatically using cache size of 1971 MB
+2018-04-15T11:58:42.798015000 0.248557s notice: Listening for intracluster connections on port 29015
+2018-04-15T11:58:42.799935000 0.250477s notice: Listening for client driver connections on port 28015
+2018-04-15T11:58:42.800109000 0.250652s notice: Listening for administrative HTTP connections on port 8080
+2018-04-15T11:58:42.800116000 0.250658s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2018-04-15T11:58:42.800120000 0.250663s notice: Listening on driver addresses: 127.0.0.1, ::1
+2018-04-15T11:58:42.800123000 0.250665s notice: Listening on http addresses: 127.0.0.1, ::1
+2018-04-15T11:58:42.800128000 0.250670s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2018-04-15T11:58:42.800134000 0.250676s notice: Server ready, "Denniss_MBP_3_hitronhub_home_s75" 33910d0c-f94b-4f0b-b271-c68671ad8912
+2018-04-15T11:58:57.539578000 14.990595s notice: Someone asked for the nonwhitelisted file "/__webpack_hmr".  If this should be accessible, add it to the static web assets.
+2018-04-15T11:59:25.367748000 42.819595s notice: Someone asked for the nonwhitelisted file "/__webpack_hmr".  If this should be accessible, add it to the static web assets.
+2018-04-15T11:59:47.412680000 64.865238s notice: Someone asked for the nonwhitelisted file "/__webpack_hmr".  If this should be accessible, add it to the static web assets.
+2018-04-15T12:01:31.014617000 168.470424s notice: Server got SIGINT from pid 307, uid 501; shutting down...
+2018-04-15T12:01:31.014830000 168.470636s notice: Shutting down client connections...
+2018-04-15T12:01:31.014990000 168.470797s notice: All client connections closed.
+2018-04-15T12:01:31.015002000 168.470809s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2018-04-15T12:01:31.018882000 168.474689s notice: Storage engine shut down.
+2018-04-15T12:01:34.047849000 0.033995s notice: Running rethinkdb 2.3.6 (CLANG 8.1.0 (clang-802.0.42))...
+2018-04-15T12:01:34.054024000 0.040165s notice: Running on Darwin 16.7.0 x86_64
+2018-04-15T12:01:34.054060000 0.040201s notice: Loading data from directory /Users/dennisbrotzky/Documents/dev/product-starter/rethinkdb_data
+2018-04-15T12:01:34.089465000 0.075606s info: Automatically using cache size of 1930 MB
+2018-04-15T12:01:34.091894000 0.078035s notice: Listening for intracluster connections on port 29015
+2018-04-15T12:01:34.093359000 0.079499s notice: Listening for client driver connections on port 28015
+2018-04-15T12:01:34.093450000 0.079591s notice: Listening for administrative HTTP connections on port 9090
+2018-04-15T12:01:34.093942000 0.080083s notice: Listening on cluster addresses: 127.0.0.1, 192.168.0.12, ::1, fd00:1cab:c0af:5a22:1959:a2bd:101c:eb46, fd00:1cab:c0af:5a22:1c02:d2aa:f22b:b72b, fe80::1%1, fe80::86d:54e2:f63f:feb6%4, fe80::4c4b:18ff:fe4d:6d84%9, fe80::56bf:4812:b5c9:7eed%11, fe80::67a2:1de1:5026:74a6%12, fe80::c4d2:bbf:cf:3ebc%10
+2018-04-15T12:01:34.094419000 0.080559s notice: Listening on driver addresses: 127.0.0.1, 192.168.0.12, ::1, fd00:1cab:c0af:5a22:1959:a2bd:101c:eb46, fd00:1cab:c0af:5a22:1c02:d2aa:f22b:b72b, fe80::1%1, fe80::86d:54e2:f63f:feb6%4, fe80::4c4b:18ff:fe4d:6d84%9, fe80::56bf:4812:b5c9:7eed%11, fe80::67a2:1de1:5026:74a6%12, fe80::c4d2:bbf:cf:3ebc%10
+2018-04-15T12:01:34.094897000 0.081037s notice: Listening on http addresses: 127.0.0.1, 192.168.0.12, ::1, fd00:1cab:c0af:5a22:1959:a2bd:101c:eb46, fd00:1cab:c0af:5a22:1c02:d2aa:f22b:b72b, fe80::1%1, fe80::86d:54e2:f63f:feb6%4, fe80::4c4b:18ff:fe4d:6d84%9, fe80::56bf:4812:b5c9:7eed%11, fe80::67a2:1de1:5026:74a6%12, fe80::c4d2:bbf:cf:3ebc%10
+2018-04-15T12:01:34.094903000 0.081043s notice: Server ready, "Denniss_MBP_3_hitronhub_home_s75" 33910d0c-f94b-4f0b-b271-c68671ad8912
+2018-04-17T07:52:58.305694000 34988.726895s notice: Server got SIGINT from pid 307, uid 501; shutting down...
+2018-04-17T07:52:58.306520000 34988.727717s notice: Shutting down client connections...
+2018-04-17T07:52:58.306722000 34988.727918s notice: All client connections closed.
+2018-04-17T07:52:58.306731000 34988.727927s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2018-04-17T07:52:58.311856000 34988.733053s notice: Storage engine shut down.

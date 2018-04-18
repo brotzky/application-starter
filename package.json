@@ -1,31 +1,23 @@
 {
   "license": "ISC",
   "scripts": {
-    "start":
-      "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production PORT=8080 node ./bin/server.js",
-    "dev:web":
-      "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development PORT=8080 node ./bin/server.js",
-    "dev:api":
-      "cross-env NODE_PATH=api NODE_ENV=development APIPORT=8081 nodemon ./bin/api.js",
+    "start": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production PORT=8080 node ./bin/server.js",
+    "dev:web": "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development PORT=8080 node ./bin/server.js",
+    "dev:api": "cross-env NODE_PATH=api NODE_ENV=development APIPORT=8081 nodemon ./bin/api.js",
     "prod": "yarn start",
-    "build:client":
-      "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/webpack.production.config.js",
-    "build:server":
-      "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/webpack.server.config.js",
+    "build:client": "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/webpack.production.config.js",
+    "build:server": "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/webpack.server.config.js",
     "build": "yarn clear | yarn build:client && yarn build:server",
     "clear": "rm -Rf static/dist/*",
-    "deploy:dev":
-      "yarn build && gcloud app deploy --quiet --project example-gcp-product-dev",
-    "deploy:qa":
-      "yarn build && gcloud app deploy --quiet --project example-gcp-product-qa",
-    "deploy:uat":
-      "yarn build && gcloud app deploy --quiet --project example-gcp-product-uat",
-    "deploy:prod":
-      "yarn build && gcloud app deploy --quiet --project example-gcp-product-prod",
+    "deploy:dev": "yarn build && gcloud app deploy --quiet --project example-gcp-product-dev",
+    "deploy:qa": "yarn build && gcloud app deploy --quiet --project example-gcp-product-qa",
+    "deploy:uat": "yarn build && gcloud app deploy --quiet --project example-gcp-product-uat",
+    "deploy:prod": "yarn build && gcloud app deploy --quiet --project example-gcp-product-prod",
     "test": "jest --no-cache --verbose",
     "test:watch": "DEBUG=nightmare jest"
   },
   "dependencies": {
+    "apollo-server-express": "^1.3.4",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.3",
     "babel-plugin-dynamic-import-node": "^1.2.0",
@@ -43,18 +35,29 @@
     "babel-preset-react-hmre": "^1.1.1",
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
     "cross-env": "^5.1.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "flat": "^4.0.0",
     "fuse.js": "^3.2.0",
+    "graphql": "^0.13.2",
+    "graphql-date": "^1.0.3",
+    "graphql-subscriptions": "^0.5.8",
+    "graphql-tools": "^2.24.0",
     "helmet": "^3.12.0",
     "history": "^4.7.2",
     "http-proxy-middleware": "^0.17.4",
+    "jsonwebtoken": "^8.2.1",
     "moment": "^2.21.0",
     "morgan": "^1.9.0",
     "nodemon": "^1.17.2",
     "numeral": "^2.0.6",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-github2": "^0.1.11",
+    "passport-google-oauth2": "^0.1.6",
+    "passport-twitter": "^1.0.4",
     "pretty-error": "^2.1.1",
     "prop-types": "^15.6.1",
     "query-string": "^5.1.0",
@@ -74,6 +77,8 @@
     "redux-api-middleware": "^2.3.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
+    "rethinkdb-inspector": "^0.3.3",
+    "rethinkdbdash": "^2.3.31",
     "serialize-javascript": "^1.4.0",
     "serve-favicon": "^2.4.5",
     "styled-components": "^3.1.6",
@@ -84,6 +89,7 @@
     "validator": "^9.4.1",
     "webpack": "4.0.1",
     "webpack-cli": "^2.0.10",
+    "webpack-dev-middleware": "^3.1.2",
     "webpack-hot-middleware": "^2.21.2",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.6.0"
