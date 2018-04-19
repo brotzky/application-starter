@@ -5,8 +5,11 @@
       "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=production PORT=8080 node ./bin/server.js",
     "dev:web":
       "cross-env BABEL_DISABLE_CACHE=1 NODE_ENV=development PORT=8080 node ./bin/server.js",
-    "dev:api":
-      "cross-env NODE_PATH=api NODE_ENV=development APIPORT=8081 nodemon ./bin/api.js",
+    "dev:api": " npm-run-all --parallel dev:api:build dev:api:run",
+    "dev:api:build":
+      " ./node_modules/.bin/webpack --silent --config ./webpack/webpack.api.config.js ",
+    "dev:api:run":
+      " cross-env NODE_PATH=api NODE_ENV=development APIPORT=8081 nodemon nodemon --ignore src/ --ignore api/ ./build-api/main.js",
     "prod": "yarn start",
     "build:client":
       "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack/webpack.production.config.js",
@@ -106,9 +109,11 @@
     "webpack-node-externals": "^1.6.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-plugin-graphql-tag": "^1.5.0",
     "jest": "^22.4.2",
     "jest-cli": "^23.0.0-alpha.0",
-    "jsdom": "^11.6.2"
+    "jsdom": "^11.6.2",
+    "npm-run-all": "^4.1.2"
   }
 }

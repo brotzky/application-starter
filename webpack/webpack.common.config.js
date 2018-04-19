@@ -1,10 +1,8 @@
 const webpack = require('webpack');
-// const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');
 const ReactLoadableWebpack = require('react-loadable/webpack');
 
-// const gitRevisionPlugin = new GitRevisionPlugin();
 const root = path.resolve(__dirname, '..');
 const src = path.resolve(root, 'src');
 const dist = path.resolve(root, 'dist');
@@ -37,17 +35,6 @@ module.exports = () => ({
     extensions: ['*', '.js', '.json'],
   },
 
-  module: {
-    rules: [
-      {
-        test: /\.(graphql|gql)$/,
-        exclude: /node_modules/,
-        loader: 'graphql-tag/loader'
-      },
-    ]
-  }
-
-
   optimization: {
     splitChunks: {
       cacheGroups: {
@@ -68,13 +55,5 @@ module.exports = () => ({
     new ReactLoadableWebpack.ReactLoadablePlugin({
       filename: './static/dist/react-loadable.json',
     }),
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     GIT: {
-    //       VERSION: JSON.stringify(gitRevisionPlugin.version()),
-    //       COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
-    //     },
-    //   },
-    // }),
   ],
 });
